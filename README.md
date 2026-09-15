@@ -1,4 +1,4 @@
-# GoalScope — Daily Predictions Website
+# goalscope — Daily Predictions Website
 
 Public, normal-looking sports predictions site. Not just odds — full homepage, insights, how it works, contact, newsletter.
 
@@ -43,7 +43,7 @@ Admin page (admin.html) also accepts drag & drop and stores previews in browser 
 1. Create GitHub repo, push this folder:
    ```bash
    cd ~/predictions-website
-   git init && git add . && git commit -m "GoalScope launch"
+   git init && git add . && git commit -m "goalscope launch"
    gh repo create goalscope --public --source=. --push
    ```
 2. Go to vercel.com → Add New Project → Import your repo → Deploy (no build step, static).
