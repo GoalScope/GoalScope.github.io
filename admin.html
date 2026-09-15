@@ -1,0 +1,88 @@
+<!DOCTYPE html>
+<html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Upload Predictions — GoalScope</title>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700;800&family=JetBrains+Mono:wght@700&display=swap" rel="stylesheet">
+<style>*{box-sizing:border-box;margin:0;padding:0}:root{--bg:#0a0e1a;--surface:#11182e;--line:#1f2e5a;--accent:#3b82f6;--accent2:#22c55e;--muted:#8b9bbf;--text:#eef2ff}
+body{font-family:Inter,sans-serif;background:var(--bg);color:var(--text)}.container{max-width:1180px;margin:0 auto;padding:0 20px}
+header{position:sticky;top:0;z-index:20;background:rgba(10,14,26,.92);backdrop-filter:blur(10px);border-bottom:1px solid var(--line)}
+.nav{display:flex;align-items:center;justify-content:space-between;padding:14px 0}.logo{display:flex;align-items:center;gap:10px;font-weight:800}.logo-mark{width:32px;height:32px;border-radius:10px;background:linear-gradient(135deg,#3b82f6,#06b6d4);display:grid;place-items:center;color:#fff}
+a{color:inherit;text-decoration:none}.links{display:flex;gap:16px;color:var(--muted);font-weight:600;font-size:14px}.links a.active{color:#fff}
+.btn{padding:10px 14px;border-radius:999px;border:1px solid var(--line);background:transparent;color:#fff;font-weight:700;cursor:pointer}.btn-primary{background:var(--accent);border-color:transparent}
+.card{background:var(--surface);border:1px solid var(--line);border-radius:16px;padding:18px;margin:16px 0}
+.drop{border:2px dashed var(--line);border-radius:14px;padding:22px;text-align:center;background:#0e1a3a}
+.input{width:100%;background:#0a132c;border:1px solid var(--line);color:#fff;padding:10px 12px;border-radius:10px}
+table{width:100%;border-collapse:collapse;font-size:13px;margin-top:10px}th{color:var(--muted);text-align:left;font-size:11px;letter-spacing:.06em;text-transform:uppercase;padding:8px;border-bottom:1px solid var(--line)}td{padding:8px;border-bottom:1px solid rgba(31,46,90,.5);vertical-align:top}
+.muted{color:var(--muted);font-size:13px}
+</style></head><body>
+<header><div class="container nav"><a class="logo" href="index.html"><span class="logo-mark">GS</span> GoalScope</a><nav class="links"><a href="index.html">Home</a><a href="predictions.html">Predictions</a><a href="about.html">How it works</a><a href="blog.html">Insights</a><a href="contact.html">Contact</a></nav><span style="font-weight:800;color:#7fb1ff">Admin</span></div></header>
+<main class="container" style="padding:18px 20px 30px">
+<h1 style="font-size:26px;letter-spacing:-.02em">Upload daily predictions</h1>
+<p class="muted" style="margin:6px 0 14px">Drop your TXT files from <code>/storage/emulated/0/Predictions/</code> — they are parsed automatically. The site stores them in <code>data/</code> for public hosting, and also in browser storage for instant preview.</p>
+
+<div class="card">
+  <div class="drop" id="drop">
+    <div style="font-weight:800">Drag & drop TXT files here</div>
+    <div class="muted" style="margin:6px 0">or</div>
+    <label class="btn btn-primary" style="cursor:pointer">Choose files<input id="file" type="file" accept=".txt" multiple hidden></label>
+    <div class="muted" style="margin-top:10px">Accepted: accumulator_YYYY-MM-DD.txt · 3x_accumulators_YYYY-MM-DD.txt</div>
+  </div>
+  <div style="display:flex;gap:10px;flex-wrap:wrap;margin-top:12px">
+    <button class="btn" onclick="syncFromPhone()">Sync from /Predictions folder (Termux)</button>
+    <button class="btn" onclick="clearStored()">Clear local preview</button>
+    <a class="btn" href="predictions.html">View public predictions</a>
+  </div>
+  <div id="status" class="muted" style="margin-top:10px"></div>
+</div>
+
+<div id="preview"></div>
+
+<div class="card">
+  <h3>How publishing works (public hosting)</h3>
+  <ol class="muted" style="margin:8px 0 0 18px;line-height:1.7">
+    <li>Upload here → preview appears instantly (saved in your browser).</li>
+    <li>To make it public for everyone: push the files in <code>predictions-website/data/</code> to GitHub, then deploy to Vercel/Netlify (see README).</li>
+    <li>Or run the sync script on your phone: it copies <code>/storage/emulated/0/Predictions/*.txt</code> into the site automatically.</li>
+  </ol>
+  <div style="margin-top:10px"><button class="btn btn-primary" onclick="downloadBundle()">Download updated data bundle</button></div>
+</div>
+</main>
+<script src="assets/app.js"></script>
+<script>
+const preview=document.getElementById('preview'), statusEl=document.getElementById('status');
+function renderPreview(acca){
+  const id=acca.id, legs=acca._legsDetailed||[];
+  const total=(legs.reduce((a,b)=>a*(parseFloat(b[2])||1.85),1)).toFixed(2);
+  const html=`<div class="card"><div style="display:flex;justify-content:space-between;gap:12px;flex-wrap:wrap"><div><span style="font-size:11px;letter-spacing:.08em;font-weight:800;color:#7fb1ff;background:#12203d;border:1px solid #24407a;padding:4px 8px;border-radius:999px">${acca.badge}</span><div style="font-weight:800;margin-top:8px">${acca.title}</div><div class="muted">${legs.length} picks · ${acca.date}</div></div><div style="font-family:JetBrains Mono,monospace;font-weight:800;color:#22c55e;font-size:20px">${acca.odds} odds</div></div><table><thead><tr><th>Match</th><th>Pick</th><th>Odds</th><th>Reason</th></tr></thead><tbody>${legs.map(l=>`<tr><td style="font-weight:700">${l[0]}</td><td style="color:#22c55e;font-weight:700">${l[1]}</td><td style="font-family:JetBrains Mono,monospace;font-weight:700">${l[2]}</td><td class="muted">${l[3]||''}</td></tr>`).join('')}</tbody></table><div class="muted" style="margin-top:8px">${legs.map(l=>l[2]).join(' × ')} = ${total} · 100 stake = ${(total*100).toFixed(0)} return</div></div>`;
+  preview.insertAdjacentHTML('afterbegin', html);
+}
+async function handleFiles(files){
+  for(const f of files){
+    const txt=await f.text();
+    const acca=parseTxtToAcca(txt, f.name);
+    renderPreview(acca);
+    // save to localStorage list
+    const key='goalscope_uploads';
+    const list=JSON.parse(localStorage.getItem(key)||'[]');
+    list.unshift(acca);
+    localStorage.setItem(key, JSON.stringify(list.slice(0,20)));
+    statusEl.textContent='Parsed '+f.name+' — '+acca.legs+' picks @ '+acca.odds+' odds. Saved to local preview.';
+  }
+}
+document.getElementById('file').addEventListener('change', e=> handleFiles(e.target.files));
+const drop=document.getElementById('drop');
+drop.addEventListener('dragover', e=>{e.preventDefault(); drop.style.borderColor='#3b82f6'});
+drop.addEventListener('dragleave', ()=> drop.style.borderColor='');
+drop.addEventListener('drop', e=>{e.preventDefault(); drop.style.borderColor=''; handleFiles(e.dataTransfer.files)});
+function clearStored(){ localStorage.removeItem('goalscope_uploads'); localStorage.removeItem('goalscope_predictions_override'); preview.innerHTML=''; statusEl.textContent='Local preview cleared.'; }
+function downloadBundle(){
+  const list=JSON.parse(localStorage.getItem('goalscope_uploads')||'[]');
+  const blob=new Blob([JSON.stringify(list,null,2)],{type:'application/json'});
+  const a=document.createElement('a'); a.href=URL.createObjectURL(blob); a.download='goalscope-uploads-'+new Date().toISOString().slice(0,10)+'.json'; a.click();
+}
+async function syncFromPhone(){
+  statusEl.textContent='If running on Termux, make sure you started: python3 -m http.server in predictions-website — then use the Sync script (see README). Browser cannot directly read /storage/emulated/0/Predictions without the helper.';
+  alert('On your phone, run:\n\ncd ~/predictions-website\n./sync.sh\n\nIt copies /storage/emulated/0/Predictions/*.txt into the site and updates data.');
+}
+// load existing previews
+try{ const list=JSON.parse(localStorage.getItem('goalscope_uploads')||'[]'); list.forEach(renderPreview); }catch{}
+</script></body></html>

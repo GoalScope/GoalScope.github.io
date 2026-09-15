@@ -1,0 +1,24 @@
+<!DOCTYPE html><html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Contact — GoalScope</title>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700;800&display=swap" rel="stylesheet">
+<style>*{box-sizing:border-box;margin:0;padding:0}:root{--bg:#0a0e1a;--surface:#11182e;--line:#1f2e5a;--muted:#8b9bbf;--text:#eef2ff}
+body{font-family:Inter,sans-serif;background:var(--bg);color:var(--text)}.container{max-width:1180px;margin:0 auto;padding:0 20px}
+header{position:sticky;top:0;background:rgba(10,14,26,.92);backdrop-filter:blur(10px);border-bottom:1px solid var(--line)}
+.nav{display:flex;align-items:center;justify-content:space-between;padding:14px 0}.logo{display:flex;align-items:center;gap:10px;font-weight:800}.logo-mark{width:32px;height:32px;border-radius:10px;background:linear-gradient(135deg,#3b82f6,#06b6d4);display:grid;place-items:center;color:#fff}
+a{color:inherit;text-decoration:none}.links{display:flex;gap:16px;color:var(--muted);font-weight:600;font-size:14px}.links a.active{color:#fff}
+.card{background:var(--surface);border:1px solid var(--line);border-radius:16px;padding:18px}.input,textarea{width:100%;background:#0a132c;border:1px solid var(--line);color:#fff;padding:12px;border-radius:10px}
+.btn{padding:10px 14px;border-radius:999px;background:#3b82f6;border:0;color:#fff;font-weight:700;cursor:pointer}.muted{color:var(--muted);font-size:13px}
+</style></head><body>
+<header><div class="container nav"><a class="logo" href="index.html"><span class="logo-mark">GS</span> GoalScope</a><nav class="links"><a href="index.html">Home</a><a href="predictions.html">Predictions</a><a href="about.html">How it works</a><a href="blog.html">Insights</a><a class="active" href="contact.html">Contact</a></nav><a href="admin.html" style="padding:10px 14px;border-radius:999px;background:#3b82f6;color:#fff;font-weight:700">Upload</a></div></header>
+<main class="container" style="padding:18px 20px 30px;max-width:760px">
+<h1 style="font-size:26px;letter-spacing:-.02em">Contact</h1><p class="muted" style="margin-top:6px">Questions, corrections, or partnerships — we reply within 24h.</p>
+<div class="card" style="margin-top:14px">
+<form onsubmit="event.preventDefault(); alert('Demo form — connect to Formspree (see README) or replace with your email.');">
+<label class="muted">Name</label><input class="input" required placeholder="Your name" style="margin:6px 0 12px">
+<label class="muted">Email</label><input class="input" type="email" required placeholder="you@example.com" style="margin:6px 0 12px">
+<label class="muted">Message</label><textarea rows="5" required placeholder="How can we help?" style="margin:6px 0 12px"></textarea>
+<button class="btn" type="submit">Send message</button>
+</form>
+</div>
+<div class="card" style="margin-top:14px"><h3>Other ways</h3><p class="muted" style="margin-top:6px">Email: tips@goalscope.example<br>X: @goalscope<br>Predictions folder on device: /storage/emulated/0/Predictions/</p></div>
+</main></body></html>

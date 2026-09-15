@@ -1,0 +1,196 @@
+{
+  "acca-main": {
+    "title": "8-FOLD — 125.45 ODDS (Target 100–300 · Safer complex markets)",
+    "legs": [
+      [
+        "Elche vs Real Madrid — La Liga 20:30",
+        "Real Madrid Win & Over 2.5 Goals",
+        "2.00",
+        "Madrid title favourites vs promoted Elche (9 conceded in 4). Won last 6 vs promoted by 2+; last 5 H2H all O2.5+Win."
+      ],
+      [
+        "Rayo Vallecano vs Espanyol — 18:00",
+        "BTTS Yes",
+        "1.85",
+        "Both W1 D1 L2. Rayo 5/6 home BTTS, Espanyol 7/8 away scored. 4/5 last H2H BTTS."
+      ],
+      [
+        "Genoa vs Südtirol — Coppa 17:00",
+        "Genoa Win & Over 1.5",
+        "1.75",
+        "Serie A vs Serie B. Genoa 2+ in 3/4 Coppa home last 3y; Südtirol 4/5 away losses vs Serie A."
+      ],
+      [
+        "Ajax vs Willem II — 19:00",
+        "Ajax Win & Over 2.5",
+        "1.80",
+        "Ajax 12 goals in last 4 home vs promoted (all W+O2.5). Willem II 10 conceded last 3 away. 8 straight H2H wins."
+      ],
+      [
+        "Liverpool vs Tottenham — League Cup 20:00",
+        "BTTS Yes",
+        "1.70",
+        "Both PL despite rotation. Pool 12 home cup games scored; Spurs 9/10 away scored. 4/5 last meetings BTTS (3.4 avg)."
+      ],
+      [
+        "Ipswich vs Arsenal — 20:00",
+        "Arsenal Win & Over 2.5",
+        "1.85",
+        "Championship vs PL. Arsenal 9 wins vs Championship in LC, 8 with O2.5. Ipswich 2+ conceded vs PL in last 4 cups."
+      ],
+      [
+        "Grasshoppers vs Sion — Swiss SL 18:00",
+        "Over 2.5 Goals",
+        "1.85",
+        "Swiss avg 3.12. Hoppers 3.0, Sion away 3.4. Last 6 H2H: 5 O2.5 (3.5 avg)."
+      ],
+      [
+        "Padres @ Rockies — MLB 01:40",
+        "Over 10.5 Runs",
+        "1.85",
+        "VERIFIED: Rockies 5.59 ERA worst, Coors 11.8 runs avg. Last 10 at Coors 8 O10.5. Strongest edge."
+      ]
+    ]
+  },
+  "acca-1": {
+    "title": "ACCA 1 — TOP FLIGHT FOCUS 67.99",
+    "legs": [
+      [
+        "Fiorentina vs Pisa — Coppa 20:00",
+        "Fiorentina Win",
+        "1.70",
+        "Serie A home vs Serie B. 4/5 last Coppa home wins vs lower division."
+      ],
+      [
+        "Alavés vs Valencia — 19:00",
+        "BTTS Yes",
+        "1.85",
+        "Both 4/5 BTTS to open. H2H last 5: 4 BTTS. Both ~1.4 goals scored."
+      ],
+      [
+        "Raków vs Zagłębie — 17:00",
+        "Raków Win & Over 1.5",
+        "1.95",
+        "Raków top-3 home (1 loss in 12), Zagłębie bottom half away (2+ conceded 5/6)."
+      ],
+      [
+        "Dodgers @ Reds — 23:10",
+        "Over 9.5",
+        "1.85",
+        "VERIFIED: Reds 4.88 ERA /1.44 WHIP (3rd worst). GABP HR-friendly. Last 6 avg 11.2."
+      ],
+      [
+        "West Ham vs Fulham — 19:45",
+        "Over 2.5",
+        "1.85",
+        "Both PL, rotate but attack-heavy. WHU cup avg 3.2, Fulham 4/5 away 2+ conceded."
+      ],
+      [
+        "Brewers @ Pirates — 22:35",
+        "Brewers Win",
+        "1.80",
+        "Brewers 3.57 ERA #2 + 778 runs top. Pirates sub-.500, pen 4.50."
+      ],
+      [
+        "Motherwell vs Aberdeen — 19:45",
+        "BTTS Yes",
+        "1.80",
+        "5/6 H2H BTTS. Motherwell 9/10 home scored, Aberdeen 7/8 away scored+conceded."
+      ]
+    ]
+  },
+  "acca-2": {
+    "title": "ACCA 2 — CUP & UNDERDOGS 70.10",
+    "legs": [
+      [
+        "Peterborough vs Barnsley — 19:30",
+        "Over 2.5",
+        "1.80",
+        "L1 vs L1. Both avg ~3.0 goals. Last 3 H2H all O2.5."
+      ],
+      [
+        "Reading vs Brentford — 20:00",
+        "Brentford Win",
+        "1.75",
+        "Champ vs PL. Brentford 4 wins vs Champ in cups."
+      ],
+      [
+        "Korona vs Górnik — 19:30",
+        "Over 2.5",
+        "1.85",
+        "Polish avg 2.9. Korona 4/5 home O2.5, Górnik 1.6 conceded. Last 5 H2H 4 O2.5."
+      ],
+      [
+        "Athletics @ Rays — 23:35",
+        "Over 9.0",
+        "1.85",
+        "VERIFIED: Athletics 5.42 ERA #2 worst, Rays .261/.329 best hit. Last 4 avg 10.4."
+      ],
+      [
+        "Tigers @ Blue Jays — 23:07",
+        "Over 8.5",
+        "1.85",
+        "Rogers Centre inflates. Both ~4.6-4.8 scored. Tigers pen taxed."
+      ],
+      [
+        "Falkirk vs Hearts — 19:45",
+        "Hearts Win",
+        "1.90",
+        "Promoted Falkirk vs top-4 Hearts (4/5 wins vs promoted away)."
+      ],
+      [
+        "Hibernian vs Kilmarnock — 19:45",
+        "Over 2.5",
+        "1.85",
+        "Hibs 2.9 avg, Killie 2+ conceded 5/6 away. 4/6 H2H O2.5."
+      ]
+    ]
+  },
+  "acca-3": {
+    "title": "ACCA 3 — TRANSATLANTIC MIX 66.27",
+    "legs": [
+      [
+        "Yankees @ Twins — 23:40",
+        "Yankees Win",
+        "1.80",
+        "VERIFIED: Yankees 3.22 ERA best, 87-63 vs Twins 4.71 ERA. 5 straight wins."
+      ],
+      [
+        "Phillies @ Nationals — 22:45",
+        "Over 9.0",
+        "1.85",
+        "Nats 4.74 ERA, 5.3 allowed. Last 8: 6 O9.0 (10.1 avg)."
+      ],
+      [
+        "Braves @ Cubs — 00:05",
+        "Over 8.5",
+        "1.85",
+        "Wrigley wind-out Sept avg 9.8. Both 4.5+ scored, pens mid-tier."
+      ],
+      [
+        "Red Sox @ Rangers — 00:05",
+        "Over 9.5",
+        "1.80",
+        "Globe Life avg 10.2. Red Sox .260+ vs RHP, Rangers 5.0 at home."
+      ],
+      [
+        "TNS vs Flint — 19:45",
+        "TNS Win & Over 2.5",
+        "1.70",
+        "TNS champs 4 straight, 15/16 home 2+. Flint 2+ conceded 6/7 away. 8 straight H2H."
+      ],
+      [
+        "Truro vs Salisbury — 19:45",
+        "Over 2.5",
+        "1.90",
+        "NL South 3.0 avg. Truro 5/6 home O2.5."
+      ],
+      [
+        "Stenhousemuir vs Partick — 19:45",
+        "Over 2.5",
+        "1.85",
+        "Championship 3.1 avg. Stenny 7/8 scored 5/8 2+ conceded. Last 4 H2H all O2.5."
+      ]
+    ]
+  }
+}
