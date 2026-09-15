@@ -21,7 +21,8 @@
 <section class="border-b border-white/10 bg-gradient-to-b from-[#0f1a36] to-[#070b1a]">
   <div class="mx-auto max-w-[1180px] px-5 py-8">
     <h1 class="text-3xl font-black tracking-tight">Daily predictions</h1>
-    <p class="mt-2 max-w-2xl text-sm text-slate-400">Every accumulator shows its stat. No duplicate picks across slips. Tap a row on mobile to scroll the full table. Odds are indicative — verify at your bookmaker.</p>
+    <p class="mt-2 max-w-2xl text-sm text-slate-400">Every accumulator shows its stat and kick-off time (WAT). No duplicate picks across slips. Odds are indicative — always verify live odds on <a href="https://www.sportybet.com" target="_blank" rel="noopener" class="font-bold text-emerald-400 underline decoration-emerald-400/30 hover:text-emerald-300">SportyBet</a> before betting.</p>
+    <div class="mt-3 rounded-xl border border-amber-500/20 bg-amber-500/10 px-4 py-2.5 text-xs leading-relaxed text-amber-200">Odds shown are indicative and may change. For accurate live odds visit <a href="https://www.sportybet.com" target="_blank" rel="noopener" class="font-extrabold underline">sportybet.com</a>. All kick-off times displayed in WAT — confirm fixture time before placing bets.</div>
     <div class="mt-4 flex flex-wrap gap-2">
       <button data-filter="all" onclick="filterAccas('all')" class="chip active rounded-full bg-blue-600 px-3.5 py-1.5 text-xs font-bold text-white">All</button>
       <button data-filter="football" onclick="filterAccas('football')" class="chip rounded-full border border-white/10 bg-white/[0.04] px-3.5 py-1.5 text-xs font-bold text-slate-400">Football</button>
@@ -33,7 +34,7 @@
 
 <main class="mx-auto max-w-[1180px] px-5 py-6">
   <div id="accas" class="grid gap-6"></div>
-  <div class="mt-6 rounded-2xl border border-white/10 bg-white/[0.03] p-4 text-xs text-slate-400">Sources: BBC Sport JSON · MLB statsapi · LiveScores · Futbol24 · 18+ Gamble responsibly. Past performance is not a guarantee.</div>
+  <div class="mt-6 rounded-2xl border border-white/10 bg-white/[0.03] p-4 text-xs leading-relaxed text-slate-400">Odds are indicative only and may differ from live prices — always check accurate odds on <a href="https://www.sportybet.com" target="_blank" rel="noopener" class="font-bold text-emerald-400 underline decoration-emerald-400/30">sportybet.com</a> before betting. All kick-off times shown in WAT. 18+ Gamble responsibly.</div>
 </main>
 
 <script src="assets/app.js"></script>
@@ -53,11 +54,17 @@ fetch('data/details.json').then(r=>r.json()).then(details=>{
       </div>
       <div class="overflow-x-auto">
         <table class="w-full min-w-[640px] text-sm">
-          <thead class="bg-white/[0.02] text-[11px] font-bold tracking-widest text-slate-400"><tr><th class="px-3 py-2 text-left">Match</th><th class="px-3 py-2 text-left">Pick</th><th class="px-3 py-2 text-left">Odds</th><th class="px-3 py-2 text-left">Reasoning</th></tr></thead>
-          <tbody class="divide-y divide-white/5">${acca.legs.map(l=>`<tr class="hover:bg-white/[0.02]"><td class="px-3 py-2.5 font-bold">${l[0]}</td><td class="px-3 py-2.5 font-bold text-emerald-400">${l[1]}</td><td class="px-3 py-2.5 font-mono font-bold">${l[2]}</td><td class="px-3 py-2.5 text-slate-400">${l[3]}</td></tr>`).join('')}</tbody>
+          <thead class="bg-white/[0.02] text-[11px] font-bold tracking-widest text-slate-400"><tr><th class="px-3 py-2 text-left">Match</th><th class="px-3 py-2 text-left">Time (WAT)</th><th class="px-3 py-2 text-left">Pick</th><th class="px-3 py-2 text-left">Odds*</th><th class="px-3 py-2 text-left">Reasoning</th></tr></thead>
+          <tbody class="divide-y divide-white/5">${acca.legs.map(l=>{
+          let m=l[0], t='\u2014';
+          let tm=m.match(/(\d{1,2}:\d{2})/);
+          if(tm) t=tm[1]+' WAT';
+          let matchOnly=m.replace(/\s*\d{1,2}:\d{2}.*$/, '').trim();
+          return `<tr class="hover:bg-white/[0.02]"><td class="px-3 py-2.5 font-bold">${matchOnly}</td><td class="px-3 py-2.5 font-mono text-xs font-bold text-slate-300">${t}</td><td class="px-3 py-2.5 font-bold text-emerald-400">${l[1]}</td><td class="px-3 py-2.5 font-mono font-bold">${l[2]}</td><td class="px-3 py-2.5 text-slate-400">${l[3]}</td></tr>`;
+        }).join('')}</tbody>
         </table>
       </div>
-      <div class="flex flex-wrap items-center justify-between gap-2 border-t border-white/10 bg-emerald-500/[0.06] px-4 py-2 font-mono text-xs font-bold"><span class="truncate">${acca.legs.map(l=>l[2]).join(' × ')} = ${total}</span><span class="font-sans font-semibold text-slate-400">Unique across all slips</span></div>
+      <div class="flex flex-wrap items-center justify-between gap-2 border-t border-white/10 bg-emerald-500/[0.06] px-4 py-2 font-mono text-xs font-bold"><span class="truncate">${acca.legs.map(l=>l[2]).join(' × ')} = ${total}</span><span class="font-sans font-semibold text-slate-400">*Indicative — live odds on sportybet.com</span></div><div class="border-t border-white/10 bg-amber-500/10 px-4 py-2 text-[11px] leading-relaxed text-amber-200">All times WAT. Odds are indicative and may change — verify accurate live odds on <a href="https://www.sportybet.com" target="_blank" rel="noopener" class="font-bold underline">sportybet.com</a> before betting.</div>
     `;
     container.appendChild(el);
   });
