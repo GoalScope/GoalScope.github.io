@@ -60,3 +60,37 @@ function parseTxtToAcca(txt, filename){
     _legsDetailed: legs
   };
 }
+
+
+// Device type detection - adds body class and adapts layout
+(function(){
+  function detectDevice(){
+    const w = window.innerWidth;
+    const ua = navigator.userAgent;
+    const isTouch = 'ontouchstart' in window || navigator.maxTouchPoints>0;
+    let type='desktop';
+    if(w <= 720) type='mobile';
+    else if(w <= 1024) type='tablet';
+    else type='desktop';
+    if(/Android|iPhone|iPad|iPod/i.test(ua) && type==='desktop' && isTouch) type='mobile';
+    document.documentElement.setAttribute('data-device', type);
+    document.body.classList.remove('device-mobile','device-tablet','device-desktop');
+    document.body.classList.add('device-'+type);
+    // expose for CSS
+    const badge=document.getElementById('device-badge');
+    if(badge) badge.textContent= type.toUpperCase();
+  }
+  detectDevice();
+  window.addEventListener('resize', detectDevice);
+  // Add responsive table wrapper for small screens
+  document.querySelectorAll('table.table').forEach(t=>{
+    if(!t.parentElement.classList.contains('table-wrap')){
+      const wrap=document.createElement('div');
+      wrap.className='table-wrap';
+      wrap.style.overflowX='auto';
+      wrap.style.webkitOverflowScrolling='touch';
+      t.parentNode.insertBefore(wrap, t);
+      wrap.appendChild(t);
+    }
+  });
+})();

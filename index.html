@@ -89,6 +89,15 @@ footer{border-top:1px solid var(--line);margin-top:18px;padding:18px 0;color:var
 .footer-grid{display:grid;grid-template-columns:1.2fr .8fr .8fr .8fr;gap:18px}
 @media(max-width:800px){.footer-grid{grid-template-columns:1fr 1fr}}
 @media(max-width:520px){.footer-grid{grid-template-columns:1fr}}
+
+/* Device-adaptive & accessibility */
+.table-wrap{overflow-x:auto;-webkit-overflow-scrolling:touch}
+.device-mobile .hero h1{font-size:28px}
+.device-mobile table.table th,.device-mobile table.table td{padding:8px 10px;font-size:12px}
+.device-mobile .match-row{flex-wrap:wrap;gap:6px}
+@media(max-width:720px){.topbar .container{font-size:12px} .nav{flex-wrap:wrap} table.table{font-size:12px} .acca-head{flex-direction:column;align-items:flex-start}}
+@media(max-width:480px){h1{font-size:26px!important} .odds{font-size:18px}}
+
 </style>
 </head>
 <body>
@@ -114,7 +123,7 @@ footer{border-top:1px solid var(--line);margin-top:18px;padding:18px 0;color:var
     </nav>
     <div class="nav-cta">
       <a class="btn btn-ghost" href="predictions.html">View today's tips</a>
-      <a class="btn btn-primary" href="admin.html">Upload predictions</a>
+      <!-- admin: /admin.html (password protected) -->
       <button class="hamburger" onclick="document.querySelector('nav.links').style.display=document.querySelector('nav.links').style.display==='flex'?'none':'flex'">Menu</button>
     </div>
   </div>
