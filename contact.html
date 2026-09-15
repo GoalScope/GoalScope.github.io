@@ -1,38 +1,35 @@
-<!DOCTYPE html><html lang="en"><head><meta charset="utf-8"><meta http-equiv="Content-Security-Policy" content="default-src 'self'; script-src 'self' https://fonts.googleapis.com https://fonts.gstatic.com 'unsafe-inline'; style-src 'self' https://fonts.googleapis.com 'unsafe-inline'; font-src https://fonts.gstatic.com; img-src 'self' data: https:; connect-src 'self'; frame-ancestors 'none'; base-uri 'self'; form-action 'self'">
-<meta http-equiv="X-Content-Type-Options" content="nosniff">
-<meta http-equiv="Referrer-Policy" content="strict-origin-when-cross-origin">
-<meta http-equiv="Permissions-Policy" content="camera=(), microphone=(), geolocation=()">
-<meta name="referrer" content="strict-origin-when-cross-origin">
-<meta name="viewport" content="width=device-width, initial-scale=1">
+<!DOCTYPE html>
+<html lang="en" class="dark">
+<head>
+<meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1">
+<meta http-equiv="Content-Security-Policy" content="default-src 'self'; script-src 'self' https://cdn.tailwindcss.com https://fonts.googleapis.com https://fonts.gstatic.com 'unsafe-inline'; style-src 'self' https://cdn.tailwindcss.com https://fonts.googleapis.com 'unsafe-inline'; font-src https://fonts.gstatic.com; img-src 'self' data: https:; connect-src 'self'; frame-ancestors 'none'; base-uri 'self'">
 <title>Contact — goalscope</title>
-<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700;800&display=swap" rel="stylesheet">
-<style>*{box-sizing:border-box;margin:0;padding:0}:root{--bg:#0a0e1a;--surface:#11182e;--line:#1f2e5a;--muted:#8b9bbf;--text:#eef2ff}
-body{font-family:Inter,sans-serif;background:var(--bg);color:var(--text)}.container{max-width:1180px;margin:0 auto;padding:0 20px}
-header{position:sticky;top:0;background:rgba(10,14,26,.92);backdrop-filter:blur(10px);border-bottom:1px solid var(--line)}
-.nav{display:flex;align-items:center;justify-content:space-between;padding:14px 0}.logo{display:flex;align-items:center;gap:10px;font-weight:800}.logo-mark{width:32px;height:32px;border-radius:10px;background:linear-gradient(135deg,#3b82f6,#06b6d4);display:grid;place-items:center;color:#fff}
-a{color:inherit;text-decoration:none}.links{display:flex;gap:16px;color:var(--muted);font-weight:600;font-size:14px}.links a.active{color:#fff}
-.card{background:var(--surface);border:1px solid var(--line);border-radius:16px;padding:18px}.input,textarea{width:100%;background:#0a132c;border:1px solid var(--line);color:#fff;padding:12px;border-radius:10px}
-.btn{padding:10px 14px;border-radius:999px;background:#3b82f6;border:0;color:#fff;font-weight:700;cursor:pointer}.muted{color:var(--muted);font-size:13px}
-
-/* Device-adaptive & accessibility */
-.table-wrap{overflow-x:auto;-webkit-overflow-scrolling:touch}
-.device-mobile .hero h1{font-size:28px}
-.device-mobile table.table th,.device-mobile table.table td{padding:8px 10px;font-size:12px}
-.device-mobile .match-row{flex-wrap:wrap;gap:6px}
-@media(max-width:720px){.topbar .container{font-size:12px} .nav{flex-wrap:wrap} table.table{font-size:12px} .acca-head{flex-direction:column;align-items:flex-start}}
-@media(max-width:480px){h1{font-size:26px!important} .odds{font-size:18px}}
-
-</style></head><body>
-<header><div class="container nav"><a class="logo" href="index.html"><span class="logo-mark">GS</span> goalscope</a><nav class="links"><a href="index.html">Home</a><a href="predictions.html">Predictions</a><a href="about.html">How it works</a><a href="blog.html">Insights</a><a class="active" href="contact.html">Contact</a></nav><!-- admin: /admin.html (password protected) --></div></header>
-<main class="container" style="padding:18px 20px 30px;max-width:760px">
-<h1 style="font-size:26px;letter-spacing:-.02em">Contact</h1><p class="muted" style="margin-top:6px">Questions, corrections, or partnerships — we reply within 24h.</p>
-<div class="card" style="margin-top:14px">
-<form onsubmit="event.preventDefault(); alert('Demo form — connect to Formspree (see README) or replace with your email.');">
-<label class="muted">Name</label><input class="input" required placeholder="Your name" style="margin:6px 0 12px">
-<label class="muted">Email</label><input class="input" type="email" required placeholder="you@example.com" style="margin:6px 0 12px">
-<label class="muted">Message</label><textarea rows="5" required placeholder="How can we help?" style="margin:6px 0 12px"></textarea>
-<button class="btn" type="submit">Send message</button>
-</form>
-</div>
-<div class="card" style="margin-top:14px"><h3>Other ways</h3><p class="muted" style="margin-top:6px">Email: tips@goalscope.example<br>X: @goalscope<br>Predictions folder on device: /storage/emulated/0/Predictions/</p></div>
-</main></body></html>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800;900&display=swap" rel="stylesheet">
+<script src="https://cdn.tailwindcss.com"></script>
+<script>tailwind.config={darkMode:'class',theme:{extend:{fontFamily:{sans:['Inter','sans-serif']}}}}</script>
+</head>
+<body class="bg-[#070b1a] text-slate-100 antialiased">
+<header class="sticky top-0 z-40 border-b border-white/10 bg-[#070b1a]/80 backdrop-blur-xl">
+  <div class="mx-auto flex max-w-[1180px] items-center justify-between gap-6 px-5 py-3.5">
+    <a href="index.html" class="flex items-center gap-2.5"><span class="grid h-9 w-9 place-items-center rounded-xl bg-gradient-to-br from-blue-600 to-cyan-400 font-black text-white">G</span><span class="text-[18px] font-black tracking-tight">goalscope</span></a>
+    <nav class="hidden gap-6 text-[13px] font-semibold text-slate-400 md:flex"><a href="index.html" class="hover:text-white">Home</a><a href="predictions.html" class="hover:text-white">Predictions</a><a href="about.html" class="hover:text-white">How it works</a><a href="blog.html" class="hover:text-white">Insights</a><a href="contact.html" class="text-white">Contact</a></nav>
+    <a href="predictions.html" class="rounded-full bg-blue-600 px-4 py-2 text-sm font-bold text-white">View tips</a>
+  </div>
+</header>
+<main class="mx-auto max-w-[760px] px-5 py-10">
+  <h1 class="text-3xl font-black tracking-tight">Contact</h1>
+  <p class="mt-2 text-sm text-slate-400">Questions, corrections, or partnerships — we reply within 24h.</p>
+  <div class="mt-6 rounded-2xl border border-white/10 bg-white/[0.03] p-6 backdrop-blur">
+    <form onsubmit="event.preventDefault(); alert('Demo form — connect to Formspree (see README) or replace with your email.');" class="grid gap-4">
+      <div><label class="text-xs font-bold tracking-widest text-slate-400">Name</label><input required placeholder="Your name" class="mt-1 w-full rounded-xl border border-white/10 bg-[#0a132c] px-4 py-3 text-sm outline-none focus:border-blue-500/50 placeholder:text-slate-500"></div>
+      <div><label class="text-xs font-bold tracking-widest text-slate-400">Email</label><input type="email" required placeholder="you@example.com" class="mt-1 w-full rounded-xl border border-white/10 bg-[#0a132c] px-4 py-3 text-sm outline-none focus:border-blue-500/50 placeholder:text-slate-500"></div>
+      <div><label class="text-xs font-bold tracking-widest text-slate-400">Message</label><textarea rows="5" required placeholder="How can we help?" class="mt-1 w-full rounded-xl border border-white/10 bg-[#0a132c] px-4 py-3 text-sm outline-none focus:border-blue-500/50 placeholder:text-slate-500"></textarea></div>
+      <button type="submit" class="rounded-full bg-blue-600 px-6 py-3 text-sm font-extrabold text-white hover:bg-blue-500 transition">Send message</button>
+    </form>
+  </div>
+  <div class="mt-4 rounded-2xl border border-white/10 bg-white/[0.03] p-5">
+    <h3 class="font-bold">Other ways</h3><p class="mt-2 text-sm leading-relaxed text-slate-400">Email: tips@goalscope.example<br>X: @goalscope<br>Predictions folder: /storage/emulated/0/Predictions/<br>Site: goalscope.github.io</p>
+  </div>
+</main>
+</body>
+</html>
