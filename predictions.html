@@ -2,7 +2,7 @@
 <html lang="en" class="dark">
 <head>
 <meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1">
-<meta http-equiv="Content-Security-Policy" content="default-src 'self'; script-src 'self' https://cdn.tailwindcss.com https://fonts.googleapis.com https://fonts.gstatic.com 'unsafe-inline'; style-src 'self' https://cdn.tailwindcss.com https://fonts.googleapis.com 'unsafe-inline'; font-src https://fonts.gstatic.com; img-src 'self' data: https:; connect-src 'self'; frame-ancestors 'none'; base-uri 'self'">
+<meta http-equiv="Content-Security-Policy" content="default-src 'self'; script-src 'self' https://cdn.tailwindcss.com https://fonts.googleapis.com https://fonts.gstatic.com 'unsafe-inline' https://*.monetag.com https://*.propellerads.com https://*.adsterra.com https://*.highperformancecpm.com https://*.brevo.com https://*.mailchimp.com https://*.formspree.io; style-src 'self' https://cdn.tailwindcss.com https://fonts.googleapis.com 'unsafe-inline'; font-src https://fonts.gstatic.com; img-src 'self' data: https:; connect-src 'self' https://*.brevo.com https://*.mailchimp.com https://*.formspree.io https://*.monetag.com https://*.propellerads.com; frame-ancestors 'none'; base-uri 'self'">
 <meta http-equiv="X-Content-Type-Options" content="nosniff">
 <title>Predictions — GoalScope</title>
 <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800;900&family=JetBrains+Mono:wght@700&display=swap" rel="stylesheet">
@@ -37,34 +37,84 @@
   <div class="mt-6 rounded-2xl border border-white/10 bg-white/[0.03] p-4 text-xs leading-relaxed text-slate-400">Odds are indicative only and may differ from live prices — always check accurate odds on <a href="https://www.sportybet.com" target="_blank" rel="noopener" class="font-bold text-emerald-400 underline decoration-emerald-400/30">sportybet.com</a> before betting. All kick-off times shown in WAT. 18+ Gamble responsibly.</div>
 </main>
 
+<script src="assets/monetize.js"></script>
 <script src="assets/app.js"></script>
 <script>
+// Monetization helpers
+function affLink(book){ const c=window.GOALSCOPE_AFFILIATE||{}; return c[book]|| (book==='sportybet'?'https://www.sportybet.com':'https://www.bet9ja.com'); }
+function affBadge(book){ const c=window.GOALSCOPE_AFFILIATE||{}; return c.enabled ? '' : ' <span class="ml-1 rounded bg-amber-500/20 px-1.5 py-0.5 text-[10px]">PLACEHOLDER</span>'; }
+</script>
+<!-- Ad slot top (enable in assets/monetize.js when you join Monetag/Propeller) -->
+<div id="ad-top" class="mx-auto max-w-[1180px] px-5 hidden"><div class="rounded-2xl border border-dashed border-white/10 bg-white/[0.02] px-4 py-3 text-center text-xs text-slate-500">Ad space — top banner (728x90). Enable in <code>assets/monetize.js</code> → GOALSCOPE_ADS</div></div>
+<div id="results-banner" class="hidden"></div>
+<script>
 let ALL=[];
-fetch('data/details.json').then(r=>r.json()).then(details=>{
+Promise.all([
+  fetch('data/details.json').then(r=>r.json()),
+  fetch('data/results.json').then(r=>r.json()).catch(()=>null),
+  fetch('data/results_2026-09-15.json').then(r=>r.json()).catch(()=>null)
+]).then(([details, results, results15])=>{
+  const resData = results || results15;
   const container=document.getElementById('accas');
+  // top banner
+  if(resData){
+    const b=document.getElementById('results-banner');
+    const upd=resData.updated||'';
+    const d=resData.date||'2026-09-15';
+    // count overall
+    let totHit=0, totLost=0, totPend=0, totAccas=0;
+    Object.values(resData.accas||{}).forEach(a=>{ totHit+=a.summary.hits; totLost+=a.summary.lost; totPend+=a.summary.pending; totAccas++; });
+    const allLost = totLost>0;
+    b.className = 'mb-6 rounded-2xl border px-4 py-4 ' + (allLost ? 'border-red-500/20 bg-red-500/10' : 'border-emerald-500/20 bg-emerald-500/10');
+    const pendNote = totPend ? ` · <span class="text-amber-300">${totPend} MLB pending (in progress at check)</span>` : '';
+    b.innerHTML = `<div class="flex flex-wrap items-center justify-between gap-3">
+      <div><div class="text-[11px] font-extrabold tracking-widest ${allLost?'text-red-300':'text-emerald-300'}">RESULTS — ${d} · Updated ${upd}</div>
+      <div class="mt-1 text-sm font-bold">${totHit} legs hit · <span class="text-red-400">${totLost} lost</span>${pendNote}</div>
+      <div class="text-xs text-slate-400">Football finals verified · MLB finals pending — will finalize tomorrow. Verified stats · All times WAT.</div></div>
+      <span class="rounded-full px-3 py-1.5 text-xs font-black ${allLost?'bg-red-600 text-white':'bg-emerald-600 text-white'}">${allLost?'ACCA LOST':'CHECK RESULTS'}</span></div>`;
+    b.classList.remove('hidden');
+  }
   Object.entries(details).forEach(([key,acca])=>{
     const total = acca.legs.map(l=>parseFloat(l[2])||1.85).reduce((a,b)=>a*b,1).toFixed(2);
+    const resAcca = resData && resData.accas && resData.accas[key];
+    const verdict = resAcca ? resAcca.summary.verdict : null;
+    const badgeColor = verdict==='LOST' ? 'border-red-500/30 bg-red-500/15 text-red-300' : verdict==='WON' ? 'border-emerald-500/30 bg-emerald-500/15 text-emerald-300' : 'border-blue-500/30 bg-blue-600/15 text-blue-300';
+    const verdictBadge = verdict ? `<span class="ml-2 inline-flex rounded-full border px-2 py-0.5 text-[10px] font-black tracking-widest ${verdict==='LOST'?'border-red-500/30 bg-red-500/15 text-red-300':verdict==='WON'?'border-emerald-500/30 bg-emerald-500/15 text-emerald-300':'border-amber-500/30 bg-amber-500/15 text-amber-300'}">${verdict}</span>` : '';
     const el=document.createElement('section');
     el.className='acca overflow-hidden rounded-2xl border border-white/10 bg-white/[0.03] backdrop-blur';
     el.dataset.key=key; el.id=key;
     el.innerHTML=`
       <div class="flex flex-wrap items-center justify-between gap-3 border-b border-white/10 px-4 py-4">
-        <div><div class="inline-flex rounded-full border border-blue-500/30 bg-blue-600/15 px-2.5 py-1 text-[11px] font-extrabold tracking-widest text-blue-300">${acca.title}</div><div class="mt-1 text-xs text-slate-400">${acca.legs.length} selections · No duplicates · Verified stats</div></div>
-        <div class="text-right"><div class="font-mono text-2xl font-black text-emerald-400">${total} <span class="text-xs tracking-widest text-slate-500">ODDS</span></div><div class="text-xs text-slate-500">100 stake = ${(total*100).toFixed(0)} return</div></div>
+        <div><div class="inline-flex items-center rounded-full border px-2.5 py-1 text-[11px] font-extrabold tracking-widest ${badgeColor}">${acca.title}${verdictBadge}</div><div class="mt-1 text-xs text-slate-400">${acca.legs.length} selections · No duplicates · Verified stats${resAcca ? ` · <span class="${verdict==='LOST'?'text-red-400':verdict==='WON'?'text-emerald-400':'text-amber-300'}">${resAcca.summary.hits} HIT · ${resAcca.summary.lost} LOST${resAcca.summary.pending?' · '+resAcca.summary.pending+' PENDING':''}</span>` : ''}</div></div>
+        <div class="text-right"><div class="font-mono text-2xl font-black ${verdict==='LOST'?'text-red-400':verdict==='WON'?'text-emerald-400':'text-emerald-400'}">${total} <span class="text-xs tracking-widest text-slate-500">ODDS</span></div><div class="text-xs text-slate-500">100 stake = ${(total*100).toFixed(0)} return</div></div>
       </div>
       <div class="overflow-x-auto">
-        <table class="w-full min-w-[640px] text-sm">
-          <thead class="bg-white/[0.02] text-[11px] font-bold tracking-widest text-slate-400"><tr><th class="px-3 py-2 text-left">Match</th><th class="px-3 py-2 text-left">Time (WAT)</th><th class="px-3 py-2 text-left">Pick</th><th class="px-3 py-2 text-left">Odds*</th><th class="px-3 py-2 text-left">Reasoning</th></tr></thead>
-          <tbody class="divide-y divide-white/5">${acca.legs.map(l=>{
+        <table class="w-full min-w-[760px] text-sm">
+          <thead class="bg-white/[0.02] text-[11px] font-bold tracking-widest text-slate-400"><tr><th class="px-3 py-2 text-left">Match</th><th class="px-3 py-2 text-left">Time (WAT)</th><th class="px-3 py-2 text-left">Pick</th><th class="px-3 py-2 text-left">Odds*</th><th class="px-3 py-2 text-left">Result</th><th class="px-3 py-2 text-left">Status</th><th class="px-3 py-2 text-left">Reasoning</th></tr></thead>
+          <tbody class="divide-y divide-white/5">${acca.legs.map((l,idx)=>{
           let m=l[0], t='\u2014';
           let tm=m.match(/(\d{1,2}:\d{2})/);
           if(tm) t=tm[1]+' WAT';
           let matchOnly=m.replace(/\s*\d{1,2}:\d{2}.*$/, '').trim();
-          return `<tr class="hover:bg-white/[0.02]"><td class="px-3 py-2.5 font-bold">${matchOnly}</td><td class="px-3 py-2.5 font-mono text-xs font-bold text-slate-300">${t}</td><td class="px-3 py-2.5 font-bold text-emerald-400">${l[1]}</td><td class="px-3 py-2.5 font-mono font-bold">${l[2]}</td><td class="px-3 py-2.5 text-slate-400">${l[3]}</td></tr>`;
+          const r = resAcca && resAcca.legs && resAcca.legs[idx];
+          const status = r ? r.status : null;
+          const ft = r ? r.result : '';
+          const statusCls = status==='HIT' ? 'bg-emerald-500/15 text-emerald-300 border-emerald-500/30' : status==='LOST' ? 'bg-red-500/15 text-red-300 border-red-500/30' : status==='PENDING' ? 'bg-amber-500/15 text-amber-300 border-amber-500/30' : 'bg-white/5 text-slate-400 border-white/10';
+          const statusLabel = status || '—';
+          const ftDisplay = ft ? `<span class="font-mono text-xs font-bold ${status==='HIT'?'text-emerald-300':status==='LOST'?'text-red-300':status==='PENDING'?'text-amber-300':'text-slate-300'}">${ft}</span>` : '<span class="text-slate-500">—</span>';
+          const rowBg = status==='HIT' ? 'bg-emerald-500/[0.04]' : status==='LOST' ? 'bg-red-500/[0.06]' : status==='PENDING' ? 'bg-amber-500/[0.04]' : '';
+          return `<tr class="hover:bg-white/[0.02] ${rowBg}"><td class="px-3 py-2.5 font-bold">${matchOnly}</td><td class="px-3 py-2.5 font-mono text-xs font-bold text-slate-300">${t}</td><td class="px-3 py-2.5 font-bold text-emerald-400">${l[1]}</td><td class="px-3 py-2.5 font-mono font-bold">${l[2]}</td><td class="px-3 py-2.5">${ftDisplay}${r&&r.note ? `<div class="text-[11px] text-slate-500">${r.note}</div>` : ''}</td><td class="px-3 py-2.5"><span class="inline-flex rounded-full border px-2 py-1 text-[11px] font-black tracking-widest ${statusCls}">${statusLabel}</span></td><td class="px-3 py-2.5 text-slate-400">${l[3]}</td></tr>`;
         }).join('')}</tbody>
         </table>
       </div>
-      <div class="flex flex-wrap items-center justify-between gap-2 border-t border-white/10 bg-emerald-500/[0.06] px-4 py-2 font-mono text-xs font-bold"><span class="truncate">${acca.legs.map(l=>l[2]).join(' × ')} = ${total}</span><span class="font-sans font-semibold text-slate-400">*Indicative — live odds on sportybet.com</span></div><div class="border-t border-white/10 bg-amber-500/10 px-4 py-2 text-[11px] leading-relaxed text-amber-200">All times WAT. Odds are indicative and may change — verify accurate live odds on <a href="https://www.sportybet.com" target="_blank" rel="noopener" class="font-bold underline">sportybet.com</a> before betting.</div>
+      <div class="flex flex-wrap items-center justify-between gap-2 border-t border-white/10 bg-emerald-500/[0.06] px-4 py-2 font-mono text-xs font-bold"><span class="truncate">${acca.legs.map(l=>l[2]).join(' × ')} = ${total}</span><span class="font-sans font-semibold text-slate-400">*Indicative — live odds on sportybet.com</span></div>
+      <div class="flex flex-wrap items-center gap-2 border-t border-white/10 bg-gradient-to-r from-emerald-600/10 to-blue-600/10 px-4 py-3">
+        ${(()=>{ const code=(window.GOALSCOPE_BOOKING&&window.GOALSCOPE_BOOKING[key])||''; if(code){ const ref=(window.GOALSCOPE_AFFILIATE&&window.GOALSCOPE_AFFILIATE.sportybet)||'https://www.sportybet.com'; const join=ref.includes('?')?'&':'?'; const url=`https://www.sportybet.com/ng/code/${code}${window.GOALSCOPE_AFFILIATE&&window.GOALSCOPE_AFFILIATE.enabled&&ref!== 'https://www.sportybet.com' ? join+'s='+encodeURIComponent(ref.split('ref=')[1]||'') : ''}`; return `<a href="${url}" target="_blank" rel="noopener sponsored" class="inline-flex items-center gap-1.5 rounded-full bg-emerald-600 px-4 py-2 text-sm font-extrabold text-white shadow hover:bg-emerald-500 transition">Load on SportyBet (${code}) →</a><button onclick="navigator.clipboard.writeText('${code}');this.textContent='Copied!';setTimeout(()=>this.textContent='Copy ${code}',1500)" class="rounded-full border border-white/10 bg-white/[0.04] px-3 py-2 text-xs font-bold hover:bg-white/[0.08]">Copy ${code}</button>`; } else { return `<a href="${affLink('sportybet')}" target="_blank" rel="noopener sponsored" class="inline-flex items-center gap-1.5 rounded-full bg-emerald-600 px-4 py-2 text-sm font-extrabold text-white shadow hover:bg-emerald-500 transition">Bet on SportyBet →${affBadge('sportybet')}</a>`; }})()}
+        ${(()=>{ const code=(window.GOALSCOPE_BOOKING_BET9JA&&window.GOALSCOPE_BOOKING_BET9JA[key])||''; if(code){ const url=`https://www.bet9ja.com/bet_code?code=${code}`; return `<a href="${url}" target="_blank" rel="noopener sponsored" class="inline-flex items-center gap-1.5 rounded-full bg-white text-[#0a7a33] px-4 py-2 text-sm font-extrabold shadow hover:bg-slate-100 transition">Load on Bet9ja (${code}) →</a><button onclick="navigator.clipboard.writeText('${code}');this.textContent='Copied!';setTimeout(()=>this.textContent='Copy ${code}',1500)" class="rounded-full border border-white/10 bg-white/[0.04] px-3 py-2 text-xs font-bold hover:bg-white/[0.08]">Copy ${code}</button>`; } else { return `<a href="${affLink('bet9ja')}" target="_blank" rel="noopener sponsored" class="inline-flex items-center gap-1.5 rounded-full border border-white/10 bg-white/[0.04] px-4 py-2 text-sm font-bold hover:bg-white/[0.08] transition">Bet on Bet9ja${affBadge('bet9ja')}</a>`; }})()}
+        <a href="${(window.GOALSCOPE_AFFILIATE&&window.GOALSCOPE_AFFILIATE.shrinkme)||'https://shrinkme.click/GoalScopeTips'}" target="_blank" rel="noopener" class="inline-flex items-center gap-1 rounded-full border border-blue-500/20 bg-blue-600/15 px-3 py-2 text-xs font-bold text-blue-300 hover:bg-blue-600/25">Stats via ShrinkMe</a>
+        <span class="ml-auto text-[11px] text-slate-500">Affiliate links — we may earn commission. 18+ Gamble responsibly.</span>
+      </div>
+      <div class="border-t border-white/10 bg-amber-500/10 px-4 py-2 text-[11px] leading-relaxed text-amber-200">All times WAT. Odds are indicative and may change — verify accurate live odds on <a href="https://www.sportybet.com" target="_blank" rel="noopener" class="font-bold underline">sportybet.com</a> before betting.</div>
     `;
     container.appendChild(el);
   });

@@ -3,14 +3,19 @@
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
-<meta http-equiv="Content-Security-Policy" content="default-src 'self'; script-src 'self' https://cdn.tailwindcss.com https://fonts.googleapis.com https://fonts.gstatic.com 'unsafe-inline'; style-src 'self' https://cdn.tailwindcss.com https://fonts.googleapis.com 'unsafe-inline'; font-src https://fonts.gstatic.com; img-src 'self' data: https:; connect-src 'self'; frame-ancestors 'none'; base-uri 'self'">
+<meta http-equiv="Content-Security-Policy" content="default-src 'self'; script-src 'self' https://cdn.tailwindcss.com https://fonts.googleapis.com https://fonts.gstatic.com 'unsafe-inline' https://*.monetag.com https://*.propellerads.com https://*.adsterra.com https://*.highperformancecpm.com https://*.brevo.com https://*.mailchimp.com https://*.formspree.io; style-src 'self' https://cdn.tailwindcss.com https://fonts.googleapis.com 'unsafe-inline'; font-src https://fonts.gstatic.com; img-src 'self' data: https:; connect-src 'self' https://*.brevo.com https://*.mailchimp.com https://*.formspree.io https://*.monetag.com https://*.propellerads.com; frame-ancestors 'none'; base-uri 'self'">
 <meta http-equiv="X-Content-Type-Options" content="nosniff">
 <meta http-equiv="Referrer-Policy" content="strict-origin-when-cross-origin">
 <title>GoalScope — Daily Football & Sports Predictions</title>
 <meta name="description" content="Expert daily football, MLB & cross-sport predictions. Verified stats, transparent tracking, free accumulators.">
+<meta property="og:title" content="GoalScope — Daily Football & Sports Predictions">
+<meta property="og:description" content="Daily accumulators with verified stats. All odds indicative — check SportyBet.">
+<meta property="og:type" content="website">
+<meta name="twitter:card" content="summary">
 <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800;900&family=JetBrains+Mono:wght@700&display=swap" rel="stylesheet">
 <script src="https://cdn.tailwindcss.com"></script>
 <script>tailwind.config={darkMode:'class',theme:{extend:{fontFamily:{sans:['Inter','system-ui','sans-serif'],mono:['JetBrains Mono','monospace']}}}}</script>
+<script src="assets/monetize.js"></script>
 <style>*{scrollbar-width:thin} ::-webkit-scrollbar{width:6px} ::-webkit-scrollbar-thumb{background:#1e2d5a;border-radius:999px}</style>
 </head>
 <body class="bg-[#070b1a] text-slate-100 antialiased selection:bg-blue-600 selection:text-white">
@@ -137,13 +142,40 @@
 <!-- Newsletter -->
 <section class="mx-auto max-w-[1180px] px-5 pb-8">
   <div class="flex flex-wrap items-center justify-between gap-4 rounded-[20px] border border-white/10 bg-gradient-to-br from-[#0f1f4a] to-[#0b1a33] p-6">
-    <div><h3 class="text-lg font-black">Get tomorrow's slips first</h3><p class="text-sm text-slate-400">One email per day. Unsubscribe anytime.</p></div>
-    <form onsubmit="event.preventDefault(); alert('Thanks! Connect to your email provider — see README')" class="flex flex-1 flex-wrap justify-end gap-2">
-      <input type="email" required placeholder="you@example.com" class="min-w-[220px] flex-1 rounded-full border border-white/10 bg-[#0a132c] px-4 py-3 text-sm outline-none placeholder:text-slate-500">
+    <div><h3 class="text-lg font-black">Get tomorrow's slips first</h3><p class="text-sm text-slate-400">One email per day. Unsubscribe anytime. Free forever.</p></div>
+    <form id="newsletterForm" class="flex flex-1 flex-wrap justify-end gap-2">
+      <input id="nlEmail" type="email" required placeholder="you@example.com" class="min-w-[220px] flex-1 rounded-full border border-white/10 bg-[#0a132c] px-4 py-3 text-sm outline-none placeholder:text-slate-500">
       <button type="submit" class="rounded-full bg-blue-600 px-6 py-3 text-sm font-extrabold text-white hover:bg-blue-500">Subscribe</button>
     </form>
   </div>
+  <div id="nlStatus" class="mx-auto max-w-[1180px] px-1 mt-2 text-xs text-slate-500"></div>
 </section>
+<script>
+(function(){
+  const form=document.getElementById('newsletterForm');
+  if(!form) return;
+  const cfg=window.GOALSCOPE_NEWSLETTER||{};
+  const status=document.getElementById('nlStatus');
+  form.addEventListener('submit', async (e)=>{
+    e.preventDefault();
+    const email=document.getElementById('nlEmail').value.trim();
+    if(!email) return;
+    // Brevo/Mailchimp if configured, else localStorage (export in admin)
+    if(cfg.provider==='brevo' && cfg.brevoFormAction){
+      try{ await fetch(cfg.brevoFormAction,{method:'POST', body:new FormData(form)}); status.textContent='Subscribed — check your email.'; status.className='mx-auto max-w-[1180px] px-1 mt-2 text-xs text-emerald-400'; form.reset(); return; }catch{}
+    }
+    if(cfg.provider==='mailchimp' && cfg.mailchimpAction){
+      window.open(cfg.mailchimpAction+'&EMAIL='+encodeURIComponent(email), '_blank'); status.textContent='Opened Mailchimp — confirm there.'; return;
+    }
+    // local fallback
+    const list=JSON.parse(localStorage.getItem('goalscope_newsletter')||'[]');
+    if(!list.includes(email)){ list.push(email); localStorage.setItem('goalscope_newsletter', JSON.stringify(list)); }
+    status.textContent='Saved locally — export in Admin → Newsletter. Connect Brevo/Mailchimp in assets/monetize.js for live delivery.';
+    status.className='mx-auto max-w-[1180px] px-1 mt-2 text-xs text-emerald-400';
+    form.reset();
+  });
+})();
+</script>
 
 <!-- FAQ -->
 <section class="mx-auto max-w-[1180px] px-5 pb-8">
@@ -157,18 +189,19 @@
 
 <footer class="border-t border-white/10 py-8 text-sm text-slate-400">
   <div class="mx-auto max-w-[1180px] px-5 grid gap-6 md:grid-cols-4">
-    <div><div class="flex items-center gap-2 font-black text-white"><span class="grid h-7 w-7 place-items-center rounded-lg bg-gradient-to-br from-blue-600 to-cyan-400 text-white">G</span> GoalScope</div><p class="mt-2 text-xs leading-relaxed">Independent sports analysis. Not affiliated with bookmakers. 18+ Gamble responsibly — gamblingtherapy.org</p></div>
+    <div><div class="flex items-center gap-2 font-black text-white"><span class="grid h-7 w-7 place-items-center rounded-lg bg-gradient-to-br from-blue-600 to-cyan-400 text-white">G</span> GoalScope</div><p class="mt-2 text-xs leading-relaxed">Independent sports analysis. Not affiliated with bookmakers. 18+ Gamble responsibly — gamblingtherapy.org</p><p class="mt-2 text-[11px] leading-relaxed text-slate-500">Affiliate disclosure: We may earn commission from SportyBet / Bet9ja links — no extra cost to you. This supports free tips.</p></div>
     <div><div class="font-bold text-white">Explore</div><div class="mt-2 grid gap-1"><a href="predictions.html" class="hover:text-white">Predictions</a><a href="blog.html" class="hover:text-white">Insights</a><a href="about.html" class="hover:text-white">How it works</a></div></div>
     <div><div class="font-bold text-white">Data</div><div class="mt-2 grid gap-1"><span>Verified stats</span><span>Live odds: SportyBet</span><span>Kick-off times shown (WAT)</span><span>18+ Gamble responsibly</span></div></div>
     <div><div class="font-bold text-white">Legal</div><div class="mt-2 grid gap-1"><a href="#" class="hover:text-white">Terms</a><a href="#" class="hover:text-white">Privacy</a><a href="contact.html" class="hover:text-white">Contact</a></div></div>
   </div>
   <div class="mx-auto max-w-[1180px] px-5 mt-6 flex flex-wrap justify-between gap-3 border-t border-white/10 pt-4 text-xs"><span>© <span id="yr"></span> GoalScope</span><span>Built for public hosting — see README for deploy</span></div>
+  <div class="mx-auto max-w-[1180px] px-5 mt-2 text-[11px] text-slate-500">Odds are indicative — verify live odds on <a href="https://www.sportybet.com" target="_blank" rel="noopener" class="underline">sportybet.com</a> before betting. Please gamble responsibly.</div>
 </footer>
 
 <script src="assets/app.js"></script>
 <script>
 document.getElementById('yr').textContent=new Date().getFullYear();
-fetch('data/predictions.json').then(r=>r.json()).then(data=>{
+Promise.all([fetch('data/predictions.json').then(r=>r.json()), fetch('data/results.json').then(r=>r.json()).catch(()=>null)]).then(([data, results])=>{
   const el=document.getElementById('home-accas');
   el.innerHTML=data.slice(0,3).map(a=>`
     <a href="predictions.html#${a.id}" class="group flex flex-col rounded-2xl border border-white/10 bg-white/[0.03] p-5 hover:bg-white/[0.05] hover:border-white/15 transition">
@@ -176,7 +209,7 @@ fetch('data/predictions.json').then(r=>r.json()).then(data=>{
       <div class="mt-1 font-bold leading-tight">${a.title}</div>
       <div class="mt-1 text-sm text-slate-400 line-clamp-2">${a.summary}</div>
       <div class="mt-3 flex flex-wrap gap-1.5">${a.tags.map(t=>`<span class='rounded-full border border-white/10 bg-white/[0.04] px-2 py-1 text-[11px] font-bold text-slate-400'>${t}</span>`).join('')}</div>
-      <div class="mt-4 flex items-center justify-between border-t border-white/10 pt-3"><span class="text-xs text-slate-500">${a.legs} selections · No duplicates</span><span class="font-mono text-lg font-black text-emerald-400">${a.odds} <span class="text-xs font-bold tracking-widest text-slate-500">ODDS</span></span></div>
+      <div class="mt-4 flex items-center justify-between border-t border-white/10 pt-3"><span class="text-xs text-slate-500">${a.legs} selections · No duplicates${(results&&results.accas&&results.accas[a.id.replace('2026-09-15-','')]) ? ' · <span class='+(results.accas[a.id.replace('2026-09-15-','')].summary.verdict==='LOST'?'text-red-400':'text-emerald-400')+'>'+results.accas[a.id.replace('2026-09-15-','')].summary.verdict+'</span>' : ''}</span><span class="font-mono text-lg font-black text-emerald-400">${a.odds} <span class="text-xs font-bold tracking-widest text-slate-500">ODDS</span></span></div>
     </a>
   `).join('');
 }).catch(()=>{});

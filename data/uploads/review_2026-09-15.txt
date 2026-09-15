@@ -1,0 +1,96 @@
+DAILY REVIEW — 2026-09-15 (Updated 2026-09-16 00:47 WAT)
+====================================================================
+DATA SOURCES CHECKED: BBC Sport scores-fixtures 2026-09-15 (FT), livescores.com (Ekstraklasa), MLB statsapi
+  BBC Sport: ok (124 score entries parsed, all FT verified)
+  livescores.com: reachable — Rakow 2-3 Zaglebie verified there (BBC lacked that league)
+  futbol24.com: reachable (JS-rendered — cross-checked)
+  MLB statsapi: 15 games 2026-09-15 — 7 In Progress / 2 Pre-Game at 00:40 WAT — NOT FINAL
+
+FOOTBALL FINALS VERIFIED (BBC unless noted):
+  Elche 2-3 Real Madrid FT
+  Rayo Vallecano 2-1 Espanyol FT
+  Genoa 1-0 Sudtirol FT
+  Ajax 5-1 Willem II FT
+  Liverpool 3-1 Tottenham Hotspur FT
+  Ipswich Town 2-4 Arsenal FT
+  Grasshoppers 2-5 Sion FT
+  Fiorentina 3-0 Pisa FT
+  Alaves 0-1 Valencia FT
+  Rakow Czestochowa 2-3 Zaglebie Lubin FT (livescores.com)
+  West Ham United 2-3 Fulham FT
+  Motherwell 0-4 Aberdeen FT
+  Peterborough United 3-3 Barnsley FT (7-6 pens, 90' = 3-3)
+  Reading 1-2 Brentford FT
+  Korona Kielce 0-2 Gornik Zabrze FT
+  Falkirk 2-1 Heart of Midlothian FT
+  Hibernian 0-1 Kilmarnock FT
+  The New Saints 5-0 Flint Town United FT
+  Truro City 0-1 Salisbury FT
+  Stenhousemuir 1-0 Partick Thistle FT
+
+MLB AT CHECK (2026-09-15 approx 23:40-00:40 WAT):
+  LAD 3-0 CIN In Progress | ATH 0-1 TB In Progress | CWS 1-3 CLE In Progress
+  MIL 1-0 PIT In Progress | PHI 2-2 WSH In Progress | DET 0-0 TOR In Progress
+  BAL 2-1 NYM In Progress | ATL 0-0 CHC In Progress | NYY 2-0 MIN In Progress
+  SF 0-0 STL In Progress | BOS 0-0 TEX Warmup | KC 0-0 HOU Pre-Game
+  SD 0-0 COL Pre-Game | SEA 0-0 LAA Pre-Game | MIA @ AZ Pre-Game
+  -> All MLB legs PENDING — will finalize tomorrow (2026-09-16) when statsapi shows Final
+
+====================================================================
+MAIN ACCUMULATOR — 8-FOLD 125.45 ODDS — VERDICT: LOST (1 leg failed, 1 pending)
+====================================================================
+ 1. Elche vs Real Madrid — Real Madrid Win & Over 2.5 @ 2.00      | 2-3 FT | HIT
+ 2. Rayo Vallecano vs Espanyol — BTTS Yes @ 1.85                 | 2-1 FT | HIT
+ 3. Genoa vs Sudtirol — Genoa Win & Over 1.5 @ 1.75              | 1-0 FT | LOST (Over 1.5 missed)
+ 4. Ajax vs Willem II — Ajax Win & Over 2.5 @ 1.80                | 5-1 FT | HIT
+ 5. Liverpool vs Tottenham — BTTS Yes @ 1.70                     | 3-1 FT | HIT
+ 6. Ipswich vs Arsenal — Arsenal Win & Over 2.5 @ 1.85            | 2-4 FT | HIT
+ 7. Grasshoppers vs Sion — Over 2.5 @ 1.85                        | 2-5 FT | HIT (7 goals)
+ 8. Padres @ Rockies — Over 10.5 @ 1.85                           | 0-0 Pre-Game | PENDING
+
+ -> Acca lost on Genoa O1.5 (won 1-0, needed 2+ goals). 6 of 7 finished legs hit, including strong Over 2.5 calls.
+
+====================================================================
+ACCA 1 — Top Flight Focus 67.99 — VERDICT: LOST (3 legs failed, 2 pending)
+====================================================================
+ 1. Fiorentina vs Pisa — Fiorentina Win @ 1.70                  | 3-0 FT | HIT
+ 2. Alaves vs Valencia — BTTS Yes @ 1.85                        | 0-1 FT | LOST (Alaves shutout)
+ 3. Rakow vs Zaglebie — Rakow Win & Over 1.5 @ 1.95             | 2-3 FT | LOST (Raków lost at home — upset)
+ 4. Dodgers @ Reds — Over 9.5 @ 1.85                            | 3-0 In Progress | PENDING (needs 7 more)
+ 5. West Ham vs Fulham — Over 2.5 @ 1.85                         | 2-3 FT | HIT (5 goals)
+ 6. Brewers @ Pirates — Brewers Win @ 1.80                       | 1-0 In Progress | PENDING (MIL leads)
+ 7. Motherwell vs Aberdeen — BTTS Yes @ 1.80                     | 0-4 FT | LOST
+
+====================================================================
+ACCA 2 — Cup & Underdogs 70.10 — VERDICT: LOST (3 legs failed, 2 pending)
+====================================================================
+ 1. Peterborough vs Barnsley — Over 2.5 @ 1.80                   | 3-3 FT | HIT (6 goals)
+ 2. Reading vs Brentford — Brentford Win @ 1.75                  | 1-2 FT | HIT
+ 3. Korona vs Gornik — Over 2.5 @ 1.85                           | 0-2 FT | LOST (only 2 goals)
+ 4. Athletics @ Rays — Over 9.0 @ 1.85                           | 0-1 In Progress | PENDING
+ 5. Tigers @ Blue Jays — Over 8.5 @ 1.85                         | 0-0 In Progress | PENDING
+ 6. Falkirk vs Hearts — Hearts Win @ 1.90                        | 2-1 FT | LOST (hearts upset by promoted Falkirk)
+ 7. Hibernian vs Kilmarnock — Over 2.5 @ 1.85                     | 0-1 FT | LOST (only 1 goal — tight Scottish game)
+
+====================================================================
+ACCA 3 — Transatlantic Mix 66.27 — VERDICT: LOST (2 legs failed, 4 pending)
+====================================================================
+ 1. Yankees @ Twins — Yankees Win @ 1.80                         | 2-0 In Progress | PENDING (NYY leads)
+ 2. Phillies @ Nationals — Over 9.0 @ 1.85                        | 2-2 In Progress | PENDING (4 runs early)
+ 3. Braves @ Cubs — Over 8.5 @ 1.85                              | 0-0 In Progress | PENDING
+ 4. Red Sox @ Rangers — Over 9.5 @ 1.80                          | 0-0 Warmup | PENDING
+ 5. TNS vs Flint — TNS Win & Over 2.5 @ 1.70                     | 5-0 FT | HIT
+ 6. Truro vs Salisbury — Over 2.5 @ 1.90                         | 0-1 FT | LOST (only 1 goal)
+ 7. Stenhousemuir vs Partick — Over 2.5 @ 1.85                   | 1-0 FT | LOST (only 1 goal)
+
+====================================================================
+LESSONS / WHAT WENT WRONG — 2026-09-15
+====================================================================
+ 1. Genoa O1.5 trap: Coppa Italia 1-0 wins are common vs low-block Serie B — Over 1.5 with a narrow favourite is riskier than it looks. Prefer straight Win or O2.5 alone, not the combo when odds already short.
+ 2. Scottish unders: Hibernian-Kilmarnock and Stenhousemuir-Partick both stayed Under 2.5 — Scottish Championship/Prem early season can be cagey (0-1, 1-0). Don't auto-Over at 1.85 without recent H2H Over rate >60%.
+ 3. Favourite away wins fragile: Rakow (2-3) and Hearts (1-2) both lost as favourites — Polish and Scottish upsets. One away favourite per slip is enough; stacking two compounds risk.
+ 4. BTTS needs both sides scoring form: Alaves (0-1) and Motherwell (0-4) shutouts — check last-5 scored % before BTTS, not just league avg.
+ 5. MLB totals still pending — but early pattern: Coors (SD@COL) and dome (TEX) totals are the strongest Overs. Don't downgrade Over 10.5 Coors because of a single 1-0 Coppa result.
+
+NEXT: MLB finals will be graded tomorrow via statsapi. Re-run review_yesterday.py --date 2026-09-15 to finalize PENDING legs.
+HOW TO VERIFY: futbol24.com -> search date | livescores.com -> football -> select date | BBC Sport -> /sport/football/scores-fixtures/2026-09-15 | MLB -> mlb.com/scores/2026-09-15

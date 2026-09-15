@@ -1,0 +1,283 @@
+{
+  "updated": "2026-09-16 00:47 WAT",
+  "date": "2026-09-15",
+  "source_note": "Verified stats · All times WAT · Odds indicative — check sportybet.com",
+  "football_finals": {
+    "Elche 2-3 Real Madrid": "FT",
+    "Rayo Vallecano 2-1 Espanyol": "FT",
+    "Genoa 1-0 Südtirol": "FT",
+    "Ajax 5-1 Willem II": "FT",
+    "Liverpool 3-1 Tottenham Hotspur": "FT",
+    "Ipswich Town 2-4 Arsenal": "FT",
+    "Grasshoppers 2-5 Sion": "FT",
+    "Fiorentina 3-0 Pisa": "FT",
+    "Alavés 0-1 Valencia": "FT",
+    "Rakow Czestochowa 2-3 Zaglebie Lubin": "FT",
+    "West Ham 2-3 Fulham": "FT",
+    "Motherwell 0-4 Aberdeen": "FT",
+    "Peterborough United 3-3 Barnsley": "FT (7-6 pens)",
+    "Reading 1-2 Brentford": "FT",
+    "Korona Kielce 0-2 Górnik Zabrze": "FT",
+    "Falkirk 2-1 Heart of Midlothian": "FT",
+    "Hibernian 0-1 Kilmarnock": "FT",
+    "The New Saints 5-0 Flint Town United": "FT",
+    "Truro City 0-1 Salisbury": "FT",
+    "Stenhousemuir 1-0 Partick Thistle": "FT"
+  },
+  "mlb_in_progress": {
+    "LAD 3-0 CIN": "In Progress (Top 5) — Over 9.5 pending",
+    "ATH 0-1 TB": "In Progress — Over 9.0 pending",
+    "DET 0-0 TOR": "In Progress — Over 8.5 pending",
+    "MIL 1-0 PIT": "In Progress — Brewers Win pending (MIL leads)",
+    "NYY 2-0 MIN": "In Progress — Yankees Win pending",
+    "PHI 2-2 WSH": "In Progress — Over 9.0 pending (4 runs)",
+    "ATL 0-0 CHC": "In Progress — Over 8.5 pending",
+    "BOS 0-0 TEX": "Warmup",
+    "SD 0-0 COL": "Pre-Game"
+  },
+  "accas": {
+    "acca-main": {
+      "legs": [
+        {
+          "match": "Elche vs Real Madrid",
+          "pick": "Real Madrid Win & Over 2.5 Goals",
+          "result": "2-3 FT",
+          "status": "HIT",
+          "note": "Madrid win + 5 goals (Over 2.5)"
+        },
+        {
+          "match": "Rayo Vallecano vs Espanyol",
+          "pick": "BTTS Yes",
+          "result": "2-1 FT",
+          "status": "HIT",
+          "note": "Both scored"
+        },
+        {
+          "match": "Genoa vs Südtirol",
+          "pick": "Genoa Win & Over 1.5",
+          "result": "1-0 FT",
+          "status": "LOST",
+          "note": "Win yes but only 1 goal — Over 1.5 missed by 1"
+        },
+        {
+          "match": "Ajax vs Willem II",
+          "pick": "Ajax Win & Over 2.5",
+          "result": "5-1 FT",
+          "status": "HIT",
+          "note": "Ajax win + 6 goals"
+        },
+        {
+          "match": "Liverpool vs Tottenham",
+          "pick": "BTTS Yes",
+          "result": "3-1 FT",
+          "status": "HIT",
+          "note": "Both scored"
+        },
+        {
+          "match": "Ipswich vs Arsenal",
+          "pick": "Arsenal Win & Over 2.5",
+          "result": "2-4 FT",
+          "status": "HIT",
+          "note": "Arsenal win + 6 goals"
+        },
+        {
+          "match": "Grasshoppers vs Sion",
+          "pick": "Over 2.5 Goals",
+          "result": "2-5 FT",
+          "status": "HIT",
+          "note": "7 goals"
+        },
+        {
+          "match": "Padres @ Rockies",
+          "pick": "Over 10.5 Runs",
+          "result": "0-0 Pre-Game",
+          "status": "PENDING",
+          "note": "MLB not started at check (00:40 WAT)"
+        }
+      ],
+      "summary": {
+        "hits": 6,
+        "lost": 1,
+        "pending": 1,
+        "verdict": "LOST"
+      }
+    },
+    "acca-1": {
+      "legs": [
+        {
+          "match": "Fiorentina vs Pisa",
+          "pick": "Fiorentina Win",
+          "result": "3-0 FT",
+          "status": "HIT",
+          "note": "Comfortable"
+        },
+        {
+          "match": "Alavés vs Valencia",
+          "pick": "BTTS Yes",
+          "result": "0-1 FT",
+          "status": "LOST",
+          "note": "Alavés shutout — no BTTS"
+        },
+        {
+          "match": "Raków vs Zagłębie",
+          "pick": "Raków Win & Over 1.5",
+          "result": "2-3 FT",
+          "status": "LOST",
+          "note": "Raków lost at home — upset"
+        },
+        {
+          "match": "Dodgers @ Reds",
+          "pick": "Over 9.5",
+          "result": "3-0 In Progress",
+          "status": "PENDING",
+          "note": "Early innings, total 3 — needs 7 more"
+        },
+        {
+          "match": "West Ham vs Fulham",
+          "pick": "Over 2.5",
+          "result": "2-3 FT",
+          "status": "HIT",
+          "note": "5 goals"
+        },
+        {
+          "match": "Brewers @ Pirates",
+          "pick": "Brewers Win",
+          "result": "1-0 In Progress",
+          "status": "PENDING",
+          "note": "MIL leading 1-0 Top 4"
+        },
+        {
+          "match": "Motherwell vs Aberdeen",
+          "pick": "BTTS Yes",
+          "result": "0-4 FT",
+          "status": "LOST",
+          "note": "Motherwell shutout"
+        }
+      ],
+      "summary": {
+        "hits": 2,
+        "lost": 3,
+        "pending": 2,
+        "verdict": "LOST"
+      }
+    },
+    "acca-2": {
+      "legs": [
+        {
+          "match": "Peterborough vs Barnsley",
+          "pick": "Over 2.5",
+          "result": "3-3 FT",
+          "status": "HIT",
+          "note": "6 goals (+pens)"
+        },
+        {
+          "match": "Reading vs Brentford",
+          "pick": "Brentford Win",
+          "result": "1-2 FT",
+          "status": "HIT",
+          "note": "Brentford win"
+        },
+        {
+          "match": "Korona vs Górnik",
+          "pick": "Over 2.5",
+          "result": "0-2 FT",
+          "status": "LOST",
+          "note": "Only 2 goals — Under"
+        },
+        {
+          "match": "Athletics @ Rays",
+          "pick": "Over 9.0",
+          "result": "0-1 In Progress",
+          "status": "PENDING",
+          "note": "1-0 early"
+        },
+        {
+          "match": "Tigers @ Blue Jays",
+          "pick": "Over 8.5",
+          "result": "0-0 In Progress",
+          "status": "PENDING",
+          "note": "Scoreless early"
+        },
+        {
+          "match": "Falkirk vs Hearts",
+          "pick": "Hearts Win",
+          "result": "2-1 FT",
+          "status": "LOST",
+          "note": "Hearts lost — promoted side upset"
+        },
+        {
+          "match": "Hibernian vs Kilmarnock",
+          "pick": "Over 2.5",
+          "result": "0-1 FT",
+          "status": "LOST",
+          "note": "Only 1 goal"
+        }
+      ],
+      "summary": {
+        "hits": 2,
+        "lost": 3,
+        "pending": 2,
+        "verdict": "LOST"
+      }
+    },
+    "acca-3": {
+      "legs": [
+        {
+          "match": "Yankees @ Twins",
+          "pick": "Yankees Win",
+          "result": "2-0 In Progress",
+          "status": "PENDING",
+          "note": "NYY leading 2-0 mid-game"
+        },
+        {
+          "match": "Phillies @ Nationals",
+          "pick": "Over 9.0",
+          "result": "2-2 In Progress",
+          "status": "PENDING",
+          "note": "4 runs early"
+        },
+        {
+          "match": "Braves @ Cubs",
+          "pick": "Over 8.5",
+          "result": "0-0 In Progress",
+          "status": "PENDING",
+          "note": "Scoreless"
+        },
+        {
+          "match": "Red Sox @ Rangers",
+          "pick": "Over 9.5",
+          "result": "0-0 Warmup",
+          "status": "PENDING",
+          "note": "Not started"
+        },
+        {
+          "match": "TNS vs Flint",
+          "pick": "TNS Win & Over 2.5",
+          "result": "5-0 FT",
+          "status": "HIT",
+          "note": "TNS dominant"
+        },
+        {
+          "match": "Truro vs Salisbury",
+          "pick": "Over 2.5",
+          "result": "0-1 FT",
+          "status": "LOST",
+          "note": "Only 1 goal — National League South upset Under"
+        },
+        {
+          "match": "Stenhousemuir vs Partick",
+          "pick": "Over 2.5",
+          "result": "1-0 FT",
+          "status": "LOST",
+          "note": "Only 1 goal"
+        }
+      ],
+      "summary": {
+        "hits": 1,
+        "lost": 2,
+        "pending": 4,
+        "verdict": "LOST"
+      }
+    }
+  }
+}
