@@ -1,8 +1,8 @@
 // GoalScope monetization config — replace YOUR_ID when you get affiliate links
 // SportyBet: https://affiliates.sportybet.com | Bet9ja: https://affiliate.bet9ja.com
 window.GOALSCOPE_AFFILIATE = {
-  sportybet: "https://www.sportybet.com", // TODO: replace with e.g. "https://www.sportybet.com/ng/m?ref=YOUR_CODE"
-  bet9ja: "https://www.bet9ja.com",       // TODO: replace with your Bet9ja ref
+  sportybet: "https://www.sportybet.com",
+  bet9ja: "https://www.bet9ja.com",
   shrinkme: "https://shrinkme.click/GoalScopeTips",
   enabled: false
 };
@@ -25,7 +25,7 @@ window.GOALSCOPE_BOOKING = {
 };
 // Bet9ja: ~/prediction-tools/bet9ja_booker.py
 window.GOALSCOPE_BOOKING_BET9JA = {
-  "acca-main": "P5XK49",
+  "acca-main": "",
   "acca-1": "",
   "acca-2": "",
   "acca-3": ""
