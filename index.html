@@ -3,7 +3,7 @@
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
-<meta http-equiv="Content-Security-Policy" content="default-src 'self'; script-src 'self' https://cdn.tailwindcss.com https://fonts.googleapis.com https://fonts.gstatic.com 'unsafe-inline' https://*.monetag.com https://*.propellerads.com https://*.adsterra.com https://*.highperformancecpm.com https://*.brevo.com https://*.mailchimp.com https://*.formspree.io; style-src 'self' https://cdn.tailwindcss.com https://fonts.googleapis.com 'unsafe-inline'; font-src https://fonts.gstatic.com; img-src 'self' data: https:; connect-src 'self' https://statsapi.mlb.com https://api.allorigins.win https://*.brevo.com https://*.mailchimp.com https://*.formspree.io https://*.monetag.com https://*.propellerads.com; frame-ancestors 'none'; base-uri 'self'">
+<meta http-equiv="Content-Security-Policy" content="default-src 'self'; script-src 'self' https://cdn.tailwindcss.com https://fonts.googleapis.com https://fonts.gstatic.com 'unsafe-inline' https://*.monetag.com https://*.propellerads.com https://*.adsterra.com https://*.highperformancecpm.com https://*.brevo.com https://*.mailchimp.com https://*.formspree.io; style-src 'self' https://cdn.tailwindcss.com https://fonts.googleapis.com 'unsafe-inline'; font-src https://fonts.gstatic.com; img-src 'self' data: https:; connect-src 'self' https://statsapi.mlb.com https://api.allorigins.win https://statsapi.mlb.com https://*.brevo.com https://*.mailchimp.com https://*.formspree.io https://*.monetag.com https://*.propellerads.com; frame-ancestors 'none'; base-uri 'self'; form-action 'self' https://*.brevo.com https://*.mailchimp.com https://*.formspree.io; object-src 'none'; upgrade-insecure-requests">
 <meta http-equiv="X-Content-Type-Options" content="nosniff">
 <meta http-equiv="Referrer-Policy" content="strict-origin-when-cross-origin">
 <title>GoalScope — Daily Football & Sports Predictions</title>
@@ -165,8 +165,10 @@
 <section class="mx-auto max-w-[1180px] px-5 pb-8">
   <div class="flex flex-wrap items-center justify-between gap-4 rounded-[20px] border border-white/10 bg-gradient-to-br from-[#0f1f4a] to-[#0b1a33] p-6">
     <div><h3 class="text-lg font-black">Get tomorrow's slips first</h3><p class="text-sm text-slate-400">One email per day. Unsubscribe anytime. Free forever.</p></div>
-    <form id="newsletterForm" class="flex flex-1 flex-wrap justify-end gap-2">
-      <input id="nlEmail" type="email" required placeholder="you@example.com" class="min-w-[220px] flex-1 rounded-full border border-white/10 bg-[#0a132c] px-4 py-3 text-sm outline-none placeholder:text-slate-500">
+    <form id="newsletterForm" novalidate class="flex flex-1 flex-wrap justify-end gap-2">
+      <input id="nlEmail" name="email" type="email" required placeholder="you@example.com">
+      <input type="text" name="website" tabindex="-1" autocomplete="off" style="position:absolute;left:-9999px;width:1px;height:1px;overflow:hidden" aria-hidden="true">
+      <input type="hidden" id="nl_ts" value="" class="min-w-[220px] flex-1 rounded-full border border-white/10 bg-[#0a132c] px-4 py-3 text-sm outline-none placeholder:text-slate-500">
       <button type="submit" class="rounded-full bg-blue-600 px-6 py-3 text-sm font-extrabold text-white hover:bg-blue-500">Subscribe</button>
     </form>
   </div>
@@ -277,6 +279,25 @@ Promise.all([fetch('data/predictions.json?v='+Date.now(),{cache:'no-store'}).the
     </a>
   `).join('');
 }).catch(()=>{});
+</script>
+
+<script id="nl_bot_guard">
+(function(){
+  const ts=document.getElementById('nl_ts'); if(ts) ts.value=Date.now().toString();
+  const f=document.getElementById('newsletterForm');
+  if(!f) return;
+  f.addEventListener('submit', function(e){
+    const hp=f.querySelector('[name="website"]');
+    if(hp && hp.value.trim()!==''){ e.preventDefault(); return false; }
+    const tsv=parseInt((document.getElementById('nl_ts')||{}).value||'0',10);
+    if(Date.now()-tsv < 2000){ e.preventDefault(); alert('Wait a moment.'); return false; }
+    const last=parseInt(localStorage.getItem('gs_nl_last')||'0',10);
+    if(Date.now()-last < 60000){ e.preventDefault(); alert('Too many — wait a minute.'); return false; }
+    const email=document.getElementById('nlEmail');
+    if(email && !/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email.value)){ e.preventDefault(); alert('Enter a valid email.'); return false; }
+    localStorage.setItem('gs_nl_last', Date.now().toString());
+  });
+})();
 </script>
 </body>
 </html>

@@ -1,6 +1,5 @@
 User-agent: *
 Allow: /
 Disallow: /admin.html
-Disallow: /.admin_password.txt
-
-Sitemap: https://ckay1.github.io/goalscope/sitemap.xml
+Disallow: /uploads/
+Sitemap: https://goalscope.github.io/sitemap.xml
