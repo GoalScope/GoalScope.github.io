@@ -6,6 +6,8 @@
 <title>Contact — GoalScope</title>
 <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800;900&display=swap" rel="stylesheet">
 <script src="https://cdn.tailwindcss.com"></script>
+<link rel="stylesheet" href="assets/theme.css">
+<script src="assets/theme.js"></script>
 <script>tailwind.config={darkMode:'class',theme:{extend:{fontFamily:{sans:['Inter','sans-serif']}}}}</script>
 <script src="assets/monetize.js"></script>
 </head>
@@ -14,7 +16,7 @@
   <div class="mx-auto flex max-w-[1180px] items-center justify-between gap-6 px-5 py-3.5">
     <a href="index.html" class="flex items-center gap-2.5"><span class="grid h-9 w-9 place-items-center rounded-xl bg-gradient-to-br from-blue-600 to-cyan-400 font-black text-white">G</span><span class="text-[18px] font-black tracking-tight">GoalScope</span></a>
     <nav class="hidden gap-6 text-[13px] font-semibold text-slate-400 md:flex"><a href="index.html" class="hover:text-white">Home</a><a href="predictions.html" class="hover:text-white">Predictions</a><a href="live.html" class="hover:text-white transition">Live</a><a href="about.html" class="hover:text-white">How it works</a><a href="blog.html" class="hover:text-white">Insights</a><a href="contact.html" class="text-white">Contact</a></nav>
-    <button onclick="document.getElementById('mobnav').classList.toggle('hidden')" class="md:hidden grid h-9 w-9 place-items-center rounded-xl border border-white/10 text-slate-300">≡</button>
+    <button id="gs-theme-btn" onclick="gsToggleTheme()" class="inline-flex items-center gap-1.5 rounded-full border border-white/10 bg-white/[0.04] px-3 py-1.5 text-xs font-bold text-slate-200 hover:bg-white/[0.08] dark:border-white/10 dark:bg-white/[0.04] dark:text-slate-200" title="Toggle theme" aria-label="Toggle theme"><span class="gs-theme-icon">☀</span><span class="gs-theme-label hidden sm:inline">Light</span></button> <button onclick="document.getElementById('mobnav').classList.toggle('hidden')" class="md:hidden grid h-9 w-9 place-items-center rounded-xl border border-white/10 text-slate-300">≡</button>
     <a href="predictions.html" class="rounded-full bg-blue-600 px-4 py-2 text-sm font-bold text-white">View tips</a>
   </div>
   <div id="mobnav" class="hidden border-t border-white/10 bg-[#0a0f22] md:hidden">
