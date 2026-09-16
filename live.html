@@ -1,0 +1,283 @@
+<!DOCTYPE html>
+<html lang="en" class="dark">
+<head>
+<meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1">
+<meta http-equiv="Content-Security-Policy" content="default-src 'self'; script-src 'self' https://cdn.tailwindcss.com https://fonts.googleapis.com https://fonts.gstatic.com 'unsafe-inline' https://*.monetag.com https://*.propellerads.com https://*.adsterra.com https://*.highperformancecpm.com https://*.brevo.com https://*.mailchimp.com https://*.formspree.io; style-src 'self' https://cdn.tailwindcss.com https://fonts.googleapis.com 'unsafe-inline'; font-src https://fonts.gstatic.com; img-src 'self' data: https:; connect-src 'self' https://statsapi.mlb.com https://api.allorigins.win https://*.brevo.com https://*.mailchimp.com https://*.formspree.io https://*.monetag.com https://*.propellerads.com; frame-ancestors 'none'; base-uri 'self'">
+<meta http-equiv="X-Content-Type-Options" content="nosniff">
+<meta http-equiv="Referrer-Policy" content="strict-origin-when-cross-origin">
+<title>Live Scores — GoalScope</title>
+<meta name="description" content="Live football and MLB scores — auto-refreshing every 60 seconds. Verified stats, kick-off times in WAT.">
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800;900&family=JetBrains+Mono:wght@700&display=swap" rel="stylesheet">
+<script src="https://cdn.tailwindcss.com"></script>
+<script>tailwind.config={darkMode:'class',theme:{extend:{fontFamily:{sans:['Inter','sans-serif'],mono:['JetBrains Mono','monospace']}}}}</script>
+<script src="assets/monetize.js"></script>
+</head>
+<body class="bg-[#070b1a] text-slate-100 antialiased">
+<header class="sticky top-0 z-40 border-b border-white/10 bg-[#070b1a]/80 backdrop-blur-xl">
+  <div class="mx-auto flex max-w-[1180px] items-center justify-between gap-6 px-5 py-3.5">
+    <a href="index.html" class="flex items-center gap-2.5"><span class="grid h-9 w-9 place-items-center rounded-xl bg-gradient-to-br from-blue-600 to-cyan-400 font-black text-white">G</span><span class="text-[18px] font-black tracking-tight">GoalScope</span><span class="hidden sm:inline ml-1 rounded-full border border-white/10 bg-white/[0.04] px-2 py-0.5 text-[10px] font-bold tracking-widest text-slate-400">BETA</span></a>
+    <nav class="hidden gap-6 text-[13px] font-semibold text-slate-400 md:flex"><a href="index.html" class="hover:text-white">Home</a><a href="predictions.html" class="hover:text-white">Predictions</a><a href="live.html" class="text-white">Live</a><a href="about.html" class="hover:text-white">How it works</a><a href="blog.html" class="hover:text-white">Insights</a><a href="contact.html" class="hover:text-white">Contact</a></nav>
+    <div class="flex items-center gap-2">
+      <span id="live-dot" class="hidden sm:inline-flex items-center gap-1.5 rounded-full bg-red-600 px-3 py-1.5 text-xs font-black tracking-widest text-white"><span class="h-2 w-2 animate-pulse rounded-full bg-white"></span>LIVE</span>
+      <button onclick="refreshAll()" class="rounded-full bg-blue-600 px-4 py-2 text-sm font-bold text-white hover:bg-blue-500">Refresh</button>
+      <button onclick="document.getElementById('mobnav').classList.toggle('hidden')" class="md:hidden grid h-9 w-9 place-items-center rounded-xl border border-white/10 text-slate-300">≡</button>
+    </div>
+  </div>
+  <div id="mobnav" class="hidden border-t border-white/10 bg-[#0a0f22] md:hidden">
+    <div class="mx-auto max-w-[1180px] px-5 py-3 grid gap-2 text-sm font-semibold text-slate-300">
+      <a class="py-1" href="index.html">Home</a><a class="py-1" href="predictions.html">Predictions</a><a class="py-1 text-white" href="live.html">Live</a><a class="py-1" href="about.html">How it works</a><a class="py-1" href="blog.html">Insights</a><a class="py-1" href="contact.html">Contact</a>
+    </div>
+  </div>
+</header>
+
+<section class="border-b border-white/10 bg-gradient-to-b from-[#0f1a36] to-[#070b1a]">
+  <div class="mx-auto max-w-[1180px] px-5 py-6">
+    <div class="flex flex-wrap items-start justify-between gap-4">
+      <div>
+        <div class="inline-flex items-center gap-2 rounded-full border border-red-500/20 bg-red-500/10 px-3 py-1 text-xs font-bold tracking-widest text-red-300"><span class="h-2 w-2 animate-pulse rounded-full bg-red-400"></span>REAL-TIME · AUTO-REFRESH 60s</div>
+        <h1 class="mt-3 text-3xl font-black tracking-tight">Live scores</h1>
+        <p class="mt-2 max-w-2xl text-sm text-slate-400">Football + MLB updating every minute. All kick-off times shown in <b class="text-slate-200">WAT</b>. Odds are indicative — verify live odds on <a href="https://www.sportybet.com" target="_blank" rel="noopener" class="font-bold text-emerald-400 underline decoration-emerald-400/30">SportyBet</a>.</p>
+        <div class="mt-3 rounded-xl border border-amber-500/20 bg-amber-500/10 px-4 py-2.5 text-xs leading-relaxed text-amber-200">All times WAT. Odds are indicative and may change — verify accurate live odds on <a href="https://www.sportybet.com" target="_blank" rel="noopener" class="font-extrabold underline">sportybet.com</a> before betting. 18+ Gamble responsibly.</div>
+      </div>
+      <div class="min-w-[260px] rounded-2xl border border-white/10 bg-white/[0.03] p-4">
+        <div class="text-[11px] font-extrabold tracking-widest text-slate-400">STATUS</div>
+        <div id="status-line" class="mt-1 text-sm font-bold text-slate-200">Loading…</div>
+        <div id="countdown" class="text-xs text-slate-500">Next refresh in 60s</div>
+        <div class="mt-3 flex flex-wrap gap-2">
+          <button onclick="setDateOffset(-1)" class="rounded-full border border-white/10 bg-white/[0.04] px-3 py-1.5 text-xs font-bold hover:bg-white/[0.08]">← Yesterday</button>
+          <button onclick="setDateOffset(0)" class="rounded-full bg-white px-3 py-1.5 text-xs font-black text-[#070b1a]">Today</button>
+          <button onclick="setDateOffset(1)" class="rounded-full border border-white/10 bg-white/[0.04] px-3 py-1.5 text-xs font-bold hover:bg-white/[0.08]">Tomorrow →</button>
+        </div>
+        <div class="mt-3 flex items-center gap-2 text-xs">
+          <label class="flex items-center gap-1.5 font-semibold text-slate-400"><input id="auto-toggle" type="checkbox" checked onchange="toggleAuto(this.checked)" class="accent-blue-600"> Auto-refresh</label>
+          <span class="text-slate-600">·</span>
+          <span id="date-label" class="font-mono font-bold text-slate-300"></span>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<main class="mx-auto max-w-[1180px] px-5 py-6">
+  <div id="accas-live-banner" class="hidden mb-6 rounded-2xl border border-blue-500/20 bg-blue-500/10 px-4 py-3 text-sm"></div>
+
+  <div class="grid gap-6 lg:grid-cols-2">
+    <section class="overflow-hidden rounded-2xl border border-white/10 bg-white/[0.03]">
+      <div class="flex items-center justify-between border-b border-white/10 px-4 py-3">
+        <h2 class="text-sm font-black tracking-widest">FOOTBALL</h2>
+        <span id="fb-count" class="rounded-full border border-white/10 bg-white/[0.04] px-2.5 py-1 text-xs font-bold text-slate-400">—</span>
+      </div>
+      <div id="football-list" class="divide-y divide-white/5 text-sm">
+        <div class="px-4 py-8 text-center text-sm text-slate-500">Loading football scores…</div>
+      </div>
+      <div class="border-t border-white/10 bg-white/[0.02] px-4 py-2 text-[11px] text-slate-500">Verified stats · Kick-off times in WAT. Tap a match for details on BBC Sport.</div>
+    </section>
+
+    <section class="overflow-hidden rounded-2xl border border-white/10 bg-white/[0.03]">
+      <div class="flex items-center justify-between border-b border-white/10 px-4 py-3">
+        <h2 class="text-sm font-black tracking-widest">MLB</h2>
+        <span id="mlb-count" class="rounded-full border border-white/10 bg-white/[0.04] px-2.5 py-1 text-xs font-bold text-slate-400">—</span>
+      </div>
+      <div id="mlb-list" class="divide-y divide-white/5 text-sm">
+        <div class="px-4 py-8 text-center text-sm text-slate-500">Loading MLB scores…</div>
+      </div>
+      <div class="border-t border-white/10 bg-white/[0.02] px-4 py-2 text-[11px] text-slate-500">Live via verified stats · Scores update every 60s. Linescore from stats API.</div>
+    </section>
+  </div>
+
+  <div class="mt-6 rounded-2xl border border-white/10 bg-white/[0.03] p-4 text-xs leading-relaxed text-slate-400">Odds are indicative only — always check accurate live odds on <a href="https://www.sportybet.com" target="_blank" rel="noopener" class="font-bold text-emerald-400 underline">sportybet.com</a> before betting. All kick-off times shown in WAT. 18+ Gamble responsibly.</div>
+</main>
+
+<script>
+const WAT_TZ='Africa/Lagos';
+function watDate(offset=0){
+  const d=new Date();
+  // get date in WAT
+  const watStr = new Date().toLocaleDateString('en-CA',{timeZone:WAT_TZ});
+  if(offset===0) return watStr;
+  const base=new Date(watStr+'T12:00:00');
+  base.setDate(base.getDate()+offset);
+  return base.toISOString().slice(0,10);
+}
+let dateOffset=0;
+let autoTimer=null, countdownTimer=null, secsLeft=60;
+
+function setDateOffset(o){
+  dateOffset=o;
+  document.getElementById('date-label').textContent = watDate(dateOffset);
+  refreshAll();
+}
+function toggleAuto(on){
+  if(on) startAuto(); else stopAuto();
+}
+function startAuto(){
+  stopAuto();
+  secsLeft=60;
+  autoTimer=setInterval(()=>{ refreshAll(); secsLeft=60; }, 60000);
+  countdownTimer=setInterval(()=>{
+    secsLeft=Math.max(0,secsLeft-1);
+    const el=document.getElementById('countdown');
+    if(el) el.textContent='Next refresh in '+secsLeft+'s';
+    if(secsLeft===0) secsLeft=60;
+  },1000);
+}
+function stopAuto(){
+  if(autoTimer) clearInterval(autoTimer);
+  if(countdownTimer) clearInterval(countdownTimer);
+  autoTimer=countdownTimer=null;
+}
+
+function renderFootball(items){
+  const c=document.getElementById('football-list');
+  const count=document.getElementById('fb-count');
+  if(!items || !items.length){
+    c.innerHTML='<div class="px-4 py-8 text-center text-sm text-slate-500">No matches found for this date. Try Yesterday or check later — kick-offs appear as the day progresses.</div>';
+    if(count) count.textContent='0 matches';
+    return;
+  }
+  if(count) count.textContent=items.length+' matches';
+  // Separate live/finished/scheduled
+  c.innerHTML = items.map(it=>{
+    const isLive = /live|min|half time|in progress/i.test(it.status);
+    const isFT = /full time/i.test(it.status);
+    const isKO = /kick off|scheduled/i.test(it.status);
+    const badge = isLive ? '<span class="inline-flex items-center gap-1 rounded-full bg-red-600 px-2 py-0.5 text-[11px] font-black text-white"><span class="h-1.5 w-1.5 animate-pulse rounded-full bg-white"></span>'+it.status+'</span>'
+      : isFT ? '<span class="inline-flex rounded-full border border-white/10 bg-white/[0.06] px-2 py-0.5 text-[11px] font-bold text-slate-300">FT</span>'
+      : isKO ? '<span class="inline-flex rounded-full border border-blue-500/20 bg-blue-500/10 px-2 py-0.5 text-[11px] font-bold text-blue-300">'+it.status+'</span>'
+      : '<span class="inline-flex rounded-full border border-white/10 bg-white/[0.04] px-2 py-0.5 text-[11px] font-bold text-slate-400">'+it.status+'</span>';
+    const score = (it.homeScore!=null && it.awayScore!=null) ? `<span class="font-mono text-base font-black">${it.homeScore} — ${it.awayScore}</span>` : (it.koTime ? `<span class="font-mono text-sm font-bold text-slate-300">${it.koTime} WAT</span>` : '<span class="text-slate-500">vs</span>');
+    const sub = it.homeScore!=null ? `<span class="text-xs text-slate-500">${it.home} · ${it.away}</span>` : '';
+    return `<div class="flex items-center justify-between gap-3 px-4 py-3 ${isLive?'bg-red-500/[0.06]':''} hover:bg-white/[0.02]">
+      <div class="min-w-0 flex-1"><div class="truncate font-bold">${it.home} <span class="font-normal text-slate-500">vs</span> ${it.away}</div><div class="text-xs text-slate-500 truncate">${sub}</div></div>
+      <div class="text-right"><div>${score}</div><div class="mt-1">${badge}</div></div>
+    </div>`;
+  }).join('');
+}
+
+function renderMLB(games){
+  const c=document.getElementById('mlb-list');
+  const count=document.getElementById('mlb-count');
+  if(!games || !games.length){
+    c.innerHTML='<div class="px-4 py-8 text-center text-sm text-slate-500">No MLB games for this date (offseason or no schedule).</div>';
+    if(count) count.textContent='0 games';
+    return;
+  }
+  if(count) count.textContent=games.length+' games';
+  c.innerHTML = games.map(g=>{
+    const isLive = /In Progress|Live|Top|Bot|Warmup/i.test(g.state);
+    const isFinal = /Final/i.test(g.state);
+    const badge = isFinal ? '<span class="inline-flex rounded-full border border-white/10 bg-white/[0.06] px-2 py-0.5 text-[11px] font-bold text-slate-300">FINAL</span>'
+      : isLive ? '<span class="inline-flex items-center gap-1 rounded-full bg-red-600 px-2 py-0.5 text-[11px] font-black text-white"><span class="h-1.5 w-1.5 animate-pulse rounded-full bg-white"></span>'+g.state+'</span>'
+      : '<span class="inline-flex rounded-full border border-blue-500/20 bg-blue-500/10 px-2 py-0.5 text-[11px] font-bold text-blue-300">'+g.state+'</span>';
+    const total = (g.awayScore!=null && g.homeScore!=null) ? g.awayScore+g.homeScore : null;
+    const scoreLine = (g.awayScore!=null) ? `<span class="font-mono text-base font-black">${g.awayAbbr} ${g.awayScore} — ${g.homeScore} ${g.homeAbbr}</span>` : `<span class="font-mono text-sm font-bold text-slate-300">${g.awayAbbr} @ ${g.homeAbbr}</span>`;
+    const detail = g.inning ? `${g.inning} · ${total!=null?'Total '+total:''}` : (g.timeWAT ? g.timeWAT+' WAT' : '');
+    return `<div class="flex items-center justify-between gap-3 px-4 py-3 ${isLive?'bg-red-500/[0.06]':''} hover:bg-white/[0.02]">
+      <div class="min-w-0 flex-1"><div class="truncate font-bold">${g.away} <span class="font-normal text-slate-500">@</span> ${g.home}</div><div class="text-xs text-slate-500">${detail}</div></div>
+      <div class="text-right"><div>${scoreLine}</div><div class="mt-1">${badge}</div></div>
+    </div>`;
+  }).join('');
+}
+
+async function fetchFootball(dateStr){
+  const url='https://api.allorigins.win/raw?url='+encodeURIComponent('https://www.bbc.com/sport/football/scores-fixtures/'+dateStr);
+  try{
+    const html=await fetch(url,{cache:'no-store'}).then(r=>{
+      if(!r.ok) throw new Error('BBC '+r.status);
+      return r.text();
+    });
+    // Parse visually-hidden spans
+    const vis=[...html.matchAll(/visually-hidden[^>]*>([^<]+?)<\/span/g)].map(m=>m[1].trim()).filter(t=>t && (t.includes(' at ') || t.includes('kick off') || t.includes('versus')));
+    const items=[];
+    for(const t of vis){
+      // "Elche 2 , Real Madrid 3 at Full time"
+      let m=t.match(/^(.+?)\s+(\d+)\s*,\s*(.+?)\s+(\d+)\s+at\s+(.+)$/);
+      if(m){
+        items.push({home:m[1].trim(), homeScore:parseInt(m[2]), away:m[3].trim(), awayScore:parseInt(m[4]), status:m[5].trim(), koTime:null});
+        continue;
+      }
+      // "Everton versus Wolves kick off 19:45"
+      let k=t.match(/^(.+?)\s+versus\s+(.+?)\s+kick off\s+(\d+:\d+)$/i);
+      if(k){
+        items.push({home:k[1].trim(), away:k[2].trim(), homeScore:null, awayScore:null, status:'Kick off '+k[3], koTime:k[3]});
+        continue;
+      }
+      // Fallback: "Team A versus Team B"
+      let v=t.match(/^(.+?)\s+versus\s+(.+)$/i);
+      if(v && !t.includes(' at ')){
+        items.push({home:v[1].trim(), away:v[2].trim(), homeScore:null, awayScore:null, status:'Scheduled', koTime:null});
+      }
+    }
+    // Dedupe by home+away (BBC lists twice)
+    const seen=new Set(); const deduped=[];
+    for(const it of items){
+      const key=(it.home+' vs '+it.away).toLowerCase();
+      if(!seen.has(key)){ seen.add(key); deduped.push(it); }
+    }
+    return deduped;
+  }catch(e){
+    console.warn('football fetch failed', e);
+    return null;
+  }
+}
+
+async function fetchMLB(dateStr){
+  const url='https://statsapi.mlb.com/api/v1/schedule?date='+dateStr+'&sportId=1&hydrate=team,linescore';
+  try{
+    const data=await fetch(url,{cache:'no-store'}).then(r=>{
+      if(!r.ok) throw new Error('MLB '+r.status);
+      return r.json();
+    });
+    const games=[];
+    for(const dt of (data.dates||[])){
+      for(const g of (dt.games||[])){
+        const away=g.teams.away.team.name, home=g.teams.home.team.name;
+        const awayAbbr=g.teams.away.team.abbreviation, homeAbbr=g.teams.home.team.abbreviation;
+        const awayScore=g.teams.away.score, homeScore=g.teams.home.score;
+        const state=g.status.detailedState;
+        const ls=g.linescore||{};
+        const inning = ls.currentInningOrdinal ? ls.currentInningOrdinal+' '+ (ls.inningState||'') + (ls.outs!=null?' · '+ls.outs+' out':'') : '';
+        // Convert start time to WAT
+        let timeWAT='';
+        try{ timeWAT=new Date(g.gameDate).toLocaleTimeString('en-GB',{timeZone:WAT_TZ,hour:'2-digit',minute:'2-digit'}); }catch{}
+        games.push({away,home,awayAbbr,homeAbbr,awayScore,homeScore,state,inning,timeWAT});
+      }
+    }
+    return games;
+  }catch(e){
+    console.warn('mlb fetch failed', e);
+    return null;
+  }
+}
+
+async function refreshAll(){
+  const d=watDate(dateOffset);
+  document.getElementById('date-label').textContent=d;
+  document.getElementById('status-line').textContent='Updating… '+new Date().toLocaleTimeString('en-GB',{timeZone:WAT_TZ});
+  secsLeft=60;
+  const [fb, mlb, results] = await Promise.all([
+    fetchFootball(d),
+    fetchMLB(d),
+    fetch('data/results.json').then(r=>r.json()).catch(()=>null)
+  ]);
+  if(fb) renderFootball(fb); else document.getElementById('football-list').innerHTML='<div class="px-4 py-6 text-center text-sm text-amber-300">Football live temporarily unavailable — <a href="https://www.bbc.com/sport/football/scores-fixtures/'+d+'" target="_blank" rel="noopener" class="underline">open BBC Sport</a> · retry in 60s.</div>';
+  if(mlb) renderMLB(mlb); else document.getElementById('mlb-list').innerHTML='<div class="px-4 py-6 text-center text-sm text-amber-300">MLB live temporarily unavailable — retry in 60s.</div>';
+  document.getElementById('status-line').textContent='Last update '+new Date().toLocaleTimeString('en-GB',{timeZone:WAT_TZ})+' WAT · '+d+' · '+(fb?fb.length:0)+' football · '+(mlb?mlb.length:0)+' MLB';
+  // accas banner
+  if(results && results.accas){
+    const tot=Object.values(results.accas).reduce((a,c)=>({h:a.h+c.summary.hits,l:a.l+c.summary.lost,p:a.p+c.summary.pending}),{h:0,l:0,p:0});
+    const bn=document.getElementById('accas-live-banner');
+    bn.classList.remove('hidden');
+    bn.innerHTML='<b>Today\'s accas:</b> '+tot.h+' HIT · <span class="text-red-300">'+tot.l+' LOST</span>'+(tot.p?' · <span class="text-amber-300">'+tot.p+' MLB pending</span>':'')+' · <a href="predictions.html" class="font-bold text-blue-300 underline">view slips →</a> <span class="text-slate-500">· Updated '+ (results.updated||'')+'</span>';
+  }
+  // live dot
+  const anyLive = (fb&&fb.some(x=>/live|min|half time/i.test(x.status))) || (mlb&&mlb.some(x=>/In Progress|Live|Top|Bot/i.test(x.state)));
+  document.getElementById('live-dot').style.display = anyLive ? 'inline-flex' : 'none';
+}
+
+// init
+setDateOffset(0);
+startAuto();
+</script>
+</body>
+</html>
