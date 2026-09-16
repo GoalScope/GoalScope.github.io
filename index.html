@@ -214,7 +214,7 @@
 <script src="assets/app.js"></script>
 <script>
 document.getElementById('yr').textContent=new Date().getFullYear();
-Promise.all([fetch('data/predictions.json').then(r=>r.json()), fetch('data/results.json').then(r=>r.json()).catch(()=>null)]).then(([data, results])=>{
+Promise.all([fetch('data/predictions.json?v='+Date.now(),{cache:'no-store'}).then(r=>r.json()), fetch('data/results.json?v='+Date.now(),{cache:'no-store'}).then(r=>r.json()).catch(()=>null)]).then(([data, results])=>{
   const el=document.getElementById('home-accas');
   el.innerHTML=data.slice(0,3).map(a=>`
     <a href="predictions.html#${a.id}" class="group flex flex-col rounded-2xl border border-white/10 bg-white/[0.03] p-5 hover:bg-white/[0.05] hover:border-white/15 transition">

@@ -205,9 +205,9 @@ async function refreshLivePills(){
 }
 
 Promise.all([
-  fetch('data/details.json').then(r=>r.json()),
-  fetch('data/results.json').then(r=>r.json()).catch(()=>null),
-  fetch('data/results_2026-09-15.json').then(r=>r.json()).catch(()=>null)
+  fetch('data/details.json?v='+Date.now(),{cache:'no-store'}).then(r=>r.json()),
+  fetch('data/results.json?v='+Date.now(),{cache:'no-store'}).then(r=>r.json()).catch(()=>null),
+  fetch('data/results_2026-09-15.json?v='+Date.now(),{cache:'no-store'}).then(r=>r.json()).catch(()=>null)
 ]).then(([details, results, results15])=>{
   const resData = results || results15;
   const container=document.getElementById('accas');
