@@ -84,10 +84,10 @@
 
       <div class="rounded-[20px] border border-white/10 bg-gradient-to-b from-[#162040]/80 to-[#0f1a36]/80 backdrop-blur shadow-2xl overflow-hidden">
         <div class="flex items-center justify-between border-b border-white/10 px-4 py-3">
-          <span class="text-[11px] font-extrabold tracking-widest text-slate-400">TODAY'S SPOTLIGHT · 15 SEP 2026</span>
-          <span class="rounded-full border border-blue-500/30 bg-blue-600/15 px-2.5 py-1 text-[11px] font-extrabold tracking-widest text-blue-300">8-FOLD 125.45 ODDS</span>
+          <span class="text-[11px] font-extrabold tracking-widest text-slate-400"><span id="spotlight-date">TODAY'S SPOTLIGHT</span></span>
+          <span id="spotlight-badge" class="rounded-full border border-blue-500/30 bg-blue-600/15 px-2.5 py-1 text-[11px] font-extrabold tracking-widest text-blue-300">—</span>
         </div>
-        <div class="divide-y divide-white/[0.06] text-sm">
+        <div id="spotlight-legs" class="divide-y divide-white/[0.06] text-sm">
           <div class="flex items-center justify-between gap-3 px-4 py-3"><span class="font-bold">Elche — Real Madrid</span><span class="rounded-full bg-emerald-500/10 border border-emerald-500/20 px-2 py-1 text-xs font-bold text-emerald-400">Madrid Win + Over 2.5</span><span class="font-mono rounded-full border border-white/10 bg-white/5 px-2 py-1 text-xs font-bold">2.00</span></div>
           <div class="flex items-center justify-between gap-3 px-4 py-3"><span class="font-bold">Liverpool — Tottenham (Cup)</span><span class="rounded-full bg-emerald-500/10 border border-emerald-500/20 px-2 py-1 text-xs font-bold text-emerald-400">BTTS Yes</span><span class="font-mono rounded-full border border-white/10 bg-white/5 px-2 py-1 text-xs font-bold">1.70</span></div>
           <div class="flex items-center justify-between gap-3 px-4 py-3"><span class="font-bold">Ajax — Willem II</span><span class="rounded-full bg-emerald-500/10 border border-emerald-500/20 px-2 py-1 text-xs font-bold text-emerald-400">Ajax Win + Over 2.5</span><span class="font-mono rounded-full border border-white/10 bg-white/5 px-2 py-1 text-xs font-bold">1.80</span></div>
@@ -100,7 +100,7 @@
     </div>
 
     <div class="mt-8 grid grid-cols-2 gap-3 lg:grid-cols-4">
-      <div class="rounded-2xl border border-white/10 bg-white/[0.03] p-4 backdrop-blur"><div class="font-mono text-2xl font-black">125.45</div><div class="text-xs font-bold tracking-widest text-slate-500">HIGHEST ACCA (TODAY)</div></div>
+      <div class="rounded-2xl border border-white/10 bg-white/[0.03] p-4 backdrop-blur"><div id="stat-highest" class="font-mono text-2xl font-black">—</div><div class="text-xs font-bold tracking-widest text-slate-500">HIGHEST ACCA (TODAY)</div></div>
       <div class="rounded-2xl border border-white/10 bg-white/[0.03] p-4"><div class="font-mono text-2xl font-black">50 — 100</div><div class="text-xs font-bold tracking-widest text-slate-500">STANDARD RANGE (3 SLIPS)</div></div>
       <div class="rounded-2xl border border-white/10 bg-white/[0.03] p-4"><div class="font-mono text-2xl font-black">15</div><div class="text-xs font-bold tracking-widest text-slate-500">MLB GAMES SCANNED TODAY</div></div>
       <div class="rounded-2xl border border-white/10 bg-white/[0.03] p-4"><div class="font-mono text-2xl font-black text-emerald-400">0</div><div class="text-xs font-bold tracking-widest text-slate-500">DUPLICATE PICKS ACROSS SLIPS</div></div>
@@ -213,9 +213,35 @@
 <script src="assets/app.js"></script>
 <script>
 document.getElementById('yr').textContent=new Date().getFullYear();
-Promise.all([fetch('data/predictions.json?v='+Date.now(),{cache:'no-store'}).then(r=>r.json()), fetch('data/results.json?v='+Date.now(),{cache:'no-store'}).then(r=>r.json()).catch(()=>null)]).then(([data, results])=>{
+Promise.all([fetch('data/predictions.json?v='+Date.now(),{cache:'no-store'}).then(r=>r.json()), fetch('data/details.json?v='+Date.now(),{cache:'no-store'}).then(r=>r.json()).catch(()=>null), fetch('data/results.json?v='+Date.now(),{cache:'no-store'}).then(r=>r.json()).catch(()=>null)]).then(([data, details, results])=>{
+  const WAT='Africa/Lagos';
+  const today=new Date().toLocaleDateString('en-CA',{timeZone:WAT});
+  const todays=(data||[]).filter(a=>a.date===today);
+  const list=todays.length?todays:data.slice(0,3);
+  // spotlight + highest
+  try{
+    const top=list[0];
+    const dTop=top && details ? (details[top.id]||details[top.id.replace(/^\d{4}-\d{2}-\d{2}-/,'')]||details['acca-main']) : null;
+    const sd=document.getElementById('spotlight-date');
+    const sb=document.getElementById('spotlight-badge');
+    const sl=document.getElementById('spotlight-legs');
+    const sh=document.getElementById('stat-highest');
+    if(top){
+      const dayLabel=new Date(top.date+'T12:00:00').toLocaleDateString('en-GB',{day:'2-digit',month:'short',year:'numeric',timeZone:WAT}).toUpperCase();
+      if(sd) sd.textContent="TODAY'S SPOTLIGHT · "+dayLabel;
+      if(sb) sb.textContent=top.badge.replace('TODAY','').trim()+' '+top.odds+' ODDS';
+      if(sh) sh.textContent=top.odds;
+      if(sl && dTop && dTop.legs){
+        sl.innerHTML=dTop.legs.slice(0,4).map(l=>{
+          const raw=l[0]||''; const pick=l[1]||''; const odds=l[2]||'';
+          const name=raw.replace(/\s*\d{1,2}:\d{2}.*$/,'').replace(/\s+[—–-].*$/,'').trim();
+          return `<div class="flex items-center justify-between gap-3 px-4 py-3"><span class="font-bold truncate">${name}</span><span class="shrink-0 rounded-full bg-emerald-500/10 border border-emerald-500/20 px-2 py-1 text-xs font-bold text-emerald-400 truncate">${pick}</span><span class="shrink-0 font-mono rounded-full border border-white/10 bg-white/5 px-2 py-1 text-xs font-bold">${odds}</span></div>`;
+        }).join('');
+      }
+    }
+  }catch(e){}
   const el=document.getElementById('home-accas');
-  el.innerHTML=data.slice(0,3).map(a=>`
+  el.innerHTML=list.slice(0,3).map(a=>`
     <a href="predictions.html#${a.id}" class="group flex flex-col rounded-2xl border border-white/10 bg-white/[0.03] p-5 hover:bg-white/[0.05] hover:border-white/15 transition">
       <div class="text-[11px] font-extrabold tracking-widest text-blue-400">${a.badge}</div>
       <div class="mt-1 font-bold leading-tight">${a.title}</div>
