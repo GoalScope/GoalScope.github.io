@@ -483,7 +483,7 @@ async function shareAcca(key, ev){
     return `• ${raw} — ${l[1]} @ ${l[2]}`;
   }).join('\n');
   const url=location.origin + location.pathname + '#'+key;
-  const text=`GoalScope — ${acca.legs.length} FOLD @ ${total} ODDS\n`+lines+`\nTotal: ${total} · 100 = ${(total*100).toFixed(0)} return\n`+url+`;
+  const text=`GoalScope — ${acca.legs.length} FOLD @ ${total} ODDS\n`+lines+`\nTotal: ${total} · 100 = ${(total*100).toFixed(0)} return\n`+url;
   try{
     if(navigator.share){
       await navigator.share({title:`GoalScope ${acca.legs.length} FOLD @ ${total}`, text, url});
@@ -507,7 +507,7 @@ function waShareAcca(key, ev){
     return `• ${raw} — ${l[1]} @ ${l[2]}`;
   }).join('\n');
   const url=location.origin + location.pathname + '#'+key;
-  const text=`GoalScope — ${acca.legs.length} FOLD @ ${total} ODDS\n`+lines+`\nTotal: ${total} · 100 = ${(total*100).toFixed(0)} return\n`+url+`;
+  const text=`GoalScope — ${acca.legs.length} FOLD @ ${total} ODDS\n`+lines+`\nTotal: ${total} · 100 = ${(total*100).toFixed(0)} return\n`+url;
   const waUrl='https://wa.me/?text='+encodeURIComponent(text);
   window.open(waUrl, '_blank');
   try{ if(navigator.clipboard) navigator.clipboard.writeText(text); }catch(_){}
