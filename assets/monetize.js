@@ -13,7 +13,7 @@ window.GOALSCOPE_BOOKING = {
   "acca-main": "P5XK49",
   "acca-1": "UVA4B8",
   "acca-2": "",
-  "acca-3": "",
+  "acca-3": "L6BXNY",
   "2026-09-15-acca-main": "",
   "2026-09-15-acca-1": "",
   "2026-09-15-acca-2": "",
@@ -21,13 +21,14 @@ window.GOALSCOPE_BOOKING = {
   "2026-09-16-acca-main": "P5XK49",
   "2026-09-16-acca-1": "UVA4B8",
   "2026-09-16-acca-2": "",
-  "2026-09-16-acca-3": ""
+  "2026-09-16-acca-3": "L6BXNY"
 };
 // Bet9ja: ~/prediction-tools/bet9ja_booker.py
 window.GOALSCOPE_BOOKING_ODDS = {
-  // Set when SportyBet total known (from screenshot/API) — overrides calculated total
   "2026-09-16-acca-main": "", // P5XK49 SportyBet total TBC
-  "2026-09-16-acca-1": "" // UVA4B8 SportyBet total TBC — send screenshot to auto-fill
+  "2026-09-16-acca-1": "", // UVA4B8 SportyBet total TBC
+  "2026-09-16-acca-3": "58.73", // L6BXNY SportyBet total — Acca 4
+  "2026-09-16-acca-2": "" // pending
 };
 
 window.GOALSCOPE_BOOKING_BET9JA = {
