@@ -35,7 +35,7 @@
       <div><label class="text-xs font-bold tracking-widest text-slate-400">Name</label><input name="name" required placeholder="Your name" class="mt-1 w-full rounded-xl border border-white/10 bg-[#0a132c] px-4 py-3 text-sm outline-none focus:border-blue-500/50 placeholder:text-slate-500"></div>
       <div><label class="text-xs font-bold tracking-widest text-slate-400">Email</label><input name="email" type="email" required placeholder="you@example.com" class="mt-1 w-full rounded-xl border border-white/10 bg-[#0a132c] px-4 py-3 text-sm outline-none focus:border-blue-500/50 placeholder:text-slate-500"></div>
       <div><label class="text-xs font-bold tracking-widest text-slate-400">Message</label><textarea name="message" rows="5" required placeholder="How can we help?" class="mt-1 w-full rounded-xl border border-white/10 bg-[#0a132c] px-4 py-3 text-sm outline-none focus:border-blue-500/50 placeholder:text-slate-500"></textarea></div>
-      <button type="text" name="website" tabindex="-1" autocomplete="off" style="position:absolute;left:-9999px;top:auto;width:1px;height:1px;overflow:hidden" aria-hidden="true" placeholder="Leave blank">
+      <input type="text" name="website" tabindex="-1" autocomplete="off" style="position:absolute;left:-9999px;top:auto;width:1px;height:1px;overflow:hidden" aria-hidden="true" placeholder="Leave blank">
       <input type="hidden" name="_hp_timestamp" id="_hp_ts" value="">
       <div class="cf-turnstile" data-sitekey="0x4AAAAAAE5HsBRKxm8cgvlh" data-theme="dark" data-size="normal" id="contact-turnstile"></div>
       <button type="submit" class="rounded-full bg-blue-600 px-6 py-3 text-sm font-extrabold text-white hover:bg-blue-500 transition">Send message</button>
@@ -88,7 +88,7 @@
     const el=document.querySelector('.cf-turnstile');
     if(cfgT.siteKey && el && el.getAttribute('data-sitekey')!==cfgT.siteKey) el.setAttribute('data-sitekey', cfgT.siteKey);
   }catch{}
-  form.addEventListener('submit', function(e){
+  form.addEventListener('submit', async function(e){
     const hp=form.querySelector('[name="website"]');
     if(hp && hp.value.trim()!==''){ e.preventDefault(); alert('Bot check failed.'); return false; }
     const ts=parseInt((document.getElementById('_hp_ts')||{}).value||'0',10);
@@ -96,11 +96,23 @@
     const last=parseInt(localStorage.getItem('gs_last_submit')||'0',10);
     if(Date.now()-last < 60000){ e.preventDefault(); alert('Too many submissions — wait a minute.'); return false; }
     // Turnstile check — if enabled and widget present, require token
+    // Turnstile client token check
+    let token='';
     try{
       const cfgT=window.GOALSCOPE_TURNSTILE||{};
       if(cfgT.enabled!==false && document.querySelector('.cf-turnstile')){
-        const token = window.turnstile ? window.turnstile.getResponse(document.getElementById('contact-turnstile')) : '';
+        token = window.turnstile ? window.turnstile.getResponse(document.getElementById('contact-turnstile')) : '';
         if(!token){ e.preventDefault(); alert('Please complete the security check.'); return false; }
+        // server verify via Worker — block if Worker says no
+        const wu = cfgT.workerUrl || 'https://goalscope-form.ogbukachristian22.workers.dev/';
+        try{
+          const vr = await fetch(wu, {method:'POST', headers:{'Content-Type':'application/json'}, body: JSON.stringify({token})});
+          const vj = await vr.json();
+          if(!vj.ok){ e.preventDefault(); alert('Security check failed — please retry.'); if(window.turnstile) window.turnstile.reset(document.getElementById('contact-turnstile')); return false; }
+        }catch(err){
+          console.warn('verify failed', err);
+          // fail open if Worker down — comment next line to block on error
+        }
       }
     }catch{}
     for(const el of form.querySelectorAll('input,textarea')){

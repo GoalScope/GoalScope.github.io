@@ -169,7 +169,7 @@
     <form id="newsletterForm" novalidate class="flex flex-1 flex-wrap justify-end gap-2">
       <input id="nlEmail" name="email" type="email" required placeholder="you@example.com" class="min-w-[220px] flex-1 rounded-full border border-white/10 bg-[#0a132c] px-4 py-3 text-sm outline-none placeholder:text-slate-500">
       <input type="text" name="website" tabindex="-1" autocomplete="off" style="position:absolute;left:-9999px;width:1px;height:1px;overflow:hidden" aria-hidden="true">
-      <input type="hidden" id="nl_ts" value="">>
+      <input type="hidden" id="nl_ts" value="">
       <div class="cf-turnstile" data-sitekey="0x4AAAAAAE5HsBRKxm8cgvlh" data-theme="dark" data-size="compact" id="nl-turnstile"></div>
       <button type="submit" class="rounded-full bg-blue-600 px-6 py-3 text-sm font-extrabold text-white hover:bg-blue-500">Subscribe</button>
     </form>
@@ -291,11 +291,18 @@ Promise.all([fetch('data/predictions.json?v='+Date.now(),{cache:'no-store'}).the
   f.addEventListener('submit', function(e){
     const hp=f.querySelector('[name="website"]');
     if(hp && hp.value.trim()!==''){ e.preventDefault(); return false; }
+    let tok='';
     try{
       const cfgT=window.GOALSCOPE_TURNSTILE||{};
       if(cfgT.enabled!==false && document.querySelector('#nl-turnstile')){
-        const tok = window.turnstile ? window.turnstile.getResponse(document.getElementById('nl-turnstile')) : '';
+        tok = window.turnstile ? window.turnstile.getResponse(document.getElementById('nl-turnstile')) : '';
         if(!tok){ e.preventDefault(); alert('Complete security check.'); return false; }
+        const wu = cfgT.workerUrl || 'https://goalscope-form.ogbukachristian22.workers.dev/';
+        try{
+          const vr = await fetch(wu, {method:'POST', headers:{'Content-Type':'application/json'}, body: JSON.stringify({token: tok})});
+          const vj = await vr.json();
+          if(!vj.ok){ e.preventDefault(); alert('Security check failed — retry.'); if(window.turnstile) window.turnstile.reset(document.getElementById('nl-turnstile')); return false; }
+        }catch(err){ console.warn('verify failed', err); }
       }
     }catch{}
     const tsv=parseInt((document.getElementById('nl_ts')||{}).value||'0',10);
