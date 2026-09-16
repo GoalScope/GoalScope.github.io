@@ -222,12 +222,27 @@ Promise.all([
     b.classList.remove('hidden');
   }
   LIVE_LEGS=[];
-  Object.entries(details).forEach(([key,acca])=>{
+  // Make sure today stays PENDING until settled — sorted today first, yesterday after
+  const sortedEntries = Object.entries(details).sort((a,b)=> b[0].localeCompare(a[0]));
+  let lastDate='';
+  sortedEntries.forEach(([key,acca])=>{
+    const datePart = key.slice(0,10);
+    if(datePart !== lastDate){
+      lastDate=datePart;
+      const isToday = datePart === watDateStr(0);
+      const label = isToday ? 'TODAY' : new Date(datePart+'T12:00:00').toLocaleDateString('en-GB',{day:'2-digit',month:'short',year:'numeric'}).toUpperCase();
+      const sub = isToday ? 'Live & upcoming — scores update every 60s · PENDING until FT' : 'Final — settled scores';
+      const hdr=document.createElement('div');
+      hdr.className='mt-6 mb-2 flex items-center gap-2';
+      hdr.innerHTML=`<span class="rounded-full ${isToday?'bg-emerald-600 text-white':'bg-white/[0.06] text-slate-300 border border-white/10'} px-3 py-1 text-[11px] font-black tracking-widest">${label}</span><span class="text-xs text-slate-500">${sub}</span>`;
+      container.appendChild(hdr);
+    }
     const total=acca.legs.map(l=>parseFloat(l[2])||1.85).reduce((a,b)=>a*b,1).toFixed(2);
     const resAcca=resData&&resData.accas&&resData.accas[key];
-    const verdict=resAcca?resAcca.summary.verdict:null;
-    const badgeColor=verdict==='LOST'?'border-red-500/30 bg-red-500/15 text-red-300':verdict==='WON'?'border-emerald-500/30 bg-emerald-500/15 text-emerald-300':'border-blue-500/30 bg-blue-600/15 text-blue-300';
-    const verdictBadge=verdict?`<span class="ml-2 inline-flex rounded-full border px-2 py-0.5 text-[10px] font-black tracking-widest ${verdict==='LOST'?'border-red-500/30 bg-red-500/15 text-red-300':verdict==='WON'?'border-emerald-500/30 bg-emerald-500/15 text-emerald-300':'border-amber-500/30 bg-amber-500/15 text-amber-300'}">${verdict}</span>`:'';
+    const rawVerdict=resAcca?resAcca.summary.verdict:null;
+    const verdict=rawVerdict || 'PENDING';
+    const badgeColor=verdict==='LOST'?'border-red-500/30 bg-red-500/15 text-red-300':verdict==='WON'?'border-emerald-500/30 bg-emerald-500/15 text-emerald-300':'border-amber-500/30 bg-amber-500/15 text-amber-300';
+    const verdictBadge=`<span class="ml-2 inline-flex rounded-full border px-2 py-0.5 text-[10px] font-black tracking-widest ${verdict==='LOST'?'border-red-500/30 bg-red-500/15 text-red-300':verdict==='WON'?'border-emerald-500/30 bg-emerald-500/15 text-emerald-300':'border-amber-500/30 bg-amber-500/15 text-amber-300'}">${verdict}</span>`;
     const el=document.createElement('section');
     el.className='acca overflow-hidden rounded-2xl border border-white/10 bg-white/[0.03] backdrop-blur min-w-0 max-w-full';
     el.dataset.key=key; el.id=key;
@@ -252,7 +267,6 @@ Promise.all([
       const pillId=key+'-pill-'+idx;
       let pillClass, pillText;
       if(status==='HIT'){
-        // green pill with score — result as status
         const score=ft?ft.replace(/\s*FT.*/,'').trim(): pick;
         pillClass='bg-emerald-500 text-white';
         pillText=score||'WON';
@@ -262,10 +276,11 @@ Promise.all([
         pillText=score||'LOST';
       } else if(status==='PENDING'){
         pillClass='bg-amber-500/20 text-amber-200 border border-amber-500/30';
-        pillText=ft && !/Pre-Game|Warmup/i.test(ft) ? ft : t;
+        pillText='PENDING';
       } else {
-        pillClass='bg-white/[0.06] text-slate-200 border border-white/10';
-        pillText=t;
+        // not yet graded (today) — undecided until live settles → PENDING
+        pillClass='bg-amber-500/20 text-amber-200 border border-amber-500/30';
+        pillText='PENDING';
       }
       const isMLB=/@/.test(l[0]) && /\b(Padres|Dodgers|Brewers|Yankees|Phillies|Braves|Reds|Rockies|Pirates|Twins|Nationals|Cubs|Rangers|Athletics|Rays|Tigers|Blue Jays|Red Sox)\b/i.test(raw);
       const kind=isMLB?'mlb':'football';
@@ -299,7 +314,7 @@ Promise.all([
     });
     el.innerHTML=`
       <div class="flex flex-wrap items-center justify-between gap-3 border-b border-white/10 px-4 py-4 min-w-0">
-        <div class="min-w-0 flex-1"><div class="inline-flex flex-wrap items-center gap-2 rounded-full border px-2.5 py-1 text-[11px] font-extrabold tracking-widest ${badgeColor}">${acca.title}${verdictBadge}</div><div class="mt-1 truncate text-xs text-slate-400">${acca.legs.length} picks · No duplicates · Verified stats${resAcca?` · <span class="${verdict==='LOST'?'text-red-400':verdict==='WON'?'text-emerald-400':'text-amber-300'}">${resAcca.summary.hits} HIT · ${resAcca.summary.lost} LOST${resAcca.summary.pending?' · '+resAcca.summary.pending+' pending':''}</span>`:''}</div></div>
+        <div class="min-w-0 flex-1"><div class="inline-flex flex-wrap items-center gap-2 rounded-full border px-2.5 py-1 text-[11px] font-extrabold tracking-widest ${badgeColor}">${acca.title}${verdictBadge}</div><div class="mt-1 truncate text-xs text-slate-400">${acca.legs.length} picks · No duplicates · Verified stats${resAcca?` · <span class="${verdict==='LOST'?'text-red-400':verdict==='WON'?'text-emerald-400':'text-amber-300'}">${resAcca.summary.hits} HIT · ${resAcca.summary.lost} LOST${resAcca.summary.pending?' · '+resAcca.summary.pending+' pending':''}</span>`:` · <span class="text-amber-300">PENDING — live updates every 60s</span>`}</div></div>
         <div class="text-right shrink-0"><div class="font-mono text-xl sm:text-2xl font-black ${verdict==='LOST'?'text-red-400':verdict==='WON'?'text-emerald-400':'text-emerald-400'}">${total} <span class="text-xs tracking-widest text-slate-500">ODDS</span></div><div class="text-xs text-slate-500">100 = ${(total*100).toFixed(0)} return</div></div>
       </div>
       <div class="divide-y divide-white/5 overflow-hidden">${legsHtml}</div>
