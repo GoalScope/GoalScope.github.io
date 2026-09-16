@@ -9,26 +9,27 @@ window.GOALSCOPE_AFFILIATE = {
 
 // Booking codes — auto-filled by bookers
 // SportyBet: ~/prediction-tools/sportybet_booker.py
+// Game 1 = PMUH1U 19.26 (Matchday 8-fold), Game 2 = P5XK49 41.75 (La Liga & Alps), Game 3 = UVA4B8 25.63 (Cup & Cross-Atlantic), Game 4 = L6BXNY 58.72 (Continent & Coors-Free)
 window.GOALSCOPE_BOOKING = {
-  "acca-main": "P5XK49",
-  "acca-1": "",
+  "acca-main": "PMUH1U",
+  "acca-1": "P5XK49",
   "acca-2": "UVA4B8",
   "acca-3": "L6BXNY",
   "2026-09-15-acca-main": "",
   "2026-09-15-acca-1": "",
   "2026-09-15-acca-2": "",
   "2026-09-15-acca-3": "",
-  "2026-09-16-acca-main": "P5XK49",
-  "2026-09-16-acca-1": "",
+  "2026-09-16-acca-main": "PMUH1U",
+  "2026-09-16-acca-1": "P5XK49",
   "2026-09-16-acca-2": "UVA4B8",
   "2026-09-16-acca-3": "L6BXNY"
 };
 // Bet9ja: ~/prediction-tools/bet9ja_booker.py
 window.GOALSCOPE_BOOKING_ODDS = {
-  "2026-09-16-acca-main": "", // P5XK49 SportyBet total TBC
-  "2026-09-16-acca-1": "", // pending
-  "2026-09-16-acca-2": "", // UVA4B8 SportyBet total TBC — Accumulator 3 (Cup & Cross-Atlantic 66.37)
-  "2026-09-16-acca-3": "58.72" // L6BXNY SportyBet total — Accumulator 4 (Continent & Coors-Free 61.03 -> 58.72)
+  "2026-09-16-acca-main": "19.26", // PMUH1U Game 1
+  "2026-09-16-acca-1": "41.75", // P5XK49 Game 2
+  "2026-09-16-acca-2": "25.63", // UVA4B8 Game 3
+  "2026-09-16-acca-3": "58.72" // L6BXNY Game 4
 };
 
 window.GOALSCOPE_BOOKING_BET9JA = {
