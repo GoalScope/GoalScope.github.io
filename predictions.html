@@ -58,6 +58,7 @@ function affBadge(book){ const c=window.GOALSCOPE_AFFILIATE||{}; return c.enable
 <div id="results-banner" class="hidden"></div>
 <script>
 let ALL=[];
+let DETAILS_MAP=null;
 const WAT_TZ='Africa/Lagos';
 function watDateStr(off=0){
   const wat=new Date().toLocaleDateString('en-CA',{timeZone:WAT_TZ});
@@ -220,7 +221,7 @@ Promise.all([
     b.innerHTML=`<div class="flex flex-wrap items-center justify-between gap-3"><div><div class="text-[11px] font-extrabold tracking-widest ${allLost?'text-red-300':'text-emerald-300'}">RESULTS — ${d} · ${upd}</div><div class="mt-1 text-sm font-bold">${totHit} hit · <span class="text-red-400">${totLost} lost</span>${pendNote} <span class="ml-2 inline-flex items-center gap-1 rounded-full bg-red-600 px-2 py-0.5 text-[10px] font-black text-white"><span class="h-1.5 w-1.5 animate-pulse rounded-full bg-white"></span>LIVE</span></div><div class="text-xs text-slate-400">Tap a game for stats · live scores update every 60s · All times WAT</div></div><span class="rounded-full px-3 py-1.5 text-xs font-black ${allLost?'bg-red-600 text-white':'bg-emerald-600 text-white'}">${allLost?'ACCA LOST':'CHECK RESULTS'}</span></div>`;
     b.classList.remove('hidden');
   }
-  LIVE_LEGS=[];
+  DETAILS_MAP=details; window.__DETAILS_MAP__=details; window.__RES_DATA__=resData; LIVE_LEGS=[];
   // Make sure today stays PENDING until settled — sorted today first, yesterday after
   const sortedEntries = Object.entries(details).sort((a,b)=> b[0].localeCompare(a[0]));
   let lastDate='';
@@ -286,7 +287,7 @@ Promise.all([
       const kind=isMLB?'mlb':'football';
       // row bg tint by outcome when settled
       const rowTint=status==='HIT'?'bg-emerald-500/[0.05]':status==='LOST'?'bg-red-500/[0.06]':status==='PENDING'?'bg-amber-500/[0.03]':'';
-      LIVE_LEGS.push({pillId, hNorm:hPart, aNorm:aPart, rawHome:hPart, rawAway:aPart, kind, finalStatus:status});
+      // folded cards have no live pills — live updates only in dialog
       legsHtml+=`<div onclick="toggleLeg(this)" class="leg group cursor-pointer border-b border-white/5 last:border-0 hover:bg-white/[0.02] ${rowTint} min-w-0">
         <div class="grid grid-cols-[1fr_auto] items-center gap-2 px-3 py-2.5 min-w-0">
           <div class="min-w-0">
@@ -312,13 +313,31 @@ Promise.all([
         </div>
       </div>`;
     });
+    const isSettledCard = verdict==='WON'||verdict==='LOST';
+    const shareBtnCard = isSettledCard ? '' : `<button onclick="event.stopPropagation(); shareAcca('${key}', event)" class="inline-flex items-center gap-1 rounded-full bg-white text-[#070b1a] px-3 py-1.5 text-xs font-black hover:bg-slate-100">Share ↗</button>`;
+    // preview first 2 picks for folded view
+    const preview = acca.legs.slice(0,2).map(l=>{
+      let raw=(l[0]||'').replace(/\s*\d{1,2}:\d{2}.*$/,'').trim();
+      return `<span class="truncate">${raw} — <span class="text-emerald-400 font-bold">${l[1]}</span> <span class="text-slate-400 font-mono">@ ${l[2]}</span></span>`;
+    }).join(' <span class="text-slate-600">·</span> ');
+    const moreCount = acca.legs.length - 2;
     el.innerHTML=`
-      <div class="flex flex-wrap items-center justify-between gap-3 border-b border-white/10 px-4 py-4 min-w-0">
-        <div class="min-w-0 flex-1"><div class="inline-flex flex-wrap items-center gap-2 rounded-full border px-2.5 py-1 text-[11px] font-extrabold tracking-widest ${badgeColor}">${acca.title}${verdictBadge}</div><div class="mt-1 truncate text-xs text-slate-400">${acca.legs.length} picks · No duplicates · Verified stats${resAcca?` · <span class="${verdict==='LOST'?'text-red-400':verdict==='WON'?'text-emerald-400':'text-amber-300'}">${resAcca.summary.hits} HIT · ${resAcca.summary.lost} LOST${resAcca.summary.pending?' · '+resAcca.summary.pending+' pending':''}</span>`:` · <span class="text-amber-300">PENDING — live updates every 60s</span>`}</div></div>
-        <div class="text-right shrink-0"><div class="font-mono text-xl sm:text-2xl font-black ${verdict==='LOST'?'text-red-400':verdict==='WON'?'text-emerald-400':'text-emerald-400'}">${total} <span class="text-xs tracking-widest text-slate-500">ODDS</span></div><div class="text-xs text-slate-500">100 = ${(total*100).toFixed(0)} return</div></div>
+      <div onclick="openAccaDialog('${key}')" class="cursor-pointer flex flex-wrap items-center justify-between gap-3 border-b border-white/10 px-4 py-4 min-w-0 hover:bg-white/[0.02] transition">
+        <div class="min-w-0 flex-1">
+          <div class="inline-flex flex-wrap items-center gap-2 rounded-full border px-2.5 py-1 text-[11px] font-extrabold tracking-widest ${badgeColor}">${acca.legs.length} FOLD · ${total} ODDS${verdictBadge}</div>
+          <div class="mt-2 text-xs leading-relaxed text-slate-300 line-clamp-2">${preview}${moreCount>0?` <span class="text-slate-500">+${moreCount} more</span>`:''}</div>
+          <div class="mt-1 text-[11px] text-slate-500">Tap to view all ${acca.legs.length} picks · <span class="${verdict==='PENDING'?'text-amber-300':verdict==='LOST'?'text-red-400':'text-emerald-400'}">${verdict}</span> · All times WAT</div>
+        </div>
+        <div class="text-right shrink-0 flex flex-col items-end gap-2">
+          <div class="font-mono text-xl sm:text-2xl font-black ${verdict==='LOST'?'text-red-400':verdict==='WON'?'text-emerald-400':'text-emerald-400'}">${total} <span class="text-xs tracking-widest text-slate-500">ODDS</span></div>
+          <div class="flex items-center gap-2"><span class="text-xs font-bold text-slate-400">100 = ${(total*100).toFixed(0)} return</span></div>
+        </div>
       </div>
-      <div class="divide-y divide-white/5 overflow-hidden">${legsHtml}</div>
-      <div class="flex flex-wrap items-center justify-between gap-2 border-t border-white/10 bg-emerald-500/[0.06] px-3 py-2 font-mono text-xs font-bold overflow-hidden"><span class="truncate min-w-0">${acca.legs.map(l=>l[2]).join(' × ')} = ${total}</span><span class="shrink-0 font-sans font-semibold text-slate-400">*Indicative — sportybet.com</span></div>
+      <div class="flex flex-wrap items-center gap-2 px-4 py-3 bg-white/[0.02] border-t border-white/5">
+        <button onclick="openAccaDialog('${key}')" class="inline-flex items-center gap-1.5 rounded-full bg-blue-600 px-4 py-2 text-xs font-black text-white hover:bg-blue-500">${acca.legs.length} picks — View →</button>
+        ${shareBtnCard}
+        <span class="ml-auto hidden sm:inline text-[11px] text-slate-500">Odds indicative — sportybet.com</span>
+      </div>
       <div class="flex flex-wrap items-center gap-2 border-t border-white/10 bg-gradient-to-r from-emerald-600/10 to-blue-600/10 px-3 py-3">
         ${(()=>{ const code=(window.GOALSCOPE_BOOKING&&window.GOALSCOPE_BOOKING[key])||''; if(code){ const ref=(window.GOALSCOPE_AFFILIATE&&window.GOALSCOPE_AFFILIATE.sportybet)||'https://www.sportybet.com'; const join=ref.includes('?')?'&':'?'; const url=`https://www.sportybet.com/ng/code/${code}${window.GOALSCOPE_AFFILIATE&&window.GOALSCOPE_AFFILIATE.enabled&&ref!== 'https://www.sportybet.com' ? join+'s='+encodeURIComponent(ref.split('ref=')[1]||'') : ''}`; return `<a href="${url}" target="_blank" rel="noopener sponsored" class="inline-flex items-center gap-1.5 rounded-full bg-emerald-600 px-4 py-2 text-sm font-extrabold text-white shadow hover:bg-emerald-500 transition">Load on SportyBet (${code}) →</a><button onclick="navigator.clipboard.writeText('${code}');this.textContent='Copied!';setTimeout(()=>this.textContent='Copy ${code}',1500)" class="rounded-full border border-white/10 bg-white/[0.04] px-3 py-2 text-xs font-bold hover:bg-white/[0.08]">Copy ${code}</button>`; } else { return `<a href="${affLink('sportybet')}" target="_blank" rel="noopener sponsored" class="inline-flex items-center gap-1.5 rounded-full bg-emerald-600 px-4 py-2 text-sm font-extrabold text-white shadow hover:bg-emerald-500 transition">Bet on SportyBet →${affBadge('sportybet')}</a>`; }})()}
         ${(()=>{ const code=(window.GOALSCOPE_BOOKING_BET9JA&&window.GOALSCOPE_BOOKING_BET9JA[key])||''; if(code){ const url=`https://www.bet9ja.com/bet_code?code=${code}`; return `<a href="${url}" target="_blank" rel="noopener sponsored" class="inline-flex items-center gap-1.5 rounded-full bg-white text-[#0a7a33] px-4 py-2 text-sm font-extrabold shadow hover:bg-slate-100 transition">Load on Bet9ja (${code}) →</a><button onclick="navigator.clipboard.writeText('${code}');this.textContent='Copied!';setTimeout(()=>this.textContent='Copy ${code}',1500)" class="rounded-full border border-white/10 bg-white/[0.04] px-3 py-2 text-xs font-bold hover:bg-white/[0.08]">Copy ${code}</button>`; } else { return `<a href="${affLink('bet9ja')}" target="_blank" rel="noopener sponsored" class="inline-flex items-center gap-1.5 rounded-full border border-white/10 bg-white/[0.04] px-4 py-2 text-sm font-bold hover:bg-white/[0.08] transition">Bet on Bet9ja${affBadge('bet9ja')}</a>`; }})()}
@@ -365,7 +384,131 @@ function filterAccas(tag){
     empty.style.display='';
   } else empty.style.display='none';
 }
-if(location.hash) setTimeout(()=>document.querySelector(location.hash)?.scrollIntoView({behavior:'smooth',block:'start'}),600);
+if(location.hash) { const h=location.hash.slice(1); setTimeout(()=>{ try{ openAccaDialog(h); }catch(e){ document.querySelector(location.hash)?.scrollIntoView({behavior:'smooth',block:'start'}); } },600); }
+
+// --- Dialog + Share ---
+function getDetailsMap(){ return DETAILS_MAP||window.__DETAILS_MAP__||{}; }
+function openAccaDialog(key){
+  const acca=getDetailsMap()[key];
+  if(!acca){ location.hash=key; return; }
+  const dlg=document.getElementById('gs-dialog');
+  const body=document.getElementById('gs-dialog-body');
+  const resData = window.__RES_DATA__ || null;
+  const resAcca=resData&&resData.accas&&resData.accas[key];
+  const rawVerdict=resAcca?resAcca.summary.verdict:null;
+  const verdict=rawVerdict || 'PENDING';
+  const badgeColor=verdict==='LOST'?'border-red-500/30 bg-red-500/15 text-red-300':verdict==='WON'?'border-emerald-500/30 bg-emerald-500/15 text-emerald-300':'border-amber-500/30 bg-amber-500/15 text-amber-300';
+  const total=acca.legs.map(l=>parseFloat(l[2])||1.85).reduce((a,b)=>a*b,1).toFixed(2);
+  const isSettled=verdict==='WON'||verdict==='LOST';
+  // build legs for dialog
+  let legsHtml='';
+  // reset live legs for dialog
+  LIVE_LEGS = LIVE_LEGS.filter(l=> !l.pillId.startsWith(key+'-dlg-'));
+  acca.legs.forEach((l,idx)=>{
+    let raw=l[0]||'';
+    let timeMatch=raw.match(/(\d{1,2}:\d{2})/);
+    let t=timeMatch?timeMatch[1]+' WAT':'—';
+    let matchOnly=raw.replace(/\s*\d{1,2}:\d{2}.*$/,'').trim();
+    let hPart='', aPart='';
+    let vsM=matchOnly.match(/^(.+?)\s+vs\s+(.+)$/i);
+    let atM=matchOnly.match(/^(.+?)\s+@\s+(.+)$/i);
+    if(vsM){ hPart=vsM[1].trim(); aPart=vsM[2].trim(); }
+    else if(atM){ hPart=atM[1].trim(); aPart=atM[2].trim(); }
+    else { hPart=matchOnly; aPart=''; }
+    const pick=l[1]||'', odds=l[2]||'', reason=l[3]||'';
+    const r=resAcca&&resAcca.legs&&resAcca.legs[idx];
+    const status=r?r.status:null;
+    const ft=r?r.result:'';
+    const note=r&&r.note?r.note:'';
+    const pillId=key+'-dlg-pill-'+idx;
+    let pillClass, pillText;
+    if(status==='HIT'){ const s=ft?ft.replace(/\s*FT.*/,'').trim(): pick; pillClass='bg-emerald-500 text-white'; pillText=s||'WON'; }
+    else if(status==='LOST'){ const s=ft?ft.replace(/\s*FT.*/,'').trim(): 'LOST'; pillClass='bg-red-600 text-white'; pillText=s||'LOST'; }
+    else { pillClass='bg-amber-500/20 text-amber-200 border border-amber-500/30'; pillText='PENDING'; }
+    const isMLB=/@/.test(l[0]) && /\b(Padres|Dodgers|Brewers|Yankees|Phillies|Braves|Reds|Rockies|Pirates|Twins|Nationals|Cubs|Rangers|Athletics|Rays|Tigers|Blue Jays|Red Sox)\b/i.test(raw);
+    const kind=isMLB?'mlb':'football';
+    const rowTint=status==='HIT'?'bg-emerald-500/[0.05]':status==='LOST'?'bg-red-500/[0.06]':'';
+    LIVE_LEGS.push({pillId, hNorm:hPart, aNorm:aPart, rawHome:hPart, rawAway:aPart, kind, finalStatus:status});
+    legsHtml+=`<div onclick="toggleLeg(this)" class="leg group cursor-pointer border-b border-white/5 last:border-0 hover:bg-white/[0.02] `+rowTint+` min-w-0">
+        <div class="grid grid-cols-[1fr_auto] items-center gap-2 px-3 py-2.5 min-w-0">
+          <div class="min-w-0">
+            <div class="truncate text-[13px] font-bold leading-tight">`+matchOnly+`</div>
+            <div class="truncate text-xs leading-tight"><span class="font-bold text-emerald-400">`+pick+`</span> <span class="text-slate-500">·</span> <span class="font-mono text-xs font-bold text-slate-400">`+odds+`</span> <span class="hidden sm:inline text-slate-500">·</span> <span class="font-mono text-[11px] font-bold text-slate-400">`+t+`</span></div>
+          </div>
+          <div class="flex items-center gap-2 shrink-0 max-w-[46vw] sm:max-w-none">
+            <span id="`+pillId+`" class="inline-flex shrink-0 items-center justify-center truncate rounded-full px-2.5 py-1 text-xs font-black leading-none `+pillClass+`">`+pillText+`</span>
+            <span class="leg-chevron hidden sm:inline text-[10px] text-slate-500">▼</span>
+          </div>
+        </div>
+        <div class="leg-details hidden px-3 pb-3 pt-1">
+          <div class="rounded-xl border border-white/10 bg-[#0e1530] px-3 py-2.5 text-xs leading-relaxed text-slate-300">
+            <div class="flex flex-wrap gap-2 text-[11px] font-bold">
+              <span class="rounded-full bg-white/[0.06] px-2 py-0.5 border border-white/10">`+t+`</span>
+              <span class="rounded-full bg-emerald-500/15 text-emerald-300 px-2 py-0.5 border border-emerald-500/20">`+pick+` @ `+odds+`</span>
+              `+(ft?`<span class="rounded-full px-2 py-0.5 border `+(status==='HIT'?'bg-emerald-500 text-white border-emerald-500':status==='LOST'?'bg-red-600 text-white border-red-600':'bg-white/[0.06] text-slate-300 border-white/10')+`">`+ft+`</span>`:'')+`
+            </div>
+            <p class="mt-2 text-slate-300">`+reason+`</p>
+            `+(note?`<p class="mt-1 text-[11px] text-slate-400">Result note: `+note+`</p>`:'')+`
+            <p class="mt-2 text-[11px] text-slate-500">Odds indicative — verify live odds on sportybet.com before betting. All times WAT.</p>
+          </div>
+        </div>
+      </div>`;
+  });
+  const shareRow = isSettled ? '' : `<button onclick="shareAcca('`+key+`', event)" class="inline-flex items-center gap-1.5 rounded-full bg-white text-[#070b1a] px-4 py-2 text-xs font-black hover:bg-slate-100">Share ↗</button>`;
+  body.innerHTML=`
+      <div class="flex items-center justify-between gap-3 border-b border-white/10 px-4 py-3">
+        <div class="min-w-0"><div class="inline-flex items-center gap-2 rounded-full border px-2.5 py-1 text-[11px] font-extrabold tracking-widest `+badgeColor+`">`+acca.legs.length+` FOLD · `+total+` ODDS <span class="ml-1 rounded-full border px-1.5 py-0.5 text-[10px] `+badgeColor+`">`+verdict+`</span></div><div class="mt-1 text-xs text-slate-400">`+acca.legs.length+` picks · Verified stats</div></div>
+        <button onclick="closeAccaDialog()" class="grid h-9 w-9 place-items-center rounded-full border border-white/10 bg-white/[0.04] text-slate-300 hover:bg-white/[0.08]">✕</button>
+      </div>
+      <div class="max-h-[62vh] overflow-y-auto divide-y divide-white/5">`+legsHtml+`</div>
+      <div class="border-t border-white/10 bg-white/[0.02] px-3 py-3">
+        <div class="font-mono text-xs font-bold text-slate-300">`+acca.legs.map(l=>l[2]).join(' × ')+` = `+total+` <span class="font-sans font-semibold text-slate-500">*Indicative — sportybet.com</span></div>
+        <div class="mt-3 flex flex-wrap items-center gap-2">
+          `+shareRow+`
+          <a href="`+affLink('sportybet')+`" target="_blank" rel="noopener sponsored" class="inline-flex items-center gap-1.5 rounded-full bg-emerald-600 px-4 py-2 text-xs font-extrabold text-white hover:bg-emerald-500">Bet on SportyBet →</a>
+          <span class="ml-auto text-[11px] text-slate-500">All times WAT · 18+ share responsibly</span>
+        </div>
+      </div>`;
+  dlg.showModal();
+  refreshLivePills();
+  // toast hint
+}
+function closeAccaDialog(){
+  const d=document.getElementById('gs-dialog'); if(d&&d.open) d.close();
+}
+async function shareAcca(key, ev){
+  if(ev) ev.stopPropagation();
+  const acca=getDetailsMap()[key];
+  if(!acca) return;
+  const total=acca.legs.map(l=>parseFloat(l[2])||1.85).reduce((a,b)=>a*b,1).toFixed(2);
+  const lines=acca.legs.map(l=>{
+    let raw=(l[0]||'').replace(/\s*\d{1,2}:\d{2}.*$/,'').trim();
+    return `• ${raw} — ${l[1]} @ ${l[2]}`;
+  }).join('\n');
+  const url=location.origin + location.pathname + '#'+key;
+  const text=`GoalScope — ${acca.legs.length} FOLD @ ${total} ODDS\n`+lines+`\nTotal: ${total} · 100 = ${(total*100).toFixed(0)} return\n`+url+`\nOdds indicative — verify on sportybet.com · All times WAT`;
+  try{
+    if(navigator.share){
+      await navigator.share({title:`GoalScope ${acca.legs.length} FOLD @ ${total}`, text, url});
+    } else if(navigator.clipboard){
+      await navigator.clipboard.writeText(text);
+      showToast('Copied — share your acca!');
+    } else {
+      prompt('Copy your acca:', text);
+    }
+  }catch(e){
+    try{ await navigator.clipboard.writeText(text); showToast('Copied!'); }catch(_){}
+  }
+}
+function showToast(msg){
+  let t=document.getElementById('gs-toast');
+  if(!t){ t=document.createElement('div'); t.id='gs-toast'; t.className='fixed bottom-4 left-1/2 -translate-x-1/2 rounded-full bg-white text-[#070b1a] px-4 py-2 text-sm font-bold shadow-xl z-[100]'; document.body.appendChild(t); }
+  t.textContent=msg; t.style.display='block'; clearTimeout(t._tm); t._tm=setTimeout(()=>t.style.display='none',2200);
+}
 </script>
+<dialog id="gs-dialog" onclick="if(event.target===this) closeAccaDialog()" class="m-0 max-h-[90vh] w-full max-w-[720px] overflow-hidden rounded-2xl border border-white/10 bg-[#0a0f22] p-0 text-slate-100 backdrop:bg-black/60 open:animate-[fadeIn_0.15s_ease] max-sm:m-2 max-sm:max-w-[calc(100vw-16px)]">
+  <div id="gs-dialog-body"></div>
+</dialog>
+<style>dialog::backdrop{background:rgba(0,0,0,0.6)} dialog[open]{margin:auto}</style>
 </body>
 </html>
