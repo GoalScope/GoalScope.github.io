@@ -315,6 +315,7 @@ Promise.all([
     });
     const isSettledCard = verdict==='WON'||verdict==='LOST';
     const shareBtnCard = isSettledCard ? '' : `<button onclick="event.stopPropagation(); shareAcca('${key}', event)" class="inline-flex items-center gap-1 rounded-full bg-white text-[#070b1a] px-3 py-1.5 text-xs font-black hover:bg-slate-100">Share ↗</button>`;
+    const waBtnCard = isSettledCard ? '' : `<button onclick="event.stopPropagation(); waShareAcca('${key}', event)" class="inline-flex items-center gap-1 rounded-full bg-[#25D366] text-white px-3 py-1.5 text-xs font-black hover:bg-[#1ebe57]">WhatsApp</button>`;
     // preview first 2 picks for folded view
     const preview = acca.legs.slice(0,2).map(l=>{
       let raw=(l[0]||'').replace(/\s*\d{1,2}:\d{2}.*$/,'').trim();
@@ -335,6 +336,7 @@ Promise.all([
       <div class="flex flex-wrap items-center gap-2 px-4 py-3 bg-white/[0.02] border-t border-white/5">
         <button onclick="openAccaDialog('${key}')" class="inline-flex items-center gap-1.5 rounded-full bg-blue-600 px-4 py-2 text-xs font-black text-white hover:bg-blue-500">${acca.legs.length} picks — View →</button>
         ${shareBtnCard}
+        ${waBtnCard}
         <span class="ml-auto hidden sm:inline text-[11px] text-slate-500">Odds indicative — sportybet.com</span>
       </div>
       <div class="flex flex-wrap items-center gap-2 border-t border-white/10 bg-gradient-to-r from-emerald-600/10 to-blue-600/10 px-3 py-3">
@@ -453,7 +455,7 @@ function openAccaDialog(key){
         </div>
       </div>`;
   });
-  const shareRow = isSettled ? '' : `<button onclick="shareAcca('`+key+`', event)" class="inline-flex items-center gap-1.5 rounded-full bg-white text-[#070b1a] px-4 py-2 text-xs font-black hover:bg-slate-100">Share ↗</button>`;
+  const shareRow = isSettled ? '' : `<button onclick="shareAcca('`+key+`', event)" class="inline-flex items-center gap-1.5 rounded-full bg-white text-[#070b1a] px-4 py-2 text-xs font-black hover:bg-slate-100">Share ↗</button><button onclick="waShareAcca('`+key+`', event)" class="inline-flex items-center gap-1.5 rounded-full bg-[#25D366] text-white px-4 py-2 text-xs font-black hover:bg-[#1ebe57]">WhatsApp</button>`;
   body.innerHTML=`
       <div class="flex items-center justify-between gap-3 border-b border-white/10 px-4 py-3">
         <div class="min-w-0"><div class="inline-flex items-center gap-2 rounded-full border px-2.5 py-1 text-[11px] font-extrabold tracking-widest `+badgeColor+`">`+acca.legs.length+` FOLD <span class="ml-1 rounded-full border px-1.5 py-0.5 text-[10px] `+badgeColor+`">`+verdict+`</span></div><div class="mt-1 text-xs text-slate-400">`+acca.legs.length+` picks · Verified stats</div></div>
@@ -498,6 +500,21 @@ async function shareAcca(key, ev){
   }catch(e){
     try{ await navigator.clipboard.writeText(text); showToast('Copied!'); }catch(_){}
   }
+}
+function waShareAcca(key, ev){
+  if(ev) ev.stopPropagation();
+  const acca=getDetailsMap()[key];
+  if(!acca) return;
+  const total=acca.legs.map(l=>parseFloat(l[2])||1.85).reduce((a,b)=>a*b,1).toFixed(2);
+  const lines=acca.legs.map(l=>{
+    let raw=(l[0]||'').replace(/\s*\d{1,2}:\d{2}.*$/,'').trim();
+    return `• ${raw} — ${l[1]} @ ${l[2]}`;
+  }).join('\n');
+  const url=location.origin + location.pathname + '#'+key;
+  const text=`GoalScope — ${acca.legs.length} FOLD @ ${total} ODDS\n`+lines+`\nTotal: ${total} · 100 = ${(total*100).toFixed(0)} return\n`+url+`\nOdds indicative — verify on sportybet.com · All times WAT`;
+  const waUrl='https://wa.me/?text='+encodeURIComponent(text);
+  window.open(waUrl, '_blank');
+  try{ if(navigator.clipboard) navigator.clipboard.writeText(text); }catch(_){}
 }
 function showToast(msg){
   let t=document.getElementById('gs-toast');
