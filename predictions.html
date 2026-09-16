@@ -397,7 +397,7 @@ function openAccaDialog(key){
   const verdict=rawVerdict || 'PENDING';
   const badgeColor=verdict==='LOST'?'border-red-500/30 bg-red-500/15 text-red-300':verdict==='WON'?'border-emerald-500/30 bg-emerald-500/15 text-emerald-300':'border-amber-500/30 bg-amber-500/15 text-amber-300';
   const bkOd = window.GOALSCOPE_BOOKING_ODDS && window.GOALSCOPE_BOOKING_ODDS[key];
-  const total = bkOd && parseFloat(bkOd) ? parseFloat(odD).toFixed(2) : acca.legs.map(l=>parseFloat(l[2])||1.85).reduce((a,b)=>a*b,1).toFixed(2);
+  const total = bkOd && parseFloat(bkOd) ? parseFloat(bkOd).toFixed(2) : acca.legs.map(l=>parseFloat(l[2])||1.85).reduce((a,b)=>a*b,1).toFixed(2);
   const isSettled=verdict==='WON'||verdict==='LOST';
   // build legs for dialog
   let legsHtml='';
@@ -480,7 +480,7 @@ async function shareAcca(key, ev){
   const acca=getDetailsMap()[key];
   if(!acca) return;
   const bkOd = window.GOALSCOPE_BOOKING_ODDS && window.GOALSCOPE_BOOKING_ODDS[key];
-  const total = bkOd && parseFloat(bkOd) ? parseFloat(odD).toFixed(2) : acca.legs.map(l=>parseFloat(l[2])||1.85).reduce((a,b)=>a*b,1).toFixed(2);
+  const total = bkOd && parseFloat(bkOd) ? parseFloat(bkOd).toFixed(2) : acca.legs.map(l=>parseFloat(l[2])||1.85).reduce((a,b)=>a*b,1).toFixed(2);
   const lines=acca.legs.map(l=>{
     let raw=(l[0]||'').replace(/\s*\d{1,2}:\d{2}.*$/,'').trim();
     return `• ${raw} — ${l[1]} @ ${l[2]}`;
@@ -505,7 +505,7 @@ function waShareAcca(key, ev){
   const acca=getDetailsMap()[key];
   if(!acca) return;
   const bkOd = window.GOALSCOPE_BOOKING_ODDS && window.GOALSCOPE_BOOKING_ODDS[key];
-  const total = bkOd && parseFloat(bkOd) ? parseFloat(odD).toFixed(2) : acca.legs.map(l=>parseFloat(l[2])||1.85).reduce((a,b)=>a*b,1).toFixed(2);
+  const total = bkOd && parseFloat(bkOd) ? parseFloat(bkOd).toFixed(2) : acca.legs.map(l=>parseFloat(l[2])||1.85).reduce((a,b)=>a*b,1).toFixed(2);
   const lines=acca.legs.map(l=>{
     let raw=(l[0]||'').replace(/\s*\d{1,2}:\d{2}.*$/,'').trim();
     return `• ${raw} — ${l[1]} @ ${l[2]}`;
