@@ -10,10 +10,18 @@ window.GOALSCOPE_AFFILIATE = {
 // Booking codes — auto-filled by bookers
 // SportyBet: ~/prediction-tools/sportybet_booker.py
 window.GOALSCOPE_BOOKING = {
-  "acca-main": "", // 8-FOLD 125.45
-  "acca-1": "",    // Top Flight Focus 67.99
-  "acca-2": "",    // Cup & Underdogs 70.10
-  "acca-3": ""     // Transatlantic Mix 66.27
+  "acca-main": "",
+  "acca-1": "",
+  "acca-2": "",
+  "acca-3": "",
+  "2026-09-15-acca-main": "",
+  "2026-09-15-acca-1": "",
+  "2026-09-15-acca-2": "",
+  "2026-09-15-acca-3": "",
+  "2026-09-16-acca-main": "PMUH1U",
+  "2026-09-16-acca-1": "",
+  "2026-09-16-acca-2": "",
+  "2026-09-16-acca-3": ""
 };
 // Bet9ja: ~/prediction-tools/bet9ja_booker.py
 window.GOALSCOPE_BOOKING_BET9JA = {
