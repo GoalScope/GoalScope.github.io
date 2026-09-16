@@ -46,6 +46,13 @@ window.GOALSCOPE_ADS = {
   enabled: false
 };
 
+window.GOALSCOPE_TURNSTILE = {
+  // Cloudflare Turnstile — get free at https://dash.cloudflare.com/?to=/:account/turnstile
+  // Demo key (always passes) for testing: 1x00000000000000000000AA — replace with your real sitekey for production
+  siteKey: "1x00000000000000000000AA",
+  enabled: true // set false to disable without removing widget
+};
+
 window.GOALSCOPE_NEWSLETTER = {
   provider: "local",
   brevoFormAction: "",

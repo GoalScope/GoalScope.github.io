@@ -3,7 +3,7 @@
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
-<meta http-equiv="Content-Security-Policy" content="default-src 'self'; script-src 'self' https://cdn.tailwindcss.com https://fonts.googleapis.com https://fonts.gstatic.com 'unsafe-inline' https://*.monetag.com https://*.propellerads.com https://*.adsterra.com https://*.highperformancecpm.com https://*.brevo.com https://*.mailchimp.com https://*.formspree.io; style-src 'self' https://cdn.tailwindcss.com https://fonts.googleapis.com 'unsafe-inline'; font-src https://fonts.gstatic.com; img-src 'self' data: https:; connect-src 'self' https://statsapi.mlb.com https://api.allorigins.win https://statsapi.mlb.com https://*.brevo.com https://*.mailchimp.com https://*.formspree.io https://*.monetag.com https://*.propellerads.com; frame-ancestors 'none'; base-uri 'self'; form-action 'self' https://*.brevo.com https://*.mailchimp.com https://*.formspree.io; object-src 'none'; upgrade-insecure-requests">
+<meta http-equiv="Content-Security-Policy" content="default-src 'self'; script-src 'self' https://cdn.tailwindcss.com https://fonts.googleapis.com https://fonts.gstatic.com 'unsafe-inline' https://*.monetag.com https://*.propellerads.com https://*.adsterra.com https://*.highperformancecpm.com https://*.brevo.com https://*.mailchimp.com https://*.formspree.io https://challenges.cloudflare.com https://*.cloudflare.com; style-src 'self' https://cdn.tailwindcss.com https://fonts.googleapis.com 'unsafe-inline'; font-src https://fonts.gstatic.com; img-src 'self' data: https:; connect-src 'self' https://statsapi.mlb.com https://api.allorigins.win https://statsapi.mlb.com https://*.brevo.com https://*.mailchimp.com https://*.formspree.io https://*.monetag.com https://*.propellerads.com; frame-ancestors 'none'; frame-src https://challenges.cloudflare.com; base-uri 'self'; form-action 'self' https://*.brevo.com https://*.mailchimp.com https://*.formspree.io https://challenges.cloudflare.com https://*.cloudflare.com; object-src 'none'; upgrade-insecure-requests">
 <meta http-equiv="X-Content-Type-Options" content="nosniff">
 <meta http-equiv="Referrer-Policy" content="strict-origin-when-cross-origin">
 <title>GoalScope — Daily Football & Sports Predictions</title>
@@ -19,6 +19,7 @@
 <script>tailwind.config={darkMode:'class',theme:{extend:{fontFamily:{sans:['Inter','system-ui','sans-serif'],mono:['JetBrains Mono','monospace']}}}}</script>
 <script src="assets/monetize.js"></script>
 <style>*{scrollbar-width:thin} ::-webkit-scrollbar{width:6px} ::-webkit-scrollbar-thumb{background:#1e2d5a;border-radius:999px}</style>
+  <script src="https://challenges.cloudflare.com/turnstile/v0/api.js" async defer></script>
 </head>
 <body class="bg-[#070b1a] text-slate-100 antialiased selection:bg-blue-600 selection:text-white">
 <!-- Top bar -->
@@ -166,9 +167,10 @@
   <div class="flex flex-wrap items-center justify-between gap-4 rounded-[20px] border border-white/10 bg-gradient-to-br from-[#0f1f4a] to-[#0b1a33] p-6">
     <div><h3 class="text-lg font-black">Get tomorrow's slips first</h3><p class="text-sm text-slate-400">One email per day. Unsubscribe anytime. Free forever.</p></div>
     <form id="newsletterForm" novalidate class="flex flex-1 flex-wrap justify-end gap-2">
-      <input id="nlEmail" name="email" type="email" required placeholder="you@example.com">
+      <input id="nlEmail" name="email" type="email" required placeholder="you@example.com" class="min-w-[220px] flex-1 rounded-full border border-white/10 bg-[#0a132c] px-4 py-3 text-sm outline-none placeholder:text-slate-500">
       <input type="text" name="website" tabindex="-1" autocomplete="off" style="position:absolute;left:-9999px;width:1px;height:1px;overflow:hidden" aria-hidden="true">
-      <input type="hidden" id="nl_ts" value="" class="min-w-[220px] flex-1 rounded-full border border-white/10 bg-[#0a132c] px-4 py-3 text-sm outline-none placeholder:text-slate-500">
+      <input type="hidden" id="nl_ts" value="">>
+      <div class="cf-turnstile" data-sitekey="1x00000000000000000000AA" data-theme="dark" data-size="compact" id="nl-turnstile"></div>
       <button type="submit" class="rounded-full bg-blue-600 px-6 py-3 text-sm font-extrabold text-white hover:bg-blue-500">Subscribe</button>
     </form>
   </div>
@@ -289,6 +291,13 @@ Promise.all([fetch('data/predictions.json?v='+Date.now(),{cache:'no-store'}).the
   f.addEventListener('submit', function(e){
     const hp=f.querySelector('[name="website"]');
     if(hp && hp.value.trim()!==''){ e.preventDefault(); return false; }
+    try{
+      const cfgT=window.GOALSCOPE_TURNSTILE||{};
+      if(cfgT.enabled!==false && document.querySelector('#nl-turnstile')){
+        const tok = window.turnstile ? window.turnstile.getResponse(document.getElementById('nl-turnstile')) : '';
+        if(!tok){ e.preventDefault(); alert('Complete security check.'); return false; }
+      }
+    }catch{}
     const tsv=parseInt((document.getElementById('nl_ts')||{}).value||'0',10);
     if(Date.now()-tsv < 2000){ e.preventDefault(); alert('Wait a moment.'); return false; }
     const last=parseInt(localStorage.getItem('gs_nl_last')||'0',10);

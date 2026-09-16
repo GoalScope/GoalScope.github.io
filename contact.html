@@ -2,7 +2,7 @@
 <html lang="en" class="dark">
 <head>
 <meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1">
-<meta http-equiv="Content-Security-Policy" content="default-src 'self'; script-src 'self' https://cdn.tailwindcss.com https://fonts.googleapis.com https://fonts.gstatic.com 'unsafe-inline' https://*.monetag.com https://*.propellerads.com https://*.adsterra.com https://*.highperformancecpm.com https://*.brevo.com https://*.mailchimp.com https://*.formspree.io; style-src 'self' https://cdn.tailwindcss.com https://fonts.googleapis.com 'unsafe-inline'; font-src https://fonts.gstatic.com; img-src 'self' data: https:; connect-src 'self' https://statsapi.mlb.com https://api.allorigins.win https://statsapi.mlb.com https://*.brevo.com https://*.mailchimp.com https://*.formspree.io https://*.monetag.com https://*.propellerads.com; frame-ancestors 'none'; base-uri 'self'; form-action 'self' https://*.brevo.com https://*.mailchimp.com https://*.formspree.io; object-src 'none'; upgrade-insecure-requests">
+<meta http-equiv="Content-Security-Policy" content="default-src 'self'; script-src 'self' https://cdn.tailwindcss.com https://fonts.googleapis.com https://fonts.gstatic.com 'unsafe-inline' https://*.monetag.com https://*.propellerads.com https://*.adsterra.com https://*.highperformancecpm.com https://*.brevo.com https://*.mailchimp.com https://*.formspree.io https://challenges.cloudflare.com https://*.cloudflare.com; style-src 'self' https://cdn.tailwindcss.com https://fonts.googleapis.com 'unsafe-inline'; font-src https://fonts.gstatic.com; img-src 'self' data: https:; connect-src 'self' https://statsapi.mlb.com https://api.allorigins.win https://statsapi.mlb.com https://*.brevo.com https://*.mailchimp.com https://*.formspree.io https://*.monetag.com https://*.propellerads.com; frame-ancestors 'none'; frame-src https://challenges.cloudflare.com; base-uri 'self'; form-action 'self' https://*.brevo.com https://*.mailchimp.com https://*.formspree.io https://challenges.cloudflare.com https://*.cloudflare.com; object-src 'none'; upgrade-insecure-requests">
 <meta http-equiv="X-Content-Type-Options" content="nosniff">
 <title>Contact — GoalScope</title>
 <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800;900&display=swap" rel="stylesheet">
@@ -11,6 +11,7 @@
 <script src="assets/theme.js"></script>
 <script>tailwind.config={darkMode:'class',theme:{extend:{fontFamily:{sans:['Inter','sans-serif']}}}}</script>
 <script src="assets/monetize.js"></script>
+  <script src="https://challenges.cloudflare.com/turnstile/v0/api.js" async defer></script>
 </head>
 <body class="bg-[#070b1a] text-slate-100 antialiased">
 <header class="sticky top-0 z-40 border-b border-white/10 bg-[#070b1a]/80 backdrop-blur-xl">
@@ -36,6 +37,7 @@
       <div><label class="text-xs font-bold tracking-widest text-slate-400">Message</label><textarea name="message" rows="5" required placeholder="How can we help?" class="mt-1 w-full rounded-xl border border-white/10 bg-[#0a132c] px-4 py-3 text-sm outline-none focus:border-blue-500/50 placeholder:text-slate-500"></textarea></div>
       <button type="text" name="website" tabindex="-1" autocomplete="off" style="position:absolute;left:-9999px;top:auto;width:1px;height:1px;overflow:hidden" aria-hidden="true" placeholder="Leave blank">
       <input type="hidden" name="_hp_timestamp" id="_hp_ts" value="">
+      <div class="cf-turnstile" data-sitekey="1x00000000000000000000AA" data-theme="dark" data-size="normal" id="contact-turnstile"></div>
       <button type="submit" class="rounded-full bg-blue-600 px-6 py-3 text-sm font-extrabold text-white hover:bg-blue-500 transition">Send message</button>
       <div id="formStatus" class="text-xs text-slate-400"></div>
     </form>
@@ -75,11 +77,17 @@
 </main>
 
 <script>
-// Bot protection — honeypot + time trap + rate limit (client-side, server headers enforce too)
+// Bot protection — honeypot + time trap + rate limit + Turnstile (client-side)
 (function(){
   const tsEl=document.getElementById('_hp_ts'); if(tsEl) tsEl.value=Date.now().toString();
   const form=document.querySelector('form');
   if(!form) return;
+  // init Turnstile siteKey from monetize.js if set
+  try{
+    const cfgT=window.GOALSCOPE_TURNSTILE||{};
+    const el=document.querySelector('.cf-turnstile');
+    if(cfgT.siteKey && el && el.getAttribute('data-sitekey')!==cfgT.siteKey) el.setAttribute('data-sitekey', cfgT.siteKey);
+  }catch{}
   form.addEventListener('submit', function(e){
     const hp=form.querySelector('[name="website"]');
     if(hp && hp.value.trim()!==''){ e.preventDefault(); alert('Bot check failed.'); return false; }
@@ -87,10 +95,16 @@
     if(Date.now()-ts < 3000){ e.preventDefault(); alert('Please wait a moment before submitting.'); return false; }
     const last=parseInt(localStorage.getItem('gs_last_submit')||'0',10);
     if(Date.now()-last < 60000){ e.preventDefault(); alert('Too many submissions — wait a minute.'); return false; }
-    // basic sanitize length
+    // Turnstile check — if enabled and widget present, require token
+    try{
+      const cfgT=window.GOALSCOPE_TURNSTILE||{};
+      if(cfgT.enabled!==false && document.querySelector('.cf-turnstile')){
+        const token = window.turnstile ? window.turnstile.getResponse(document.getElementById('contact-turnstile')) : '';
+        if(!token){ e.preventDefault(); alert('Please complete the security check.'); return false; }
+      }
+    }catch{}
     for(const el of form.querySelectorAll('input,textarea')){
       if(el.value.length>2000){ e.preventDefault(); alert('Input too long.'); return false; }
-      // strip <script
       if(/<\s*script/i.test(el.value)){ e.preventDefault(); alert('Invalid input.'); return false; }
     }
     localStorage.setItem('gs_last_submit', Date.now().toString());
