@@ -34,10 +34,9 @@
     <p class="mt-2 max-w-2xl text-sm text-slate-400">Every accumulator shows its stat and kick-off time (WAT). No duplicate picks across slips. Odds are indicative — always verify live odds on <a href="https://www.sportybet.com" target="_blank" rel="noopener" class="font-bold text-emerald-400 underline decoration-emerald-400/30 hover:text-emerald-300">SportyBet</a> before betting.</p>
     <div class="mt-3 rounded-xl border border-amber-500/20 bg-amber-500/10 px-4 py-2.5 text-xs leading-relaxed text-amber-200">Odds shown are indicative and may change. For accurate live odds visit <a href="https://www.sportybet.com" target="_blank" rel="noopener" class="font-extrabold underline">sportybet.com</a>. All kick-off times displayed in WAT — confirm fixture time before placing bets.</div>
     <div class="mt-4 flex flex-wrap gap-2">
-      <button data-filter="all" onclick="filterAccas('all')" class="chip active rounded-full bg-blue-600 px-3.5 py-1.5 text-xs font-bold text-white">All</button>
-      <button data-filter="football" onclick="filterAccas('football')" class="chip rounded-full border border-white/10 bg-white/[0.04] px-3.5 py-1.5 text-xs font-bold text-slate-400">Football</button>
-      <button data-filter="mlb" onclick="filterAccas('mlb')" class="chip rounded-full border border-white/10 bg-white/[0.04] px-3.5 py-1.5 text-xs font-bold text-slate-400">MLB</button>
-      <button data-filter="acca" onclick="filterAccas('acca')" class="chip rounded-full border border-white/10 bg-white/[0.04] px-3.5 py-1.5 text-xs font-bold text-slate-400">Accas</button>
+      <button data-filter="yesterday" onclick="filterAccas('yesterday')" class="chip rounded-full border border-white/10 bg-white/[0.04] px-3.5 py-1.5 text-xs font-bold text-slate-400">Yesterday</button>
+      <button data-filter="today" onclick="filterAccas('today')" class="chip active rounded-full bg-blue-600 px-3.5 py-1.5 text-xs font-bold text-white">Today</button>
+      <button data-filter="tomorrow" onclick="filterAccas('tomorrow')" class="chip rounded-full border border-white/10 bg-white/[0.04] px-3.5 py-1.5 text-xs font-bold text-slate-400">Tomorrow</button>
     </div>
   </div>
 </section>
@@ -233,7 +232,8 @@ Promise.all([
       const label = isToday ? 'TODAY' : new Date(datePart+'T12:00:00').toLocaleDateString('en-GB',{day:'2-digit',month:'short',year:'numeric'}).toUpperCase();
       const sub = isToday ? 'Live & upcoming — scores update every 60s · PENDING until FT' : 'Final — settled scores';
       const hdr=document.createElement('div');
-      hdr.className='mt-6 mb-2 flex items-center gap-2';
+      hdr.className='date-header mt-6 mb-2 flex items-center gap-2';
+      hdr.dataset.date=datePart;
       hdr.innerHTML=`<span class="rounded-full ${isToday?'bg-emerald-600 text-white':'bg-white/[0.06] text-slate-300 border border-white/10'} px-3 py-1 text-[11px] font-black tracking-widest">${label}</span><span class="text-xs text-slate-500">${sub}</span>`;
       container.appendChild(hdr);
     }
@@ -333,16 +333,37 @@ Promise.all([
   // initial live + interval
   refreshLivePills();
   setInterval(refreshLivePills, 60000);
+  try{ filterAccas('today'); }catch(e){}
 });
 function filterAccas(tag){
   document.querySelectorAll('.chip').forEach(c=>{
     const active=c.dataset.filter===tag;
     c.className=active ? 'chip active rounded-full bg-blue-600 px-3.5 py-1.5 text-xs font-bold text-white' : 'chip rounded-full border border-white/10 bg-white/[0.04] px-3.5 py-1.5 text-xs font-bold text-slate-400';
   });
+  const targetDate = tag==='yesterday' ? watDateStr(-1) : tag==='tomorrow' ? watDateStr(1) : watDateStr(0);
+  let visibleCount=0;
   document.querySelectorAll('.acca').forEach(el=>{
-    if(tag==='all'){el.style.display='';return;}
-    el.style.display=el.innerText.toLowerCase().includes(tag) ? '' : 'none';
+    const d=(el.dataset.key||'').slice(0,10);
+    const show=d===targetDate;
+    el.style.display=show?'':'none';
+    if(show) visibleCount++;
   });
+  document.querySelectorAll('.date-header').forEach(h=>{
+    h.style.display=(h.dataset.date===targetDate)?'':'none';
+  });
+  let empty=document.getElementById('filter-empty');
+  if(!empty){
+    empty=document.createElement('div');
+    empty.id='filter-empty';
+    empty.className='rounded-2xl border border-white/10 bg-white/[0.03] px-6 py-10 text-center text-sm text-slate-400';
+    document.getElementById('accas').appendChild(empty);
+  }
+  if(visibleCount===0){
+    const dateStr=new Date(targetDate+'T12:00:00').toLocaleDateString('en-GB',{day:'2-digit',month:'short',year:'numeric'});
+    if(tag==='tomorrow') empty.innerHTML='<div class="font-black text-slate-200">No predictions for '+dateStr+' yet</div><div class="mt-1">Tomorrow\'s accas drop by 09:00 WAT — check back soon.</div>';
+    else empty.innerHTML='<div class="font-black text-slate-200">No '+tag+' predictions ('+dateStr+')</div>';
+    empty.style.display='';
+  } else empty.style.display='none';
 }
 if(location.hash) setTimeout(()=>document.querySelector(location.hash)?.scrollIntoView({behavior:'smooth',block:'start'}),600);
 </script>
