@@ -1,0 +1,28 @@
+DAILY REVIEW - 2026-09-14
+Generated: 2026-09-15 19:31 WAT
+============================================================
+DATA SOURCES CHECKED: livescores.com, futbol24.com, BBC Sport JSON, MLB statsapi
+  livescores.com: reachable
+  futbol24.com: reachable
+  BBC Sport: ok
+  MLB: 10 games fetched
+
+No predictions to grade for this date. Sites prepped for next run.
+TIP: Run this script again tomorrow to grade today's (2026-09-15) slips once finals arrive.
+
+============================================================
+LESSONS / WHAT WENT WRONG (fill after checking scores)
+============================================================
+1. MLB totals at Coors / hitter parks - hit rate:
+   Sample finals 2026-09-14: LAD@CIN 4-1 (5), CWS@CLE 7-3 (10), DET@TOR 6-5 (11), ATL@CHC 3-7 (10), NYY@MIN 8-3 (11), SD@COL 8-7 (15)
+   -> Overs at Coors (SD@COL 15) would HIT Over 10.5, but GABP underperformed (5 vs 9.5). Lesson: Coors altitude > park factor alone.
+2. Cup rotation risk: avoid picking outright wins in League Cup - prefer BTTS/Overs (rotation variance).
+3. Lower-league totals: check actual goals avg on futbol24.com before locking Over 2.5.
+
+HOW TO VERIFY MANUALLY (required by workflow):
+  futbol24.com -> search date -> confirm FT scores
+  livescores.com -> football -> select date -> cross-check
+  BBC Sport -> https://www.bbc.com/sport/football/scores-fixtures/2026-09-14
+  MLB -> https://www.mlb.com/scores/2026-09-14
+
+Next step: after filling hits/misses, run daily prediction generator.
