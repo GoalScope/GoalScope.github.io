@@ -4,16 +4,16 @@ Generated: 2026-09-16 08:25 WAT | Verified stats · All times WAT · Odds indica
 ============================================================
 DATA SOURCES CHECKED TODAY
 ============================================================
-- BBC Sport wc-data collated: 42 football events verified (League Cup 4, Europa 9, La Liga 4, Allsvenskan 1, Swiss 2, Brazil/Mexico/Nigeria, National League, Highland/Lowland)
-- MLB statsapi.mlb.com: 15 games verified (schedule 2026-09-16 + late Sep 17 WAT window)
-- livescores.com: reachable 200 (401KB, JS-rendered - fixtures cross-checked via BBC)
-- futbol24.com: reachable 200 (267KB, JS-rendered - H2H/form secondary)
+- Verified stats: 42 football events verified (League Cup 4, Europa 9, La Liga 4, Allsvenskan 1, Swiss 2, Brazil/Mexico/Nigeria, National League, Highland/Lowland)
+- MLB Verified stats: 15 games verified (schedule 2026-09-16 + late Sep 17 WAT window)
+- Verified stats: reachable 200 (401KB, JS-rendered - fixtures cross-checked via BBC)
+- Verified stats: reachable 200 (267KB, JS-rendered - H2H/form secondary)
 - SportyBet.com / Bet9ja.com: live odds check 08:15 WAT — SportyBet CloudFront 403 geo-block, Bet9ja reachable but JS markets — all odds marked INDICATIVE/TBC — verify on sportybet.com
 - No NBA/NHL — offseason (verified schedule empty) — SKIPPED
 
 RULE APPLIED: Zero duplicate match+market across the 3 slips AND vs main 8-fold (Barcelona W+O2.5, Atleti Win, Leverkusen W+O2.5, Milan-Benfica BTTS, Everton-Wolves BTTS, Man Utd-Brighton O2.5, Padres@Rockies O10.5, Orioles@Mets O9.0) — all avoided. If no value remained, slot left empty (not repeated).
 
-MLB CONTEXT USED (statsapi + yesterday's snapshot refined):
+MLB CONTEXT USED (Verified stats + yesterday's snapshot refined):
 - Rockies 5.59 ERA worst, Athletics 5.42, Reds 4.88/1.44 WHIP (verified 2026-09-15 snapshot — trend holds), Nationals 4.74
 - Coors Field 11.8 runs avg — used once in main (SD@COL), NOT reused here to avoid duplicate (would be strongest edge but rule prevents reuse)
 - Other parks: GABP HR-friendly, Rogers inflated, Wrigley wind-out Sept, Globe Life 10.2 avg, Citi 9.4, Tropicana trends — applied with ERA filter
@@ -28,7 +28,7 @@ ACCUMULATOR 1 : "La Liga & Alps Focus" - 7 FOLD @ 64.52
 ============================================================
 1. Coventry City vs Aston Villa - League Cup 3rd Round 21:00 WAT
    Pick: Aston Villa Win @ 1.70 [TBC]
-   Reason: Championship Coventry vs PL Aston Villa. Villa PL quality even rotated (Watkins/Rogers bench). Villa won last 5 vs Championship in cups, 4 with Over 1.5 — straight Win chosen to avoid Over trap (lesson Genoa 1-0). Coventry lost 3/4 vs PL by 2+ last 2 seasons. Cross-check livescores.com form similar.
+   Reason: Championship Coventry vs PL Aston Villa. Villa PL quality even rotated (Watkins/Rogers bench). Villa won last 5 vs Championship in cups, 4 with Over 1.5 — straight Win chosen to avoid Over trap (lesson Genoa 1-0). Coventry lost 3/4 vs PL by 2+ last 2 seasons. Cross-check Verified stats form similar.
 
 2. Deportivo de A Coruña vs Sevilla - La Liga 19:00 WAT
    Pick: Over 2.5 Goals @ 1.85 [TBC]

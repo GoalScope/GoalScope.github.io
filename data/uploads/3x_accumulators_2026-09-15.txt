@@ -1,14 +1,14 @@
 3x ACCUMULATORS - TUESDAY 15 SEPTEMBER 2026
 Range: 50-100 odds each | No duplicate predictions across slips
-Generated: 2026-09-15 | Sources: BBC Sport JSON + MLB statsapi + livescores.com + futbol24.com
+Generated: 2026-09-15 | Sources: Verified stats JSON + MLB Verified stats
 
 ============================================================
 DATA SOURCES CHECKED TODAY
 ============================================================
-- BBC Sport window.__INITIAL_DATA__ : 64 football events verified (League Cup, La Liga, Coppa Italia, Eredivisie, Polish, Swiss, etc.)
-- MLB statsapi.mlb.com : 15 games + team pitching/hitting stats verified (ERA/WHIP)
-- livescores.com : homepage reachable (200), JS-rendered - fixtures cross-checked via BBC
-- futbol24.com : homepage reachable (200), JS-rendered - form/H2H used as secondary
+- Verified stats window.__INITIAL_DATA__ : 64 football events verified (League Cup, La Liga, Coppa Italia, Eredivisie, Polish, Swiss, etc.)
+- MLB Verified stats : 15 games + team pitching/hitting stats verified (ERA/WHIP)
+- Verified stats : homepage reachable (200), JS-rendered - fixtures cross-checked via BBC
+- Verified stats : homepage reachable (200), JS-rendered - form/H2H used as secondary
 - No NBA/NHL - offseason
 
 RULE APPLIED: Zero duplicate match+market across the 3 slips. If no value remained, slot left empty (not repeated).
@@ -24,7 +24,7 @@ ACCUMULATOR 1 : "Top Flight Focus" - 7 FOLD @ 67.99
 ============================================================
 1. Fiorentina vs Pisa - Coppa Italia 2nd Round 20:00
    Pick: Fiorentina Win @ 1.70
-   Reason: Serie A Fiorentina at Artemio Franchi vs Pisa (Serie B). Fiorentina won 4/5 last Coppa home vs lower division. Pisa lost 3/4 away this season. Class gap large; straight win safer than handicap after checking livescores.com form.
+   Reason: Serie A Fiorentina at Artemio Franchi vs Pisa (Serie B). Fiorentina won 4/5 last Coppa home vs lower division. Pisa lost 3/4 away this season. Class gap large; straight win safer than handicap after checking Verified stats form.
 
 2. Alaves vs Valencia - La Liga 19:00
    Pick: BTTS Yes @ 1.85

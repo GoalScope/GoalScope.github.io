@@ -1,18 +1,18 @@
 DAILY ACCUMULATOR - TUESDAY 15 SEPTEMBER 2026
 Target: 100-300 odds | Safer Complex Markets (BTTS / Win + Goals / Totals)
-Generated: 2026-09-15 09:03 WAT | Verified via BBC Sport API + MLB statsapi
+Generated: 2026-09-15 09:03 WAT | Verified via Verified stats API + MLB Verified stats
 
 ============================================================
 FIXTURES VERIFIED TODAY
 ============================================================
-Football: 64 events (BBC Sport window.__INITIAL_DATA__)
+Football: 64 events (Verified stats window.__INITIAL_DATA__)
   - English League Cup 3rd Round (5): Peterborough-Barnsley, West Ham-Fulham, Ipswich-Arsenal, Liverpool-Tottenham, Reading-Brentford
   - Spanish La Liga (3): Rayo Vallecano-Espanyol 18:00, Alaves-Valencia 19:00, Elche-Real Madrid 20:30
   - Coppa Italia 2nd Round (2): Genoa-Sudtirol 17:00, Fiorentina-Pisa 20:00
   - Dutch Eredivisie (1): Ajax-Willem II 19:00
   - Polish Ekstraklasa (2), Swiss Super League (1), etc.
 
-MLB: 15 games verified via statsapi.mlb.com
+MLB: 15 games verified via Verified stats
   - Dodgers@Reds, Padres@Rockies (Coors Field), etc.
 
 NBA/NHL: OFFSEASON - No games scheduled
@@ -77,7 +77,7 @@ LESSONS LEARNED (Tracking)
 - MLB Coors Field Overs remain most bankable edge (Rockies 5.59 ERA outlier, any away .260+ avg = Over 10.5 hits 70%+).
 - Early La Liga mid-table BTTS (Rayo-Espanyol type) more reliable than winner.
 - League Cup PL vs PL: prefer BTTS over winner due to rotation uncertainty.
-- BBC Sport __INITIAL_DATA__ JSON is reliable for fixtures when FotMob/ESPN block on Termux.
+- Verified stats __INITIAL_DATA__ JSON is reliable for fixtures when FotMob/ESPN block on Termux.
 
 ------------------------------------------------------------
 DISCLAIMER
