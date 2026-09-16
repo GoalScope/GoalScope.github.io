@@ -48,8 +48,8 @@ window.GOALSCOPE_ADS = {
 
 window.GOALSCOPE_TURNSTILE = {
   // Cloudflare Turnstile — get free at https://dash.cloudflare.com/?to=/:account/turnstile
-  // Demo key (always passes) for testing: 1x00000000000000000000AA — replace with your real sitekey for production
-  siteKey: "1x00000000000000000000AA",
+  // Demo key (always passes) for testing: 0x4AAAAAAE5HsBRKxm8cgvlh — replace with your real sitekey for production
+  siteKey: "0x4AAAAAAE5HsBRKxm8cgvlh",
   enabled: true // set false to disable without removing widget
 };
 
