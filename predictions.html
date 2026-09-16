@@ -2,14 +2,15 @@
 <html lang="en" class="dark">
 <head>
 <meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1">
-<meta http-equiv="Content-Security-Policy" content="default-src 'self'; script-src 'self' https://cdn.tailwindcss.com https://fonts.googleapis.com https://fonts.gstatic.com 'unsafe-inline' https://*.monetag.com https://*.propellerads.com https://*.adsterra.com https://*.highperformancecpm.com https://*.brevo.com https://*.mailchimp.com https://*.formspree.io; style-src 'self' https://cdn.tailwindcss.com https://fonts.googleapis.com 'unsafe-inline'; font-src https://fonts.gstatic.com; img-src 'self' data: https:; connect-src 'self' https://statsapi.mlb.com https://api.allorigins.win https://*.brevo.com https://*.mailchimp.com https://*.formspree.io https://*.monetag.com https://*.propellerads.com; frame-ancestors 'none'; base-uri 'self'">
+<meta http-equiv="Content-Security-Policy" content="default-src 'self'; script-src 'self' https://cdn.tailwindcss.com https://fonts.googleapis.com https://fonts.gstatic.com 'unsafe-inline' https://*.monetag.com https://*.propellerads.com https://*.adsterra.com https://*.highperformancecpm.com https://*.brevo.com https://*.mailchimp.com https://*.formspree.io; style-src 'self' https://cdn.tailwindcss.com https://fonts.googleapis.com 'unsafe-inline'; font-src https://fonts.gstatic.com; img-src 'self' data: https:; connect-src 'self' https://statsapi.mlb.com https://api.allorigins.win https://statsapi.mlb.com https://*.brevo.com https://*.mailchimp.com https://*.formspree.io https://*.monetag.com https://*.propellerads.com; frame-ancestors 'none'; base-uri 'self'">
 <meta http-equiv="X-Content-Type-Options" content="nosniff">
 <title>Predictions — GoalScope</title>
 <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800;900&family=JetBrains+Mono:wght@700&display=swap" rel="stylesheet">
 <script src="https://cdn.tailwindcss.com"></script>
 <script>tailwind.config={darkMode:'class',theme:{extend:{fontFamily:{sans:['Inter','sans-serif'],mono:['JetBrains Mono','monospace']}}}}</script>
+<style>html,body{overflow-x:hidden;max-width:100vw}#accas{min-width:0}</style>
 </head>
-<body class="bg-[#070b1a] text-slate-100 antialiased">
+<body class="bg-[#070b1a] text-slate-100 antialiased overflow-x-hidden">
 <header class="sticky top-0 z-40 border-b border-white/10 bg-[#070b1a]/80 backdrop-blur-xl">
   <div class="mx-auto flex max-w-[1180px] items-center justify-between gap-6 px-5 py-3.5">
     <a href="index.html" class="flex items-center gap-2.5"><span class="grid h-9 w-9 place-items-center rounded-xl bg-gradient-to-br from-blue-600 to-cyan-400 font-black text-white">G</span><span class="text-[18px] font-black tracking-tight">GoalScope</span></a>
@@ -39,7 +40,7 @@
   </div>
 </section>
 
-<main class="mx-auto max-w-[1180px] px-5 py-6">
+<main class="mx-auto max-w-[1180px] px-4 sm:px-5 py-6 overflow-hidden">
   <div id="accas" class="grid gap-6"></div>
   <div class="mt-6 rounded-2xl border border-white/10 bg-white/[0.03] p-4 text-xs leading-relaxed text-slate-400">Odds are indicative only and may differ from live prices — always check accurate odds on <a href="https://www.sportybet.com" target="_blank" rel="noopener" class="font-bold text-emerald-400 underline decoration-emerald-400/30">sportybet.com</a> before betting. All kick-off times shown in WAT. 18+ Gamble responsibly.</div>
 </main>
@@ -56,6 +57,151 @@ function affBadge(book){ const c=window.GOALSCOPE_AFFILIATE||{}; return c.enable
 <div id="results-banner" class="hidden"></div>
 <script>
 let ALL=[];
+const WAT_TZ='Africa/Lagos';
+function watDateStr(off=0){
+  const wat=new Date().toLocaleDateString('en-CA',{timeZone:WAT_TZ});
+  if(off===0) return wat;
+  const b=new Date(wat+'T12:00:00'); b.setDate(b.getDate()+off);
+  return b.toISOString().slice(0,10);
+}
+function norm(s){ return s.toLowerCase().replace(/[^a-z0-9]+/g,' ').trim(); }
+function teamHits(needle, hay){
+  needle=norm(needle); hay=norm(hay);
+  if(!needle||!hay) return false;
+  if(hay.includes(needle)||needle.includes(hay)) return true;
+  const a=needle.split(' ').filter(w=>w.length>2);
+  return a.some(w=>hay.includes(w));
+}
+let LIVE_LEGS=[];
+function toggleLeg(root){
+  const d=root.querySelector('.leg-details');
+  const c=root.querySelector('.leg-chevron');
+  if(!d) return;
+  const hid=d.classList.contains('hidden');
+  d.classList.toggle('hidden', !hid);
+  if(c) c.textContent = hid ? '▲' : '▼';
+  root.classList.toggle('bg-white/[0.04]', hid);
+}
+
+async function fetchFootballDate(d){
+  const url='https://api.allorigins.win/raw?url='+encodeURIComponent('https://www.bbc.com/sport/football/scores-fixtures/'+d);
+  try{
+    const html=await fetch(url,{cache:'no-store'}).then(r=>r.ok?r.text():Promise.reject(r.status));
+    const vis=[...html.matchAll(/visually-hidden[^>]*>([^<]+?)<\/span/g)].map(m=>m[1].trim()).filter(t=>t&&(t.includes(' at ')||t.includes('versus')));
+    const items=[];
+    for(const t of vis){
+      let m=t.match(/^(.+?)\s+(\d+)\s*,\s*(.+?)\s+(\d+)\s+at\s+(.+)$/);
+      if(m){ items.push({home:m[1].trim(),away:m[3].trim(),hs:parseInt(m[2]),as:parseInt(m[4]),status:m[5].trim(),ko:null}); continue; }
+      let k=t.match(/^(.+?)\s+versus\s+(.+?)\s+kick off\s+(\d+:\d+)$/i);
+      if(k){ items.push({home:k[1].trim(),away:k[2].trim(),hs:null,as:null,status:'Kick off '+k[3],ko:k[3]}); continue; }
+      let v=t.match(/^(.+?)\s+versus\s+(.+)$/i);
+      if(v&&!t.includes(' at ')) items.push({home:v[1].trim(),away:v[2].trim(),hs:null,as:null,status:'Scheduled',ko:null});
+    }
+    const seen=new Set(), out=[];
+    for(const it of items){ const k=(it.home+' vs '+it.away).toLowerCase(); if(!seen.has(k)){seen.add(k); out.push(it);} }
+    return out;
+  }catch(e){ return []; }
+}
+async function fetchFootballLiveAll(){
+  const dates=[watDateStr(-1), watDateStr(0), watDateStr(1)];
+  const all=(await Promise.all(dates.map(fetchFootballDate))).flat();
+  const seen=new Set(), dedup=[];
+  for(const it of all){ const k=(it.home+' vs '+it.away).toLowerCase(); if(!seen.has(k)){seen.add(k); dedup.push(it);} }
+  return dedup;
+}
+async function fetchMLBLive(d){
+  const url='https://statsapi.mlb.com/api/v1/schedule?date='+d+'&sportId=1&hydrate=team,linescore';
+  try{
+    const data=await fetch(url,{cache:'no-store'}).then(r=>r.json());
+    const out=[];
+    for(const dt of (data.dates||[])) for(const g of (dt.games||[])){
+      out.push({away:g.teams.away.team.name, home:g.teams.home.team.name,
+        abbrA:g.teams.away.team.abbreviation, abbrH:g.teams.home.team.abbreviation,
+        sA:g.teams.away.score, sH:g.teams.home.score, state:g.status.detailedState,
+        inning: g.linescore? (g.linescore.currentInningOrdinal+' '+(g.linescore.inningState||'') + (g.linescore.outs!=null?' · '+g.linescore.outs+' out':'')) : '',
+        timeWAT: new Date(g.gameDate).toLocaleTimeString('en-GB',{timeZone:WAT_TZ,hour:'2-digit',minute:'2-digit'})});
+    }
+    return out;
+  }catch(e){ return []; }
+}
+function matchFootballLeg(leg, fbItems){
+  for(const it of fbItems){
+    const a=teamHits(leg.hNorm, it.home) || teamHits(leg.aNorm, it.home);
+    const b=teamHits(leg.aNorm, it.away) || teamHits(leg.hNorm, it.away);
+    const cross= (teamHits(leg.hNorm,it.home)&&teamHits(leg.aNorm,it.away)) || (teamHits(leg.hNorm,it.away)&&teamHits(leg.aNorm,it.home));
+    if(cross) return it;
+  }
+  return null;
+}
+function matchMLBLeg(leg, mlbItems){
+  for(const g of mlbItems){
+    const aw=leg.hNorm+' '+leg.aNorm;
+    const ok = (teamHits(leg.hNorm, g.away)||teamHits(leg.hNorm, g.home)) && (teamHits(leg.aNorm, g.away)||teamHits(leg.aNorm, g.home));
+    if(ok) return g;
+    const shortA=(leg.abbrA||'').toLowerCase(), shortH=(leg.abbrH||'').toLowerCase();
+  }
+  // fallback scan
+  for(const g of mlbItems){
+    if(teamHits(leg.rawHome||leg.hNorm, g.away) || teamHits(leg.rawHome||leg.hNorm, g.home)) {
+      if(teamHits(leg.rawAway||leg.aNorm, g.away) || teamHits(leg.rawAway||leg.aNorm, g.home)) return g;
+    }
+  }
+  return null;
+}
+async function refreshLivePills(){
+  const fb=[...(await fetchFootballLiveAll())];
+  const mlb=[...(await fetchMLBLive(watDateStr(0))) , ...(await fetchMLBLive(watDateStr(-1)))];
+  // also try +1 for late MLB spanning midnight
+  LIVE_LEGS.forEach(leg=>{
+    const pill=document.getElementById(leg.pillId);
+    if(!pill) return;
+    if(leg.kind==='football'){
+      const m=matchFootballLeg(leg, fb);
+      if(!m) return;
+      const isLive=/live|min|half time|in progress/i.test(m.status);
+      const isFT=/full time/i.test(m.status);
+      if(m.hs!=null){
+        if(isLive){
+          pill.className='inline-flex shrink-0 items-center gap-1 rounded-full bg-red-600 px-2.5 py-1 text-xs font-black text-white';
+          pill.innerHTML='<span class="h-1.5 w-1.5 animate-pulse rounded-full bg-white"></span>'+m.hs+' – '+m.as+' · '+m.status;
+        } else if(leg.finalStatus==='HIT' || leg.finalStatus==='LOST'){
+          // settled: keep settled color (green/red) even if FT
+          // do not override final settled pill
+        } else if(isFT){
+          pill.className='inline-flex shrink-0 rounded-full bg-white/[0.08] px-2.5 py-1 text-xs font-black text-slate-200 border border-white/10';
+          pill.textContent=m.hs+' – '+m.as+' · FT';
+        } else {
+          pill.className='inline-flex shrink-0 rounded-full bg-white/[0.06] px-2.5 py-1 text-xs font-black text-slate-300 border border-white/10';
+          pill.textContent=m.hs+' – '+m.as;
+        }
+      } else if(m.ko){
+        if(!leg.finalStatus) { pill.className='inline-flex shrink-0 rounded-full border border-white/10 bg-white/[0.04] px-2.5 py-1 text-xs font-bold text-slate-300'; pill.textContent=m.ko+' WAT'; }
+      }
+    } else {
+      const g=matchMLBLeg(leg, mlb);
+      if(!g) return;
+      const isLive=/In Progress|Live|Top|Bot/i.test(g.state);
+      const isFinal=/Final/i.test(g.state);
+      if(g.sA!=null){
+        if(isLive){
+          pill.className='inline-flex shrink-0 items-center gap-1 rounded-full bg-red-600 px-2.5 py-1 text-xs font-black text-white';
+          pill.innerHTML='<span class="h-1.5 w-1.5 animate-pulse rounded-full bg-white"></span>'+g.abbrA+' '+g.sA+' – '+g.sH+' '+g.abbrH+' · '+(g.inning||g.state);
+        } else if(isFinal && leg.finalStatus){
+          // keep settled
+        } else if(isFinal){
+          pill.className='inline-flex shrink-0 rounded-full bg-white/[0.08] px-2.5 py-1 text-xs font-black text-slate-200 border border-white/10';
+          pill.textContent=g.abbrA+' '+g.sA+' – '+g.sH+' '+g.abbrH+' · FINAL';
+        } else {
+          pill.className='inline-flex shrink-0 rounded-full bg-white/[0.06] px-2.5 py-1 text-xs font-black text-slate-300 border border-white/10';
+          pill.textContent=g.abbrA+' '+g.sA+' – '+g.sH+' '+g.abbrH;
+        }
+      } else if(g.timeWAT){
+        if(!leg.finalStatus){ pill.className='inline-flex shrink-0 rounded-full border border-white/10 bg-white/[0.04] px-2.5 py-1 text-xs font-bold text-slate-300'; pill.textContent=g.timeWAT+' WAT'; }
+      }
+    }
+  });
+}
+
 Promise.all([
   fetch('data/details.json').then(r=>r.json()),
   fetch('data/results.json').then(r=>r.json()).catch(()=>null),
@@ -63,68 +209,112 @@ Promise.all([
 ]).then(([details, results, results15])=>{
   const resData = results || results15;
   const container=document.getElementById('accas');
-  // top banner
   if(resData){
     const b=document.getElementById('results-banner');
-    const upd=resData.updated||'';
-    const d=resData.date||'2026-09-15';
-    // count overall
-    let totHit=0, totLost=0, totPend=0, totAccas=0;
-    Object.values(resData.accas||{}).forEach(a=>{ totHit+=a.summary.hits; totLost+=a.summary.lost; totPend+=a.summary.pending; totAccas++; });
-    const allLost = totLost>0;
-    b.className = 'mb-6 rounded-2xl border px-4 py-4 ' + (allLost ? 'border-red-500/20 bg-red-500/10' : 'border-emerald-500/20 bg-emerald-500/10');
-    const pendNote = totPend ? ` · <span class="text-amber-300">${totPend} MLB pending (in progress at check)</span>` : '';
-    b.innerHTML = `<div class="flex flex-wrap items-center justify-between gap-3">
-      <div><div class="text-[11px] font-extrabold tracking-widest ${allLost?'text-red-300':'text-emerald-300'}">RESULTS — ${d} · Updated ${upd}</div>
-      <div class="mt-1 text-sm font-bold">${totHit} legs hit · <span class="text-red-400">${totLost} lost</span>${pendNote}</div>
-      <div class="text-xs text-slate-400">Football finals verified · MLB finals pending — will finalize tomorrow. Verified stats · All times WAT.</div></div>
-      <span class="rounded-full px-3 py-1.5 text-xs font-black ${allLost?'bg-red-600 text-white':'bg-emerald-600 text-white'}">${allLost?'ACCA LOST':'CHECK RESULTS'}</span></div>`;
+    const upd=resData.updated||''; const d=resData.date||'2026-09-15';
+    let totHit=0, totLost=0, totPend=0; Object.values(resData.accas||{}).forEach(a=>{ totHit+=a.summary.hits; totLost+=a.summary.lost; totPend+=a.summary.pending; });
+    const allLost=totLost>0;
+    b.className='mb-6 rounded-2xl border px-4 py-4 '+(allLost?'border-red-500/20 bg-red-500/10':'border-emerald-500/20 bg-emerald-500/10');
+    const pendNote=totPend?` · <span class="text-amber-300">${totPend} pending</span>`:'';
+    b.innerHTML=`<div class="flex flex-wrap items-center justify-between gap-3"><div><div class="text-[11px] font-extrabold tracking-widest ${allLost?'text-red-300':'text-emerald-300'}">RESULTS — ${d} · ${upd}</div><div class="mt-1 text-sm font-bold">${totHit} hit · <span class="text-red-400">${totLost} lost</span>${pendNote} <span class="ml-2 inline-flex items-center gap-1 rounded-full bg-red-600 px-2 py-0.5 text-[10px] font-black text-white"><span class="h-1.5 w-1.5 animate-pulse rounded-full bg-white"></span>LIVE</span></div><div class="text-xs text-slate-400">Tap a game for stats · live scores update every 60s · All times WAT</div></div><span class="rounded-full px-3 py-1.5 text-xs font-black ${allLost?'bg-red-600 text-white':'bg-emerald-600 text-white'}">${allLost?'ACCA LOST':'CHECK RESULTS'}</span></div>`;
     b.classList.remove('hidden');
   }
+  LIVE_LEGS=[];
   Object.entries(details).forEach(([key,acca])=>{
-    const total = acca.legs.map(l=>parseFloat(l[2])||1.85).reduce((a,b)=>a*b,1).toFixed(2);
-    const resAcca = resData && resData.accas && resData.accas[key];
-    const verdict = resAcca ? resAcca.summary.verdict : null;
-    const badgeColor = verdict==='LOST' ? 'border-red-500/30 bg-red-500/15 text-red-300' : verdict==='WON' ? 'border-emerald-500/30 bg-emerald-500/15 text-emerald-300' : 'border-blue-500/30 bg-blue-600/15 text-blue-300';
-    const verdictBadge = verdict ? `<span class="ml-2 inline-flex rounded-full border px-2 py-0.5 text-[10px] font-black tracking-widest ${verdict==='LOST'?'border-red-500/30 bg-red-500/15 text-red-300':verdict==='WON'?'border-emerald-500/30 bg-emerald-500/15 text-emerald-300':'border-amber-500/30 bg-amber-500/15 text-amber-300'}">${verdict}</span>` : '';
+    const total=acca.legs.map(l=>parseFloat(l[2])||1.85).reduce((a,b)=>a*b,1).toFixed(2);
+    const resAcca=resData&&resData.accas&&resData.accas[key];
+    const verdict=resAcca?resAcca.summary.verdict:null;
+    const badgeColor=verdict==='LOST'?'border-red-500/30 bg-red-500/15 text-red-300':verdict==='WON'?'border-emerald-500/30 bg-emerald-500/15 text-emerald-300':'border-blue-500/30 bg-blue-600/15 text-blue-300';
+    const verdictBadge=verdict?`<span class="ml-2 inline-flex rounded-full border px-2 py-0.5 text-[10px] font-black tracking-widest ${verdict==='LOST'?'border-red-500/30 bg-red-500/15 text-red-300':verdict==='WON'?'border-emerald-500/30 bg-emerald-500/15 text-emerald-300':'border-amber-500/30 bg-amber-500/15 text-amber-300'}">${verdict}</span>`:'';
     const el=document.createElement('section');
-    el.className='acca overflow-hidden rounded-2xl border border-white/10 bg-white/[0.03] backdrop-blur';
+    el.className='acca overflow-hidden rounded-2xl border border-white/10 bg-white/[0.03] backdrop-blur min-w-0 max-w-full';
     el.dataset.key=key; el.id=key;
+    let legsHtml='';
+    acca.legs.forEach((l,idx)=>{
+      let raw=l[0]||'';
+      let timeMatch=raw.match(/(\d{1,2}:\d{2})/);
+      let t=timeMatch?timeMatch[1]+' WAT':'—';
+      let matchOnly=raw.replace(/\s*\d{1,2}:\d{2}.*$/,'').trim();
+      // split home/away
+      let hPart='', aPart='';
+      let vsM=matchOnly.match(/^(.+?)\s+vs\s+(.+)$/i);
+      let atM=matchOnly.match(/^(.+?)\s+@\s+(.+)$/i);
+      if(vsM){ hPart=vsM[1].trim(); aPart=vsM[2].trim(); }
+      else if(atM){ hPart=atM[1].trim(); aPart=atM[2].trim(); }
+      else { hPart=matchOnly; aPart=''; }
+      const pick=l[1]||'', odds=l[2]||'', reason=l[3]||'';
+      const r=resAcca&&resAcca.legs&&resAcca.legs[idx];
+      const status=r?r.status:null; // HIT / LOST / PENDING
+      const ft=r?r.result:'';
+      const note=r&&r.note?r.note:'';
+      const pillId=key+'-pill-'+idx;
+      let pillClass, pillText;
+      if(status==='HIT'){
+        // green pill with score — result as status
+        const score=ft?ft.replace(/\s*FT.*/,'').trim(): pick;
+        pillClass='bg-emerald-500 text-white';
+        pillText=score||'WON';
+      } else if(status==='LOST'){
+        const score=ft?ft.replace(/\s*FT.*/,'').trim(): 'LOST';
+        pillClass='bg-red-600 text-white';
+        pillText=score||'LOST';
+      } else if(status==='PENDING'){
+        pillClass='bg-amber-500/20 text-amber-200 border border-amber-500/30';
+        pillText=ft && !/Pre-Game|Warmup/i.test(ft) ? ft : t;
+      } else {
+        pillClass='bg-white/[0.06] text-slate-200 border border-white/10';
+        pillText=t;
+      }
+      const isMLB=/@/.test(l[0]) && /\b(Padres|Dodgers|Brewers|Yankees|Phillies|Braves|Reds|Rockies|Pirates|Twins|Nationals|Cubs|Rangers|Athletics|Rays|Tigers|Blue Jays|Red Sox)\b/i.test(raw);
+      const kind=isMLB?'mlb':'football';
+      // row bg tint by outcome when settled
+      const rowTint=status==='HIT'?'bg-emerald-500/[0.05]':status==='LOST'?'bg-red-500/[0.06]':status==='PENDING'?'bg-amber-500/[0.03]':'';
+      LIVE_LEGS.push({pillId, hNorm:hPart, aNorm:aPart, rawHome:hPart, rawAway:aPart, kind, finalStatus:status});
+      legsHtml+=`<div onclick="toggleLeg(this)" class="leg group cursor-pointer border-b border-white/5 last:border-0 hover:bg-white/[0.02] ${rowTint} min-w-0">
+        <div class="grid grid-cols-[1fr_auto] items-center gap-2 px-3 py-2.5 min-w-0">
+          <div class="min-w-0">
+            <div class="truncate text-[13px] font-bold leading-tight">${matchOnly}</div>
+            <div class="truncate text-xs leading-tight"><span class="font-bold text-emerald-400">${pick}</span> <span class="text-slate-500">·</span> <span class="font-mono text-xs font-bold text-slate-400">${odds}</span> <span class="hidden sm:inline text-slate-500">·</span> <span class="font-mono text-[11px] font-bold text-slate-400">${t}</span></div>
+          </div>
+          <div class="flex items-center gap-2 shrink-0 max-w-[46vw] sm:max-w-none">
+            <span id="${pillId}" class="inline-flex shrink-0 items-center justify-center truncate rounded-full px-2.5 py-1 text-xs font-black leading-none ${pillClass}">${pillText}</span>
+            <span class="leg-chevron hidden sm:inline text-[10px] text-slate-500">▼</span>
+          </div>
+        </div>
+        <div class="leg-details hidden px-3 pb-3 pt-1">
+          <div class="rounded-xl border border-white/10 bg-[#0e1530] px-3 py-2.5 text-xs leading-relaxed text-slate-300">
+            <div class="flex flex-wrap gap-2 text-[11px] font-bold">
+              <span class="rounded-full bg-white/[0.06] px-2 py-0.5 border border-white/10">${t}</span>
+              <span class="rounded-full bg-emerald-500/15 text-emerald-300 px-2 py-0.5 border border-emerald-500/20">${pick} @ ${odds}</span>
+              ${ft?`<span class="rounded-full px-2 py-0.5 border ${status==='HIT'?'bg-emerald-500 text-white border-emerald-500':status==='LOST'?'bg-red-600 text-white border-red-600':'bg-white/[0.06] text-slate-300 border-white/10'}">${ft}</span>`:''}
+            </div>
+            <p class="mt-2 text-slate-300">${reason}</p>
+            ${note?`<p class="mt-1 text-[11px] text-slate-400">Result note: ${note}</p>`:''}
+            <p class="mt-2 text-[11px] text-slate-500">Odds indicative — verify live odds on sportybet.com before betting. All times WAT.</p>
+          </div>
+        </div>
+      </div>`;
+    });
     el.innerHTML=`
-      <div class="flex flex-wrap items-center justify-between gap-3 border-b border-white/10 px-4 py-4">
-        <div><div class="inline-flex items-center rounded-full border px-2.5 py-1 text-[11px] font-extrabold tracking-widest ${badgeColor}">${acca.title}${verdictBadge}</div><div class="mt-1 text-xs text-slate-400">${acca.legs.length} selections · No duplicates · Verified stats${resAcca ? ` · <span class="${verdict==='LOST'?'text-red-400':verdict==='WON'?'text-emerald-400':'text-amber-300'}">${resAcca.summary.hits} HIT · ${resAcca.summary.lost} LOST${resAcca.summary.pending?' · '+resAcca.summary.pending+' PENDING':''}</span>` : ''}</div></div>
-        <div class="text-right"><div class="font-mono text-2xl font-black ${verdict==='LOST'?'text-red-400':verdict==='WON'?'text-emerald-400':'text-emerald-400'}">${total} <span class="text-xs tracking-widest text-slate-500">ODDS</span></div><div class="text-xs text-slate-500">100 stake = ${(total*100).toFixed(0)} return</div></div>
+      <div class="flex flex-wrap items-center justify-between gap-3 border-b border-white/10 px-4 py-4 min-w-0">
+        <div class="min-w-0 flex-1"><div class="inline-flex flex-wrap items-center gap-2 rounded-full border px-2.5 py-1 text-[11px] font-extrabold tracking-widest ${badgeColor}">${acca.title}${verdictBadge}</div><div class="mt-1 truncate text-xs text-slate-400">${acca.legs.length} picks · No duplicates · Verified stats${resAcca?` · <span class="${verdict==='LOST'?'text-red-400':verdict==='WON'?'text-emerald-400':'text-amber-300'}">${resAcca.summary.hits} HIT · ${resAcca.summary.lost} LOST${resAcca.summary.pending?' · '+resAcca.summary.pending+' pending':''}</span>`:''}</div></div>
+        <div class="text-right shrink-0"><div class="font-mono text-xl sm:text-2xl font-black ${verdict==='LOST'?'text-red-400':verdict==='WON'?'text-emerald-400':'text-emerald-400'}">${total} <span class="text-xs tracking-widest text-slate-500">ODDS</span></div><div class="text-xs text-slate-500">100 = ${(total*100).toFixed(0)} return</div></div>
       </div>
-      <div class="overflow-x-auto">
-        <table class="w-full min-w-[760px] text-sm">
-          <thead class="bg-white/[0.02] text-[11px] font-bold tracking-widest text-slate-400"><tr><th class="px-3 py-2 text-left">Match</th><th class="px-3 py-2 text-left">Time (WAT)</th><th class="px-3 py-2 text-left">Pick</th><th class="px-3 py-2 text-left">Odds*</th><th class="px-3 py-2 text-left">Result</th><th class="px-3 py-2 text-left">Status</th><th class="px-3 py-2 text-left">Reasoning</th></tr></thead>
-          <tbody class="divide-y divide-white/5">${acca.legs.map((l,idx)=>{
-          let m=l[0], t='\u2014';
-          let tm=m.match(/(\d{1,2}:\d{2})/);
-          if(tm) t=tm[1]+' WAT';
-          let matchOnly=m.replace(/\s*\d{1,2}:\d{2}.*$/, '').trim();
-          const r = resAcca && resAcca.legs && resAcca.legs[idx];
-          const status = r ? r.status : null;
-          const ft = r ? r.result : '';
-          const statusCls = status==='HIT' ? 'bg-emerald-500/15 text-emerald-300 border-emerald-500/30' : status==='LOST' ? 'bg-red-500/15 text-red-300 border-red-500/30' : status==='PENDING' ? 'bg-amber-500/15 text-amber-300 border-amber-500/30' : 'bg-white/5 text-slate-400 border-white/10';
-          const statusLabel = status || '—';
-          const ftDisplay = ft ? `<span class="font-mono text-xs font-bold ${status==='HIT'?'text-emerald-300':status==='LOST'?'text-red-300':status==='PENDING'?'text-amber-300':'text-slate-300'}">${ft}</span>` : '<span class="text-slate-500">—</span>';
-          const rowBg = status==='HIT' ? 'bg-emerald-500/[0.04]' : status==='LOST' ? 'bg-red-500/[0.06]' : status==='PENDING' ? 'bg-amber-500/[0.04]' : '';
-          return `<tr class="hover:bg-white/[0.02] ${rowBg}"><td class="px-3 py-2.5 font-bold">${matchOnly}</td><td class="px-3 py-2.5 font-mono text-xs font-bold text-slate-300">${t}</td><td class="px-3 py-2.5 font-bold text-emerald-400">${l[1]}</td><td class="px-3 py-2.5 font-mono font-bold">${l[2]}</td><td class="px-3 py-2.5">${ftDisplay}${r&&r.note ? `<div class="text-[11px] text-slate-500">${r.note}</div>` : ''}</td><td class="px-3 py-2.5"><span class="inline-flex rounded-full border px-2 py-1 text-[11px] font-black tracking-widest ${statusCls}">${statusLabel}</span></td><td class="px-3 py-2.5 text-slate-400">${l[3]}</td></tr>`;
-        }).join('')}</tbody>
-        </table>
-      </div>
-      <div class="flex flex-wrap items-center justify-between gap-2 border-t border-white/10 bg-emerald-500/[0.06] px-4 py-2 font-mono text-xs font-bold"><span class="truncate">${acca.legs.map(l=>l[2]).join(' × ')} = ${total}</span><span class="font-sans font-semibold text-slate-400">*Indicative — live odds on sportybet.com</span></div>
-      <div class="flex flex-wrap items-center gap-2 border-t border-white/10 bg-gradient-to-r from-emerald-600/10 to-blue-600/10 px-4 py-3">
+      <div class="divide-y divide-white/5 overflow-hidden">${legsHtml}</div>
+      <div class="flex flex-wrap items-center justify-between gap-2 border-t border-white/10 bg-emerald-500/[0.06] px-3 py-2 font-mono text-xs font-bold overflow-hidden"><span class="truncate min-w-0">${acca.legs.map(l=>l[2]).join(' × ')} = ${total}</span><span class="shrink-0 font-sans font-semibold text-slate-400">*Indicative — sportybet.com</span></div>
+      <div class="flex flex-wrap items-center gap-2 border-t border-white/10 bg-gradient-to-r from-emerald-600/10 to-blue-600/10 px-3 py-3">
         ${(()=>{ const code=(window.GOALSCOPE_BOOKING&&window.GOALSCOPE_BOOKING[key])||''; if(code){ const ref=(window.GOALSCOPE_AFFILIATE&&window.GOALSCOPE_AFFILIATE.sportybet)||'https://www.sportybet.com'; const join=ref.includes('?')?'&':'?'; const url=`https://www.sportybet.com/ng/code/${code}${window.GOALSCOPE_AFFILIATE&&window.GOALSCOPE_AFFILIATE.enabled&&ref!== 'https://www.sportybet.com' ? join+'s='+encodeURIComponent(ref.split('ref=')[1]||'') : ''}`; return `<a href="${url}" target="_blank" rel="noopener sponsored" class="inline-flex items-center gap-1.5 rounded-full bg-emerald-600 px-4 py-2 text-sm font-extrabold text-white shadow hover:bg-emerald-500 transition">Load on SportyBet (${code}) →</a><button onclick="navigator.clipboard.writeText('${code}');this.textContent='Copied!';setTimeout(()=>this.textContent='Copy ${code}',1500)" class="rounded-full border border-white/10 bg-white/[0.04] px-3 py-2 text-xs font-bold hover:bg-white/[0.08]">Copy ${code}</button>`; } else { return `<a href="${affLink('sportybet')}" target="_blank" rel="noopener sponsored" class="inline-flex items-center gap-1.5 rounded-full bg-emerald-600 px-4 py-2 text-sm font-extrabold text-white shadow hover:bg-emerald-500 transition">Bet on SportyBet →${affBadge('sportybet')}</a>`; }})()}
         ${(()=>{ const code=(window.GOALSCOPE_BOOKING_BET9JA&&window.GOALSCOPE_BOOKING_BET9JA[key])||''; if(code){ const url=`https://www.bet9ja.com/bet_code?code=${code}`; return `<a href="${url}" target="_blank" rel="noopener sponsored" class="inline-flex items-center gap-1.5 rounded-full bg-white text-[#0a7a33] px-4 py-2 text-sm font-extrabold shadow hover:bg-slate-100 transition">Load on Bet9ja (${code}) →</a><button onclick="navigator.clipboard.writeText('${code}');this.textContent='Copied!';setTimeout(()=>this.textContent='Copy ${code}',1500)" class="rounded-full border border-white/10 bg-white/[0.04] px-3 py-2 text-xs font-bold hover:bg-white/[0.08]">Copy ${code}</button>`; } else { return `<a href="${affLink('bet9ja')}" target="_blank" rel="noopener sponsored" class="inline-flex items-center gap-1.5 rounded-full border border-white/10 bg-white/[0.04] px-4 py-2 text-sm font-bold hover:bg-white/[0.08] transition">Bet on Bet9ja${affBadge('bet9ja')}</a>`; }})()}
         <a href="${(window.GOALSCOPE_AFFILIATE&&window.GOALSCOPE_AFFILIATE.shrinkme)||'https://shrinkme.click/GoalScopeTips'}" target="_blank" rel="noopener" class="inline-flex items-center gap-1 rounded-full border border-blue-500/20 bg-blue-600/15 px-3 py-2 text-xs font-bold text-blue-300 hover:bg-blue-600/25">Stats via ShrinkMe</a>
-        <span class="ml-auto text-[11px] text-slate-500">Affiliate links — we may earn commission. 18+ Gamble responsibly.</span>
+        <span class="ml-auto text-[11px] text-slate-500">Affiliate — may earn commission. 18+.</span>
       </div>
-      <div class="border-t border-white/10 bg-amber-500/10 px-4 py-2 text-[11px] leading-relaxed text-amber-200">All times WAT. Odds are indicative and may change — verify accurate live odds on <a href="https://www.sportybet.com" target="_blank" rel="noopener" class="font-bold underline">sportybet.com</a> before betting.</div>
+      <div class="border-t border-white/10 bg-amber-500/10 px-4 py-2 text-[11px] leading-relaxed text-amber-200">All times WAT. Odds indicative — verify accurate live odds on <a href="https://www.sportybet.com" target="_blank" rel="noopener" class="font-bold underline">sportybet.com</a> before betting.</div>
     `;
     container.appendChild(el);
   });
+  // initial live + interval
+  refreshLivePills();
+  setInterval(refreshLivePills, 60000);
 });
 function filterAccas(tag){
   document.querySelectorAll('.chip').forEach(c=>{
