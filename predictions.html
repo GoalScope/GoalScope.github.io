@@ -31,8 +31,7 @@
 <section class="border-b border-white/10 bg-gradient-to-b from-[#0f1a36] to-[#070b1a]">
   <div class="mx-auto max-w-[1180px] px-5 py-8">
     <h1 class="text-3xl font-black tracking-tight">Daily predictions</h1>
-    <p class="mt-2 max-w-2xl text-sm text-slate-400">Every accumulator shows its stat and kick-off time (WAT). No duplicate picks across slips. Odds are indicative — always verify live odds on <a href="https://www.sportybet.com" target="_blank" rel="noopener" class="font-bold text-emerald-400 underline decoration-emerald-400/30 hover:text-emerald-300">SportyBet</a> before betting.</p>
-    <div class="mt-3 rounded-xl border border-amber-500/20 bg-amber-500/10 px-4 py-2.5 text-xs leading-relaxed text-amber-200">Odds shown are indicative and may change. For accurate live odds visit <a href="https://www.sportybet.com" target="_blank" rel="noopener" class="font-extrabold underline">sportybet.com</a>. All kick-off times displayed in WAT — confirm fixture time before placing bets.</div>
+    <p class="mt-2 max-w-2xl text-sm text-slate-400">Every accumulator shows its stat and kick-off time (WAT). No duplicate picks across slips.</p>
     <div class="mt-4 flex flex-wrap gap-2">
       <button data-filter="yesterday" onclick="filterAccas('yesterday')" class="chip rounded-full border border-white/10 bg-white/[0.04] px-3.5 py-1.5 text-xs font-bold text-slate-400">Yesterday</button>
       <button data-filter="today" onclick="filterAccas('today')" class="chip active rounded-full bg-blue-600 px-3.5 py-1.5 text-xs font-bold text-white">Today</button>
@@ -43,7 +42,6 @@
 
 <main class="mx-auto max-w-[1180px] px-4 sm:px-5 py-6 overflow-hidden">
   <div id="accas" class="grid gap-6"></div>
-  <div class="mt-6 rounded-2xl border border-white/10 bg-white/[0.03] p-4 text-xs leading-relaxed text-slate-400">Odds are indicative only and may differ from live prices — always check accurate odds on <a href="https://www.sportybet.com" target="_blank" rel="noopener" class="font-bold text-emerald-400 underline decoration-emerald-400/30">sportybet.com</a> before betting. All kick-off times shown in WAT. 18+ Gamble responsibly.</div>
 </main>
 
 <script src="assets/monetize.js"></script>
@@ -308,14 +306,13 @@ Promise.all([
             </div>
             <p class="mt-2 text-slate-300">${reason}</p>
             ${note?`<p class="mt-1 text-[11px] text-slate-400">Result note: ${note}</p>`:''}
-            <p class="mt-2 text-[11px] text-slate-500">Odds indicative — verify live odds on sportybet.com before betting. All times WAT.</p>
+            
           </div>
         </div>
       </div>`;
     });
-    const isSettledCard = verdict==='WON'||verdict==='LOST';
-    const shareBtnCard = isSettledCard ? '' : `<button onclick="event.stopPropagation(); shareAcca('${key}', event)" class="inline-flex items-center gap-1 rounded-full bg-white text-[#070b1a] px-3 py-1.5 text-xs font-black hover:bg-slate-100">Share ↗</button>`;
-    const waBtnCard = isSettledCard ? '' : `<button onclick="event.stopPropagation(); waShareAcca('${key}', event)" class="inline-flex items-center gap-1 rounded-full bg-[#25D366] text-white px-3 py-1.5 text-xs font-black hover:bg-[#1ebe57]">WhatsApp</button>`;
+    const shareBtnCard = '';
+    const waBtnCard = '';
     // preview first 2 picks for folded view
     const preview = acca.legs.slice(0,2).map(l=>{
       let raw=(l[0]||'').replace(/\s*\d{1,2}:\d{2}.*$/,'').trim();
@@ -337,15 +334,14 @@ Promise.all([
         <button onclick="openAccaDialog('${key}')" class="inline-flex items-center gap-1.5 rounded-full bg-blue-600 px-4 py-2 text-xs font-black text-white hover:bg-blue-500">${acca.legs.length} picks — View →</button>
         ${shareBtnCard}
         ${waBtnCard}
-        <span class="ml-auto hidden sm:inline text-[11px] text-slate-500">Odds indicative — sportybet.com</span>
+        
       </div>
       <div class="flex flex-wrap items-center gap-2 border-t border-white/10 bg-gradient-to-r from-emerald-600/10 to-blue-600/10 px-3 py-3">
-        ${(()=>{ const code=(window.GOALSCOPE_BOOKING&&window.GOALSCOPE_BOOKING[key])||''; if(code){ const ref=(window.GOALSCOPE_AFFILIATE&&window.GOALSCOPE_AFFILIATE.sportybet)||'https://www.sportybet.com'; const join=ref.includes('?')?'&':'?'; const url=`https://www.sportybet.com/ng/code/${code}${window.GOALSCOPE_AFFILIATE&&window.GOALSCOPE_AFFILIATE.enabled&&ref!== 'https://www.sportybet.com' ? join+'s='+encodeURIComponent(ref.split('ref=')[1]||'') : ''}`; return `<a href="${url}" target="_blank" rel="noopener sponsored" class="inline-flex items-center gap-1.5 rounded-full bg-emerald-600 px-4 py-2 text-sm font-extrabold text-white shadow hover:bg-emerald-500 transition">Load on SportyBet (${code}) →</a><button onclick="navigator.clipboard.writeText('${code}');this.textContent='Copied!';setTimeout(()=>this.textContent='Copy ${code}',1500)" class="rounded-full border border-white/10 bg-white/[0.04] px-3 py-2 text-xs font-bold hover:bg-white/[0.08]">Copy ${code}</button>`; } else { return `<a href="${affLink('sportybet')}" target="_blank" rel="noopener sponsored" class="inline-flex items-center gap-1.5 rounded-full bg-emerald-600 px-4 py-2 text-sm font-extrabold text-white shadow hover:bg-emerald-500 transition">Bet on SportyBet →${affBadge('sportybet')}</a>`; }})()}
+        ${(()=>{ const code=(window.GOALSCOPE_BOOKING&&window.GOALSCOPE_BOOKING[key])||''; if(code){ const url=`https://www.sportybet.com/ng/?shareCode=${code}`; return `<a href="${url}" target="_blank" rel="noopener" class="inline-flex items-center gap-1.5 rounded-full bg-emerald-600 px-4 py-2 text-sm font-extrabold text-white shadow hover:bg-emerald-500 transition">Bet on SportyBet →</a><button onclick="navigator.clipboard.writeText('${code}');this.textContent='Copied!';setTimeout(()=>this.textContent='Copy ${code}',1500)" class="rounded-full border border-white/10 bg-white/[0.04] px-3 py-2 text-xs font-bold hover:bg-white/[0.08]">Copy ${code}</button>`; } else { return `<a href="${affLink('sportybet')}" target="_blank" rel="noopener sponsored" class="inline-flex items-center gap-1.5 rounded-full bg-emerald-600 px-4 py-2 text-sm font-extrabold text-white shadow hover:bg-emerald-500 transition">Bet on SportyBet →${affBadge('sportybet')}</a>`; }})()}
         ${(()=>{ const code=(window.GOALSCOPE_BOOKING_BET9JA&&window.GOALSCOPE_BOOKING_BET9JA[key])||''; if(code){ const url=`https://www.bet9ja.com/bet_code?code=${code}`; return `<a href="${url}" target="_blank" rel="noopener sponsored" class="inline-flex items-center gap-1.5 rounded-full bg-white text-[#0a7a33] px-4 py-2 text-sm font-extrabold shadow hover:bg-slate-100 transition">Load on Bet9ja (${code}) →</a><button onclick="navigator.clipboard.writeText('${code}');this.textContent='Copied!';setTimeout(()=>this.textContent='Copy ${code}',1500)" class="rounded-full border border-white/10 bg-white/[0.04] px-3 py-2 text-xs font-bold hover:bg-white/[0.08]">Copy ${code}</button>`; } else { return `<a href="${affLink('bet9ja')}" target="_blank" rel="noopener sponsored" class="inline-flex items-center gap-1.5 rounded-full border border-white/10 bg-white/[0.04] px-4 py-2 text-sm font-bold hover:bg-white/[0.08] transition">Bet on Bet9ja${affBadge('bet9ja')}</a>`; }})()}
         <a href="${(window.GOALSCOPE_AFFILIATE&&window.GOALSCOPE_AFFILIATE.shrinkme)||'https://shrinkme.click/GoalScopeTips'}" target="_blank" rel="noopener" class="inline-flex items-center gap-1 rounded-full border border-blue-500/20 bg-blue-600/15 px-3 py-2 text-xs font-bold text-blue-300 hover:bg-blue-600/25">Stats via ShrinkMe</a>
         <span class="ml-auto text-[11px] text-slate-500">Affiliate — may earn commission. 18+.</span>
       </div>
-      <div class="border-t border-white/10 bg-amber-500/10 px-4 py-2 text-[11px] leading-relaxed text-amber-200">All times WAT. Odds indicative — verify accurate live odds on <a href="https://www.sportybet.com" target="_blank" rel="noopener" class="font-bold underline">sportybet.com</a> before betting.</div>
     <div class="mt-3 rounded-xl border border-emerald-500/20 bg-emerald-500/10 px-4 py-3 flex flex-wrap items-center justify-between gap-3"><div class="text-sm"><span class="font-black text-emerald-300">FREE:</span> <b class="text-slate-200">The Acca Killer Checklist</b> <span class="text-slate-400">— 7 filters to cut the losing leg before you bet (1 page, WAT)</span></div><a href="lead-magnet.html" class="rounded-full bg-emerald-600 px-4 py-2 text-xs font-black text-white hover:bg-emerald-500">Get it free →</a></div>
     `;
     container.appendChild(el);
@@ -450,12 +446,12 @@ function openAccaDialog(key){
             </div>
             <p class="mt-2 text-slate-300">`+reason+`</p>
             `+(note?`<p class="mt-1 text-[11px] text-slate-400">Result note: `+note+`</p>`:'')+`
-            <p class="mt-2 text-[11px] text-slate-500">Odds indicative — verify live odds on sportybet.com before betting. All times WAT.</p>
+            
           </div>
         </div>
       </div>`;
   });
-  const shareRow = isSettled ? '' : `<button onclick="shareAcca('`+key+`', event)" class="inline-flex items-center gap-1.5 rounded-full bg-white text-[#070b1a] px-4 py-2 text-xs font-black hover:bg-slate-100">Share ↗</button><button onclick="waShareAcca('`+key+`', event)" class="inline-flex items-center gap-1.5 rounded-full bg-[#25D366] text-white px-4 py-2 text-xs font-black hover:bg-[#1ebe57]">WhatsApp</button>`;
+  const shareRow = '';
   body.innerHTML=`
       <div class="flex items-center justify-between gap-3 border-b border-white/10 px-4 py-3">
         <div class="min-w-0"><div class="inline-flex items-center gap-2 rounded-full border px-2.5 py-1 text-[11px] font-extrabold tracking-widest `+badgeColor+`">`+acca.legs.length+` FOLD <span class="ml-1 rounded-full border px-1.5 py-0.5 text-[10px] `+badgeColor+`">`+verdict+`</span></div><div class="mt-1 text-xs text-slate-400">`+acca.legs.length+` picks · Verified stats</div></div>
@@ -463,11 +459,11 @@ function openAccaDialog(key){
       </div>
       <div class="max-h-[62vh] overflow-y-auto divide-y divide-white/5">`+legsHtml+`</div>
       <div class="border-t border-white/10 bg-white/[0.02] px-3 py-3">
-        <div class="font-mono text-xs font-bold text-slate-300">`+acca.legs.map(l=>l[2]).join(' × ')+` = `+total+` <span class="font-sans font-semibold text-slate-500">*Indicative — sportybet.com</span></div>
+        <div class="font-mono text-xs font-bold text-slate-300">`+acca.legs.map(l=>l[2]).join(' × ')+` = `+total+`</div>
         <div class="mt-3 flex flex-wrap items-center gap-2">
           `+shareRow+`
-          <a href="`+affLink('sportybet')+`" target="_blank" rel="noopener sponsored" class="inline-flex items-center gap-1.5 rounded-full bg-emerald-600 px-4 py-2 text-xs font-extrabold text-white hover:bg-emerald-500">Bet on SportyBet →</a>
-          <span class="ml-auto text-[11px] text-slate-500">All times WAT · 18+ share responsibly</span>
+          `+( (()=>{ const code=(window.GOALSCOPE_BOOKING&&window.GOALSCOPE_BOOKING[key])||''; if(code){ const url=`https://www.sportybet.com/ng/?shareCode=${code}`; return `<a href="${url}" target="_blank" rel="noopener" class="inline-flex items-center gap-1.5 rounded-full bg-emerald-600 px-4 py-2 text-xs font-extrabold text-white hover:bg-emerald-500">Bet on SportyBet →</a> <button onclick="navigator.clipboard.writeText('${code}');this.textContent='Copied!';setTimeout(()=>this.textContent='Copy ${code}',1500)" class="rounded-full border border-white/10 bg-white/[0.04] px-3 py-1.5 text-xs font-bold hover:bg-white/[0.08]">Copy ${code}</button>`; } else { return `<a href="`+affLink('sportybet')+`" target="_blank" rel="noopener sponsored" class="inline-flex items-center gap-1.5 rounded-full bg-emerald-600 px-4 py-2 text-xs font-extrabold text-white hover:bg-emerald-500">Bet on SportyBet →</a>`; } })() )+`
+          <span class="ml-auto text-[11px] text-slate-500">18+ · Bet responsibly</span>
         </div>
       </div>`;
   dlg.showModal();
@@ -487,7 +483,7 @@ async function shareAcca(key, ev){
     return `• ${raw} — ${l[1]} @ ${l[2]}`;
   }).join('\n');
   const url=location.origin + location.pathname + '#'+key;
-  const text=`GoalScope — ${acca.legs.length} FOLD @ ${total} ODDS\n`+lines+`\nTotal: ${total} · 100 = ${(total*100).toFixed(0)} return\n`+url+`\nOdds indicative — verify on sportybet.com · All times WAT`;
+  const text=`GoalScope — ${acca.legs.length} FOLD @ ${total} ODDS\n`+lines+`\nTotal: ${total} · 100 = ${(total*100).toFixed(0)} return\n`+url+`;
   try{
     if(navigator.share){
       await navigator.share({title:`GoalScope ${acca.legs.length} FOLD @ ${total}`, text, url});
@@ -511,7 +507,7 @@ function waShareAcca(key, ev){
     return `• ${raw} — ${l[1]} @ ${l[2]}`;
   }).join('\n');
   const url=location.origin + location.pathname + '#'+key;
-  const text=`GoalScope — ${acca.legs.length} FOLD @ ${total} ODDS\n`+lines+`\nTotal: ${total} · 100 = ${(total*100).toFixed(0)} return\n`+url+`\nOdds indicative — verify on sportybet.com · All times WAT`;
+  const text=`GoalScope — ${acca.legs.length} FOLD @ ${total} ODDS\n`+lines+`\nTotal: ${total} · 100 = ${(total*100).toFixed(0)} return\n`+url+`;
   const waUrl='https://wa.me/?text='+encodeURIComponent(text);
   window.open(waUrl, '_blank');
   try{ if(navigator.clipboard) navigator.clipboard.writeText(text); }catch(_){}

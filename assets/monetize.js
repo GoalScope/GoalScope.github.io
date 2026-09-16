@@ -10,7 +10,7 @@ window.GOALSCOPE_AFFILIATE = {
 // Booking codes — auto-filled by bookers
 // SportyBet: ~/prediction-tools/sportybet_booker.py
 window.GOALSCOPE_BOOKING = {
-  "acca-main": "",
+  "acca-main": "P5XK49",
   "acca-1": "",
   "acca-2": "",
   "acca-3": "",
@@ -18,14 +18,14 @@ window.GOALSCOPE_BOOKING = {
   "2026-09-15-acca-1": "",
   "2026-09-15-acca-2": "",
   "2026-09-15-acca-3": "",
-  "2026-09-16-acca-main": "PMUH1U",
+  "2026-09-16-acca-main": "P5XK49",
   "2026-09-16-acca-1": "",
   "2026-09-16-acca-2": "",
   "2026-09-16-acca-3": ""
 };
 // Bet9ja: ~/prediction-tools/bet9ja_booker.py
 window.GOALSCOPE_BOOKING_BET9JA = {
-  "acca-main": "",
+  "acca-main": "P5XK49",
   "acca-1": "",
   "acca-2": "",
   "acca-3": ""
