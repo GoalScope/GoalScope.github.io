@@ -1,288 +1,74 @@
 {
-  "updated": "2026-09-16 06:40 WAT",
-  "date": "2026-09-15",
-  "source_note": "Verified stats \u00b7 All times WAT \u00b7 Odds indicative \u2014 check sportybet.com",
-  "football_finals": {
-    "Elche 2-3 Real Madrid": "FT",
-    "Rayo Vallecano 2-1 Espanyol": "FT",
-    "Genoa 1-0 S\u00fcdtirol": "FT",
-    "Ajax 5-1 Willem II": "FT",
-    "Liverpool 3-1 Tottenham Hotspur": "FT",
-    "Ipswich Town 2-4 Arsenal": "FT",
-    "Grasshoppers 2-5 Sion": "FT",
-    "Fiorentina 3-0 Pisa": "FT",
-    "Alav\u00e9s 0-1 Valencia": "FT",
-    "Rakow Czestochowa 2-3 Zaglebie Lubin": "FT",
-    "West Ham 2-3 Fulham": "FT",
-    "Motherwell 0-4 Aberdeen": "FT",
-    "Peterborough United 3-3 Barnsley": "FT (7-6 pens)",
-    "Reading 1-2 Brentford": "FT",
-    "Korona Kielce 0-2 G\u00f3rnik Zabrze": "FT",
-    "Falkirk 2-1 Heart of Midlothian": "FT",
-    "Hibernian 0-1 Kilmarnock": "FT",
-    "The New Saints 5-0 Flint Town United": "FT",
-    "Truro City 0-1 Salisbury": "FT",
-    "Stenhousemuir 1-0 Partick Thistle": "FT"
-  },
-  "mlb_finals": {
-    "LAD @ CIN": "4-0 Final (total 4)",
-    "ATH @ TB": "1-2 Final (total 3)",
-    "CWS @ CLE": "6-7 Final (total 13)",
-    "MIL @ PIT": "5-1 Final (total 6)",
-    "PHI @ WSH": "3-6 Final (total 9)",
-    "DET @ TOR": "10-1 Final (total 11)",
-    "BAL @ NYM": "7-5 Final (total 12)",
-    "ATL @ CHC": "6-3 Final (total 9)",
-    "NYY @ MIN": "8-1 Final (total 9)",
-    "SF @ STL": "10-3 Final (total 13)",
-    "BOS @ TEX": "2-4 Final (total 6)",
-    "KC @ HOU": "2-4 Final (total 6)",
-    "SD @ COL": "3-9 Final (total 12)",
-    "SEA @ LAA": "1-2 Final (total 3)",
-    "MIA @ AZ": "4-2 Final (total 6)"
-  },
+  "updated": "2026-09-17 09:33 WAT",
+  "date": "2026-09-17",
+  "source_note": "Verified stats · All times WAT · Odds indicative — check sportybet.com",
+  "football_finals": {},
+  "mlb_finals": {},
   "accas": {
-    "2026-09-15-acca-main": {
+    "2026-09-17-acca-main": {
       "legs": [
         {
-          "match": "Elche vs Real Madrid",
-          "pick": "Real Madrid Win & Over 2.5 Goals",
-          "result": "2-3 FT",
-          "status": "HIT",
-          "note": "Madrid win + 5 goals"
+          "match": "Arsenal vs Chelsea",
+          "pick": "Over 1.5 Goals",
+          "result": "",
+          "status": "PENDING",
+          "note": ""
         },
         {
-          "match": "Rayo Vallecano vs Espanyol",
-          "pick": "BTTS Yes",
-          "result": "2-1 FT",
-          "status": "HIT",
-          "note": "Both scored"
+          "match": "Real Madrid vs Barcelona",
+          "pick": "Both Teams to Score",
+          "result": "",
+          "status": "PENDING",
+          "note": ""
         },
         {
-          "match": "Genoa vs S\u00fcdtirol",
-          "pick": "Genoa Win & Over 1.5",
-          "result": "1-0 FT",
-          "status": "LOST",
-          "note": "Win yes but only 1 goal \u2014 Over 1.5 missed"
-        },
-        {
-          "match": "Ajax vs Willem II",
-          "pick": "Ajax Win & Over 2.5",
-          "result": "5-1 FT",
-          "status": "HIT",
-          "note": "Ajax win + 6 goals"
-        },
-        {
-          "match": "Liverpool vs Tottenham",
-          "pick": "BTTS Yes",
-          "result": "3-1 FT",
-          "status": "HIT",
-          "note": "Both scored"
-        },
-        {
-          "match": "Ipswich vs Arsenal",
-          "pick": "Arsenal Win & Over 2.5",
-          "result": "2-4 FT",
-          "status": "HIT",
-          "note": "Arsenal win + 6 goals"
-        },
-        {
-          "match": "Grasshoppers vs Sion",
+          "match": "Bayern Munich vs Dortmund",
           "pick": "Over 2.5 Goals",
-          "result": "2-5 FT",
-          "status": "HIT",
-          "note": "7 goals"
+          "result": "",
+          "status": "PENDING",
+          "note": ""
         },
         {
-          "match": "Padres @ Rockies",
-          "pick": "Over 10.5 Runs",
-          "result": "3-9 Final (12 runs)",
-          "status": "HIT",
-          "note": "12 runs at Coors \u2014 easy Over"
+          "match": "AC Milan vs Inter",
+          "pick": "Under 3.5 Goals",
+          "result": "",
+          "status": "PENDING",
+          "note": ""
+        },
+        {
+          "match": "PSG vs Marseille",
+          "pick": "1X and Over 1.5",
+          "result": "",
+          "status": "PENDING",
+          "note": ""
+        },
+        {
+          "match": "Ajax vs Feyenoord",
+          "pick": "Over 2.5 Goals",
+          "result": "",
+          "status": "PENDING",
+          "note": ""
+        },
+        {
+          "match": "Benfica vs Porto",
+          "pick": "Both Teams to Score",
+          "result": "",
+          "status": "PENDING",
+          "note": ""
+        },
+        {
+          "match": "Celtic vs Rangers",
+          "pick": "Over 1.5 Goals",
+          "result": "",
+          "status": "PENDING",
+          "note": ""
         }
       ],
       "summary": {
-        "hits": 7,
-        "lost": 1,
-        "pending": 0,
-        "verdict": "LOST"
-      }
-    },
-    "2026-09-15-acca-1": {
-      "legs": [
-        {
-          "match": "Fiorentina vs Pisa",
-          "pick": "Fiorentina Win",
-          "result": "3-0 FT",
-          "status": "HIT",
-          "note": "Comfortable"
-        },
-        {
-          "match": "Alav\u00e9s vs Valencia",
-          "pick": "BTTS Yes",
-          "result": "0-1 FT",
-          "status": "LOST",
-          "note": "Alav\u00e9s shutout \u2014 no BTTS"
-        },
-        {
-          "match": "Rak\u00f3w vs Zag\u0142\u0119bie",
-          "pick": "Rak\u00f3w Win & Over 1.5",
-          "result": "2-3 FT",
-          "status": "LOST",
-          "note": "Rak\u00f3w lost at home \u2014 upset"
-        },
-        {
-          "match": "Dodgers @ Reds",
-          "pick": "Over 9.5",
-          "result": "4-0 Final (4 runs)",
-          "status": "LOST",
-          "note": "Only 4 runs at GABP \u2014 big Under"
-        },
-        {
-          "match": "West Ham vs Fulham",
-          "pick": "Over 2.5",
-          "result": "2-3 FT",
-          "status": "HIT",
-          "note": "5 goals"
-        },
-        {
-          "match": "Brewers @ Pirates",
-          "pick": "Brewers Win",
-          "result": "5-1 Final",
-          "status": "HIT",
-          "note": "MIL win"
-        },
-        {
-          "match": "Motherwell vs Aberdeen",
-          "pick": "BTTS Yes",
-          "result": "0-4 FT",
-          "status": "LOST",
-          "note": "Motherwell shutout"
-        }
-      ],
-      "summary": {
-        "hits": 3,
-        "lost": 4,
-        "pending": 0,
-        "verdict": "LOST"
-      }
-    },
-    "2026-09-15-acca-2": {
-      "legs": [
-        {
-          "match": "Peterborough vs Barnsley",
-          "pick": "Over 2.5",
-          "result": "3-3 FT",
-          "status": "HIT",
-          "note": "6 goals (+pens)"
-        },
-        {
-          "match": "Reading vs Brentford",
-          "pick": "Brentford Win",
-          "result": "1-2 FT",
-          "status": "HIT",
-          "note": "Brentford win"
-        },
-        {
-          "match": "Korona vs G\u00f3rnik",
-          "pick": "Over 2.5",
-          "result": "0-2 FT",
-          "status": "LOST",
-          "note": "Only 2 goals \u2014 Under"
-        },
-        {
-          "match": "Athletics @ Rays",
-          "pick": "Over 9.0",
-          "result": "1-2 Final (3 runs)",
-          "status": "LOST",
-          "note": "Only 3 runs"
-        },
-        {
-          "match": "Tigers @ Blue Jays",
-          "pick": "Over 8.5",
-          "result": "10-1 Final (11 runs)",
-          "status": "HIT",
-          "note": "11 runs \u2014 easy Over"
-        },
-        {
-          "match": "Falkirk vs Hearts",
-          "pick": "Hearts Win",
-          "result": "2-1 FT",
-          "status": "LOST",
-          "note": "Hearts lost \u2014 promoted side upset"
-        },
-        {
-          "match": "Hibernian vs Kilmarnock",
-          "pick": "Over 2.5",
-          "result": "0-1 FT",
-          "status": "LOST",
-          "note": "Only 1 goal"
-        }
-      ],
-      "summary": {
-        "hits": 3,
-        "lost": 4,
-        "pending": 0,
-        "verdict": "LOST"
-      }
-    },
-    "2026-09-15-acca-3": {
-      "legs": [
-        {
-          "match": "Yankees @ Twins",
-          "pick": "Yankees Win",
-          "result": "8-1 Final",
-          "status": "HIT",
-          "note": "NYY dominant"
-        },
-        {
-          "match": "Phillies @ Nationals",
-          "pick": "Over 9.0",
-          "result": "3-6 Final (9 runs)",
-          "status": "LOST",
-          "note": "Exactly 9 \u2014 push on 9.0 (needs 10)"
-        },
-        {
-          "match": "Braves @ Cubs",
-          "pick": "Over 8.5",
-          "result": "6-3 Final (9 runs)",
-          "status": "HIT",
-          "note": "9 runs \u2014 just Over"
-        },
-        {
-          "match": "Red Sox @ Rangers",
-          "pick": "Over 9.5",
-          "result": "2-4 Final (6 runs)",
-          "status": "LOST",
-          "note": "Only 6 runs"
-        },
-        {
-          "match": "TNS vs Flint",
-          "pick": "TNS Win & Over 2.5",
-          "result": "5-0 FT",
-          "status": "HIT",
-          "note": "TNS dominant"
-        },
-        {
-          "match": "Truro vs Salisbury",
-          "pick": "Over 2.5",
-          "result": "0-1 FT",
-          "status": "LOST",
-          "note": "Only 1 goal"
-        },
-        {
-          "match": "Stenhousemuir vs Partick",
-          "pick": "Over 2.5",
-          "result": "1-0 FT",
-          "status": "LOST",
-          "note": "Only 1 goal"
-        }
-      ],
-      "summary": {
-        "hits": 3,
-        "lost": 4,
-        "pending": 0,
-        "verdict": "LOST"
+        "hits": 0,
+        "lost": 0,
+        "pending": 8,
+        "verdict": "PENDING"
       }
     }
   }
