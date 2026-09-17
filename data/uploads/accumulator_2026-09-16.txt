@@ -4,13 +4,13 @@ Generated: 2026-09-16 08:20 WAT | Verified stats · All times WAT · Odds indica
 ============================================================
 FIXTURES VERIFIED TODAY (WAT)
 ============================================================
-Football: 42 events verified via Verified stats
+Football: 42 events verified via BBC Sport wc-data (collated) + livescores.com + futbol24.com
   - English League Cup 3rd Round (4): Everton-Wolves 20:45 WAT, Fleetwood-Sheff Utd 20:45, Coventry-Aston Villa 21:00, Man Utd-Brighton 21:00
   - UEFA Europa League League Stage (9): Ararat-Sparta 18:45, Omonia-Celta 18:45, Milan-Benfica 21:00, Anderlecht-Lyon 21:00, Leverkusen-Celje 21:00, Hapoel-Dinamo Zagreb 21:00, Olympiacos-Jagiellonia 21:00, Sturm Graz-Rennes 21:00, Sunderland-AZ 21:00
   - Spanish La Liga (4): Atletico-Osasuna 19:00, Deportivo-Sevilla 19:00, Barcelona-Racing Santander 21:30, Levante-Athletic Club 21:30
   - Swedish Allsvenskan (1): AIK-Mjallby 19:00 | Swiss Super League (2): Lugano-St.Gallen 19:00, Thun-Servette 19:00 | Brazil, Mexico, Nigeria verified
-  Cross-check: Verified stats 200 reachable (401KB), Verified stats 200 reachable (267KB) — JS-rendered, BBC used as primary
-MLB: 15 games verified via Verified stats (2026-09-16)
+  Cross-check: livescores.com 200 reachable (401KB), futbol24.com 200 reachable (267KB) — JS-rendered, BBC used as primary
+MLB: 15 games verified via statsapi.mlb.com (2026-09-16)
   - CWS@CLE 18:10 WAT, SF@STL 18:15, NYY@MIN 18:40, DET@TOR 20:07, LAD@CIN 23:40, ATH@TB 23:40, MIL@PIT 23:40, PHI@WSH 23:45, BAL@NYM 00:10 (17 Sep), ATL@CHC 00:40, BOS@TEX 01:05, KC@HOU 01:10, SD@COL 01:40 (Coors Field), SEA@LAA 02:38, MIA@AZ 02:40
 NBA/NHL: OFFSEASON — No regular-season games (NBA tips 2026-27 from Oct, NHL from Oct). SKIPPED rather than invent.
 NFL: Not in mid-week slate — no value, SKIPPED.
