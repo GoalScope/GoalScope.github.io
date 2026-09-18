@@ -402,5 +402,78 @@
     ],
     "_orig_key": "acca-3",
     "date": "2026-09-16"
+  },
+  "2026-09-18-value-bets": {
+    "title": "Daily Value Bets \u2014 2026-09-18",
+    "legs": [
+      [
+        "Arsenal vs Chelsea",
+        "Over 1.5 Goals",
+        "1.34",
+        "High tempo, strong scoring form"
+      ],
+      [
+        "Real Madrid vs Barcelona",
+        "BTTS",
+        "1.72",
+        "High-scoring El Cl\u00e1sico trend"
+      ],
+      [
+        "Bayern Munich vs Dortmund",
+        "Over 2.5 Goals",
+        "1.55",
+        "Der Klassiker goalfest"
+      ],
+      [
+        "AC Milan vs Inter",
+        "Under 3.5 Goals",
+        "1.28",
+        "Tactical derby"
+      ],
+      [
+        "PSG vs Marseille",
+        "1X and Over 1.5",
+        "1.45",
+        "PSG dominance at home"
+      ],
+      [
+        "Ajax vs Feyenoord",
+        "Over 2.5 Goals",
+        "1.65",
+        "High-scoring Eredivisie"
+      ],
+      [
+        "Benfica vs Porto",
+        "BTTS",
+        "1.80",
+        "Rivalry open game"
+      ],
+      [
+        "Celtic vs Rangers",
+        "Over 1.5 Goals",
+        "1.30",
+        "Celtic Park atmosphere"
+      ],
+      [
+        "Cubs @ Reds",
+        "Over 9.5 Runs",
+        "1.85",
+        "GABP hitter friendly"
+      ],
+      [
+        "Phillies @ Mets",
+        "Over 9.0 Runs",
+        "1.85",
+        "Citi field trend"
+      ],
+      [
+        "Braves @ Astros",
+        "Over 8.5 Runs",
+        "1.85",
+        "High scoring trend"
+      ]
+    ],
+    "_orig_key": "value-bets",
+    "date": "2026-09-18"
   }
 }

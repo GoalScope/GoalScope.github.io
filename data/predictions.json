@@ -1,5 +1,21 @@
 [
   {
+    "id": "2026-09-18-value-bets",
+    "date": "2026-09-18",
+    "title": "Daily Value Bets \u2014 Verified Stats",
+    "badge": "VALUE BETS",
+    "odds": "TBD",
+    "legs": 11,
+    "summary": "11 value picks across Football and MLB",
+    "tags": [
+      "Football",
+      "MLB",
+      "Value"
+    ],
+    "file": "2026-09-18_value_bets.txt",
+    "raw": "GoalScope Daily Value Bets \u2014 2026-09-18"
+  },
+  {
     "id": "2026-09-16-acca-main",
     "date": "2026-09-16",
     "title": "Matchday Accumulator \u2014 115.96 Odds",
