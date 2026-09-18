@@ -5,6 +5,21 @@
     "title": "Daily Value Bets \u2014 Verified Stats",
     "badge": "VALUE BETS",
     "odds": "TBD",
+    "legs": 198,
+    "summary": "9 value picks across Football (heuristic)",
+    "tags": [
+      "Football",
+      "Value"
+    ],
+    "file": "2026-09-18_value_bets.txt",
+    "raw": "GoalScope Daily Value Bets \u2013 heuristic predictions"
+  },
+  {
+    "id": "2026-09-18-value-bets",
+    "date": "2026-09-18",
+    "title": "Daily Value Bets \u2014 Verified Stats",
+    "badge": "VALUE BETS",
+    "odds": "TBD",
     "legs": 11,
     "summary": "11 value picks across Football and MLB",
     "tags": [
